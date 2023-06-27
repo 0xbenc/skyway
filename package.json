@@ -1,0 +1,57 @@
+{
+  "name": "skyway",
+  "productName": "Skyway",
+  "version": "1.0.0",
+  "description": "Tomorrow Begins Today",
+  "main": ".webpack/main",
+  "scripts": {
+    "start": "electron-forge start",
+    "makeLinux": "electron-forge make --arch=x64 --platform=linux",
+    "makeLinuxARM": "electron-forge make --arch=arm64 --platform=linux",
+    "makeMac": "electron-forge make --arch=x64 --platform=darwin",
+    "makeMacARM": "electron-forge make --arch=arm64 --platform=darwin",
+    "makeWindows": "electron-forge make --arch=x64 --platform=win32"
+  },
+  "keywords": [],
+  "author": {
+    "name": "Ben Chapman",
+    "email": "0xbenc@gmail.com"
+  },
+  "license": "COPYRIGHT Ben Chapman 2023 - Do not copy or distribute this software",
+  "config": {
+    "forge": "./tools/forge/forge.config.js"
+  },
+  "devDependencies": {
+    "@babel/core": "7.21.3",
+    "@babel/preset-react": "7.18.6",
+    "@electron-forge/cli": "6.0.5",
+    "@electron-forge/maker-deb": "6.0.5",
+    "@electron-forge/maker-rpm": "6.0.5",
+    "@electron-forge/maker-squirrel": "6.0.5",
+    "@electron-forge/maker-zip": "6.0.5",
+    "@electron-forge/plugin-webpack": "6.0.5",
+    "@pmmmwh/react-refresh-webpack-plugin": "0.5.10",
+    "@svgr/webpack": "^7.0.0",
+    "@vercel/webpack-asset-relocator-loader": "1.7.3",
+    "babel-loader": "9.1.2",
+    "css-loader": "6.7.3",
+    "dotenv-webpack": "8.0.1",
+    "electron": "23.2.0",
+    "node-loader": "2.0.0",
+    "style-loader": "3.3.2",
+    "svg-url-loader": "8.0.0"
+  },
+  "dependencies": {
+    "@emotion/styled": "11.10.6",
+    "@mui/icons-material": "5.11.11",
+    "@mui/material": "5.11.14",
+    "axios": "1.4.0",
+    "crypto-js": "4.1.1",
+    "electron-squirrel-startup": "1.0.0",
+    "electron-store": "8.1.0",
+    "react": "18.2.0",
+    "react-copy-to-clipboard": "^5.1.0",
+    "react-dom": "18.2.0",
+    "zustand": "4.3.8"
+  }
+}

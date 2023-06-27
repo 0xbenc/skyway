@@ -1,0 +1,18 @@
+# Logs
+logs
+
+# Dependency directories
+node_modules/
+
+# dotenv environment variables file
+.env
+
+# Webpack
+.webpack/
+
+# Electron-Forge
+out/
+
+package-lock.json
+
+.DS_Store
