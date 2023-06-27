@@ -43,7 +43,7 @@ const Landing = () => {
             Skyway
           </Typography>
           <Typography variant="body1">
-            v{version_} {devMode_ ? "dev" : ""}
+            v{version_} {devMode_ ? "pre-release" : ""}
           </Typography>
         </OutPaper>
 

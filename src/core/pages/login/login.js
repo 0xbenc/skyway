@@ -162,7 +162,7 @@ const Login = () => {
             Skyway
           </Typography>
           <Typography variant="body1">
-            v{version} {devMode_ ? "dev" : ""}
+            v{version} {devMode_ ? "pre-release" : ""}
           </Typography>
         </OutPaper>
 
