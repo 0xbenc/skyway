@@ -2,7 +2,7 @@
 
 > A cross-platform, desktop, ChatGPT-esque interface featuring encryption and custom system prompts
 
-[![License][license-image]][license-url]
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ![A screenshot of Skyway](screenshot.png)
 
