@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { StyledEngineProvider } from '@mui/material/styles';
 import App from './app';
 
-const container = document.getElementById('react-app');
+const container = document.getElementById('skyway');
 const root = createRoot(container);
 
 root.render(
