@@ -22,7 +22,7 @@ export const useStore = create(() => {
     version: "-1",
 
     // MUI 5 theme color mode
-    color_mode: "dark",
+    color_mode: "light",
 
     // decrypted OpenAI API Key
     open_ai_api_key: "missing",

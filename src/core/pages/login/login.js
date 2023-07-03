@@ -108,13 +108,13 @@ const Login = () => {
     window.electron.store.set('password_set', true);
     window.electron.store.set("integrity_check", ciphertext)
     window.electron.store.set("system_prompts", encPrompts)
-    window.electron.store.set("color_mode", "dark")
+    window.electron.store.set("color_mode", "light")
     window.electron.store.set('open_ai_api_key', cipherAPI)
 
     useStore.setState({
       password: passwordInput,
       system_prompts: Prompts,
-      color_mode: "dark",
+      color_mode: "light",
       page: "landing",
       open_ai_api_key: apiInput
     });
