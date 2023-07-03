@@ -19,7 +19,7 @@ import { formatResponse } from "./newChat_utility";
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 import CloseIcon from '@mui/icons-material/Close';
-import { OutPaper } from "../../mui/reusable";
+import { OutlinePaper } from "../../mui/reusable";
 import { navigate } from "../../utility/navigatePage";
 import AspectRatioIcon from '@mui/icons-material/AspectRatio';
 import CloseFullscreenIcon from '@mui/icons-material/CloseFullscreen';
@@ -200,7 +200,7 @@ const NewChat = () => {
   return (
     <>
       <Stack direction="column" spacing={1}>
-        <OutPaper>
+        <OutlinePaper>
           <IconButton
             aria-label="close"
             onClick={() => { navigate("landing") }}
@@ -216,11 +216,11 @@ const NewChat = () => {
             <Typography variant="h3">
               New Chat:
             </Typography>
-            <OutPaper>
+            <OutlinePaper>
               <Typography variant="h4">
                 {activeSystemPrompt.title}
               </Typography>
-            </OutPaper>
+            </OutlinePaper>
             <Stack direction="column" spacing={1}>
               <Typography variant="body1">
                 {activeSystemPrompt.model}
@@ -230,7 +230,7 @@ const NewChat = () => {
               </Typography>
             </Stack>
           </Stack>
-        </OutPaper>
+        </OutlinePaper>
         <ChatsHolder>
           {displayedChats.length > 0 && displayedChats.map((chat, key) => {
             return (
@@ -280,7 +280,7 @@ const NewChat = () => {
 
       <Box sx={{ position: "absolute", bottom: 0, width: "100%" }}>
         <Stack direction="row" spacing={1}>
-          <OutPaper>
+          <OutlinePaper>
             <Stack direction="row" spacing={1}>
               <Tooltip title="resubmit last message">
                 <span>
@@ -306,7 +306,7 @@ const NewChat = () => {
                 </span>
               </Tooltip>
             </Stack>
-          </OutPaper>
+          </OutlinePaper>
 
           <FormControl fullWidth >
             <Box sx={{ margin: 1 }}>
@@ -363,7 +363,7 @@ const NewChat = () => {
 
           {busyUI && <CircularProgress color="secondary" />}
 
-          <OutPaper>
+          <OutlinePaper>
             <Stack direction="row" spacing={1}>
               {activeSystemPrompt.engine === "token limited" && <Typography variant="body1">
                 Total Tokens: {newTokenCount}/{activeSystemPrompt.limit}
@@ -372,7 +372,7 @@ const NewChat = () => {
                 Previous Tokens: {newTokenCount}
               </Typography>}
             </Stack>
-          </OutPaper>
+          </OutlinePaper>
         </Stack>
       </Box>
 

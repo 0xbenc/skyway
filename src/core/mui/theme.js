@@ -4,11 +4,7 @@ const light = {
       "@global": {
         "*, *::before, *::after": {
           boxSizing: "border-box",
-        },
-        body: {
-          fontSize: 14,
-          fontWeight: 400
-        },
+        }
       },
     },
   },
@@ -28,12 +24,16 @@ const light = {
       main: "#eee",
       light: "#fff",
       dark: "#ddd",
+      inside: "#ddd",
+      outside: "#fff",
       contrastText: '#000',
     },
     secondary: {
       main: "#111",
       light: "#000",
       dark: '#222',
+      outside: "#000",
+      inside: "#222",
       contrastText: '#fff',
     },
     text: {
@@ -50,10 +50,6 @@ const dark = {
       "@global": {
         "*, *::before, *::after": {
           boxSizing: "border-box",
-        },
-        body: {
-          fontSize: 14,
-          fontWeight: 400
         },
       },
     },

@@ -2,7 +2,7 @@ import React from "react";
 import Typography from "@mui/material/Typography";
 import { useStore } from "../../zustand";
 import { MenuItem, Button, Menu } from "@mui/material";
-import { BackPaper, OutPaper } from "../../mui/reusable";
+import { BasicBox, OutlinePaper } from "../../mui/reusable";
 import Stack from "@mui/material/Stack";
 import { switchColor } from "./landing_utility";
 import { navigate } from "../../utility/navigatePage";
@@ -36,18 +36,18 @@ const Landing = () => {
   };
 
   return (
-    <BackPaper>
+    <BasicBox>
       <Stack direction="column" spacing={1}>
-        <OutPaper>
+        <OutlinePaper>
           <Typography variant="h1">
             Skyway
           </Typography>
           <Typography variant="body1">
             v{version_} {devMode_ ? "pre-release" : ""}
           </Typography>
-        </OutPaper>
+        </OutlinePaper>
 
-        <OutPaper>
+        <OutlinePaper>
           <Stack direction="row" spacing={1}>
             <Button
               variant="outlined"
@@ -101,9 +101,9 @@ const Landing = () => {
               })}
             </Menu>
           </Stack>
-        </OutPaper>
+        </OutlinePaper>
       </Stack>
-    </BackPaper>
+    </BasicBox>
   );
 };
 

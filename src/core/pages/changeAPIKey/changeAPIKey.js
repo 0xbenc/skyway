@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Typography, FormControl, TextField, Button, Stack } from "@mui/material";
-import { BackPaper, OutPaper } from "../../mui/reusable";
+import { BasicBox, OutlinePaper } from "../../mui/reusable";
 import { navigate } from "../../utility/navigatePage";
 import { useStore } from "../../zustand";
 import { encrypt } from "../../utility/encryption";
@@ -27,15 +27,15 @@ const ChangeAPIKey = () => {
   };
 
   return (
-    <BackPaper>
+    <BasicBox>
       <Stack direction="column" spacing={1}>
-        <OutPaper>
+        <OutlinePaper>
           <Typography variant="h2">
             Change API Key
           </Typography>
-        </OutPaper>
+        </OutlinePaper>
 
-        <OutPaper>
+        <OutlinePaper>
           <Stack direction="column" spacing={1}>
             <Typography>Enter new OpenAI API key</Typography>
             <FormControl>
@@ -64,8 +64,8 @@ const ChangeAPIKey = () => {
               </Stack>
             </FormControl>
           </Stack>
-        </OutPaper>
-        <OutPaper>
+        </OutlinePaper>
+        <OutlinePaper>
           <Button
             color={"secondary"}
             variant="outlined"
@@ -74,9 +74,9 @@ const ChangeAPIKey = () => {
           >
             Cancel
           </Button>
-        </OutPaper>
+        </OutlinePaper>
       </Stack>
-    </BackPaper>
+    </BasicBox>
   );
 };
 

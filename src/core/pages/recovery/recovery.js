@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Typography, FormControl, TextField, Button, Stack } from "@mui/material";
-import { BackPaper, OutPaper } from "../../mui/reusable";
+import { BasicBox, OutlinePaper } from "../../mui/reusable";
 import { seeds } from "../../utility/seeds";
 import { navigate } from "../../utility/navigatePage";
 import { decrypt } from "../../utility/encryption";
@@ -48,15 +48,15 @@ const Recovery = () => {
   };
 
   return (
-    <BackPaper>
+    <BasicBox>
       <Stack direction="column" spacing={1}>
-        <OutPaper>
+        <OutlinePaper>
           <Typography variant="h2">
             Password Recovery
           </Typography>
-        </OutPaper>
+        </OutlinePaper>
 
-        <OutPaper>
+        <OutlinePaper>
           <Stack direction="column" spacing={1}>
             <Typography>Enter every word of your seed phrase, all lowercase, separated by spaces, no space at the end.</Typography>
             <FormControl>
@@ -85,16 +85,16 @@ const Recovery = () => {
               </Stack>
             </FormControl>
           </Stack>
-        </OutPaper>
-        {(bad || passwordOutput !== "") && <OutPaper>
+        </OutlinePaper>
+        {(bad || passwordOutput !== "") && <OutlinePaper>
           {passwordOutput !== "" && <Typography variant="body">
             Password: {passwordOutput}
           </Typography>}
           {bad && <Typography variant="body">
             Incorrect Seed Phrase
           </Typography>}
-        </OutPaper>}
-        <OutPaper>
+        </OutlinePaper>}
+        <OutlinePaper>
           <Button
             color={"secondary"}
             variant="outlined"
@@ -103,9 +103,9 @@ const Recovery = () => {
           >
             Return to Login
           </Button>
-        </OutPaper>
+        </OutlinePaper>
       </Stack>
-    </BackPaper>
+    </BasicBox>
   );
 };
 

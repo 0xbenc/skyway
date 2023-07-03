@@ -3,7 +3,7 @@ import { Menu, FormControl, TextField, Button } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import MenuItem from '@mui/material/MenuItem';
-import { BackPaper, OutPaper } from "../../mui/reusable";
+import { BasicBox, OutlinePaper } from "../../mui/reusable";
 import { useStore } from "../../zustand";
 import { encryptPrompts } from "../../utility/encryption";
 import Stack from "@mui/material/Stack";
@@ -131,7 +131,7 @@ const EditSystemPrompt = () => {
   }, [titleInput, promptInput, userInput, model]);
 
   return (
-    <BackPaper>
+    <BasicBox>
       <Grid
         spacing={1}
         container
@@ -144,15 +144,15 @@ const EditSystemPrompt = () => {
         direction={"row"}
       >
         <Grid item sm={12}>
-          <OutPaper>
+          <OutlinePaper>
             <Typography variant="h2">
               Edit System Prompt
             </Typography>
-          </OutPaper>
+          </OutlinePaper>
         </Grid>
 
         <Grid item sm={12}>
-          <OutPaper>
+          <OutlinePaper>
             <Grid
               spacing={1}
               container
@@ -202,11 +202,11 @@ const EditSystemPrompt = () => {
                 </Stack>
               </Grid>
             </Grid>
-          </OutPaper>
+          </OutlinePaper>
         </Grid>
 
         <Grid item sm={12}>
-          <OutPaper>
+          <OutlinePaper>
             <Stack direction="column" spacing={1}>
               <Typography variant="h4">
                 Prompt:
@@ -227,11 +227,11 @@ const EditSystemPrompt = () => {
                 />
               </FormControl>
             </Stack>
-          </OutPaper>
+          </OutlinePaper>
         </Grid>
 
         <Grid item sm={12}>
-          <OutPaper>
+          <OutlinePaper>
             <Grid
               spacing={1}
               container
@@ -308,11 +308,11 @@ const EditSystemPrompt = () => {
                 </Stack>
               </Grid>
             </Grid>
-          </OutPaper>
+          </OutlinePaper>
         </Grid>
 
         <Grid item sm={12}>
-          <OutPaper>
+          <OutlinePaper>
             <Stack direction="row" spacing={1}>
               <Button
                 variant="outlined"
@@ -331,10 +331,10 @@ const EditSystemPrompt = () => {
                 Cancel
               </Button>
             </Stack>
-          </OutPaper>
+          </OutlinePaper>
         </Grid>
       </Grid>
-    </BackPaper >
+    </BasicBox >
   );
 };
 
