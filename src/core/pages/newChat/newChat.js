@@ -18,10 +18,10 @@ import {
   Backdrop
 } from "@mui/material";
 //
+import HomeIcon from "@mui/icons-material/Home"
 import RefreshIcon from '@mui/icons-material/Refresh';
 import DoneIcon from "@mui/icons-material/Done";
 import EditIcon from "@mui/icons-material/Edit";
-import CloseIcon from '@mui/icons-material/Close';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 import AspectRatioIcon from '@mui/icons-material/AspectRatio';
 import CloseFullscreenIcon from '@mui/icons-material/CloseFullscreen';
@@ -65,7 +65,7 @@ const NewChat = () => {
 
   const handleUserPromptInput = (event) => {
     setUserPromptInput(event.target.value);
-    
+
     const input = inputRef.current;
     if (hasScrollbar(input)) {
       setScrollCount(scrollCount + 1)
@@ -206,18 +206,15 @@ const NewChat = () => {
     <>
       <Stack direction="column" spacing={1}>
         <OutlinePaper>
-          <IconButton
-            aria-label="close"
-            onClick={() => { navigate("landing") }}
-            sx={{
-              position: "absolute",
-              top: 0,
-              right: 0,
-            }}
-          >
-            <CloseIcon />
-          </IconButton>
           <Stack direction="row" spacing={1}>
+            <Box>
+              <IconButton
+                aria-label="close"
+                onClick={() => { navigate("landing") }}
+              >
+                <HomeIcon />
+              </IconButton>
+            </Box>
             <Typography variant="h3">
               New Chat:
             </Typography>
