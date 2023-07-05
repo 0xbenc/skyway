@@ -10,7 +10,7 @@ const switchColor = () => {
     console.log("THEME: dark mode selected")
     useStore.setState({ color_mode: "dark" })
     window.electron.store.set('color_mode', 'dark')
-  }
-}
+  };
+};
 
 export {switchColor};

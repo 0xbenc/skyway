@@ -1,14 +1,20 @@
 import React from "react";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import Chip from "@mui/material/Chip"
-import Stack from "@mui/material/Stack"
+//
 import { useStore } from "../../zustand";
+//
 import { previewText } from "../../utility/string";
+import { navigate } from "../../utility/navigatePage";
+//
+import { 
+  Grid, 
+  Typography, 
+  Button, 
+  Chip, 
+  Stack
+} from "@mui/material";
+//
 import { BasicBox, OutlinePaper } from "../../mui/reusable";
 import { deleteSystemPrompt } from "./systemPrompts_utility";
-import { navigate } from "../../utility/navigatePage";
 
 // ----------------------------------------------------------------------
 

@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
+//
 import { useStore } from "../../zustand";
+//
 import Prompts from "../../utility/defaultSystemPrompts";
-import { FormControl, TextField, Button, Typography, Box } from "@mui/material";
-import { decrypt, decryptPrompts, encryptPrompts, encrypt } from "../../utility/encryption";
-import { BasicBox, OutlinePaper } from "../../mui/reusable";
-import Stack from "@mui/material/Stack";
 import { seeds } from "../../utility/seeds";
 import { generateRandomNumbers } from "../../utility/number";
+import { decrypt, decryptPrompts, encryptPrompts, encrypt } from "../../utility/encryption";
+//
+import { FormControl, TextField, Button, Typography, Box, Stack } from "@mui/material";
+//
+import { BasicBox, OutlinePaper } from "../../mui/reusable";
 import { SeedPaper } from "./login_styles";
 
 // ----------------------------------------------------------------------

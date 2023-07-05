@@ -1,5 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
+//
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { useStore } from "../../zustand";
+//
 import { fetchChatCompletion } from "../../utility/fetchData";
+import { navigate } from "../../utility/navigatePage";
+//
 import {
   FormControl,
   TextField,
@@ -8,22 +14,21 @@ import {
   CircularProgress,
   Box,
   Stack,
-  Tooltip
+  Tooltip,
+  Backdrop
 } from "@mui/material";
-import DoneIcon from "@mui/icons-material/Done";
+//
 import RefreshIcon from '@mui/icons-material/Refresh';
+import DoneIcon from "@mui/icons-material/Done";
 import EditIcon from "@mui/icons-material/Edit";
-import { useStore } from "../../zustand";
-import { LeftBox, RightBox, LeftChatBox, RightChatBox, ChatsHolder, LeftCodeBorder, RightCodeBorder } from "./newChat_styles";
-import { formatResponse } from "./newChat_utility";
-import { CopyToClipboard } from 'react-copy-to-clipboard';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 import CloseIcon from '@mui/icons-material/Close';
-import { OutlinePaper } from "../../mui/reusable";
-import { navigate } from "../../utility/navigatePage";
+import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 import AspectRatioIcon from '@mui/icons-material/AspectRatio';
 import CloseFullscreenIcon from '@mui/icons-material/CloseFullscreen';
-import { Backdrop } from "@mui/material";
+//
+import { formatResponse } from "./newChat_utility";
+import { LeftBox, RightBox, LeftChatBox, RightChatBox, ChatsHolder, LeftCodeBorder, RightCodeBorder } from "./newChat_styles";
+import { OutlinePaper } from "../../mui/reusable";
 
 function hasScrollbar(input) {
   return input.scrollHeight > input.clientHeight;

@@ -1,12 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { Menu, FormControl, TextField, Button } from "@mui/material";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import MenuItem from '@mui/material/MenuItem';
-import { BasicBox, OutlinePaper } from "../../mui/reusable";
+//
 import { useStore } from "../../zustand";
+//
 import { encryptPrompts } from "../../utility/encryption";
-import Stack from "@mui/material/Stack";
+//
+import { 
+  Menu, 
+  FormControl, 
+  TextField, 
+  Button, 
+  Grid, 
+  Typography, 
+  MenuItem, 
+  Stack 
+} from "@mui/material";
+//
+import { BasicBox, OutlinePaper } from "../../mui/reusable";
+
 // ----------------------------------------------------------------------
 
 const EditSystemPrompt = () => {

@@ -1,9 +1,12 @@
 import React, { useMemo } from 'react';
-import HandlePages from './pages';
+//
+import { useStore } from './zustand';
+//
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
-import { useStore } from './zustand';
+//
 import { light, dark } from "./mui/theme";
+import HandlePages from './pages';
 
 const App = () => {
   const color_mode = useStore(state => state.color_mode);
