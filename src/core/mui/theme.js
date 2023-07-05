@@ -1,3 +1,7 @@
+const PINK = {
+  main: '#FFC0CB'
+};
+
 const light = {
   overrides: {
     MuiCssBaseline: {
@@ -41,6 +45,7 @@ const light = {
       secondary: '#000',
       disabled: '#000'
     },
+    pink: PINK,
   }
 };
 
@@ -83,6 +88,7 @@ const dark = {
       secondary: '#fff',
       disabled: '#fff'
     },
+    pink: PINK,
   }
 };
 

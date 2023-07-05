@@ -379,10 +379,17 @@ const NewChat = () => {
       </Box>
 
       <Backdrop
-        sx={{ color: '#fff', backgroundColor: "#000", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        sx={{
+          color: '#fff',
+          backgroundColor: (theme) => theme.palette.primary.outside,
+          zIndex: (theme) => theme.zIndex.drawer + 1
+        }}
         open={modalOpen}
       >
-        <FormControl fullWidth >
+        <FormControl
+          fullWidth
+          sx={{ backgroundColor: (theme) => theme.palette.primary.main }}
+        >
           <Box sx={{ margin: 1 }}>
             <TextField
               id="prompt-zone"
