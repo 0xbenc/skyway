@@ -130,32 +130,32 @@ Go to the [Releases](https://github.com/0xbenc/skyway/releases) section of this 
 Find the version with the 'Latest' tag.
 Download the file appropriate for your platform.
 
-- Mac:
+- Mac
   - Darwin .zip file
   - After downloading
     - Double click to unzip
     - Drag app into `Applications` folder
     - Try to run app
     - If app will not run, allow app in system preferences -> security
-- Linux:
+- Linux
   - .deb file
   - see [Linux installer instructions](#on-linux-debian-x64--arm64) below
-- Windows:
+- Windows
   - .exe file
-  - after downloading, double click to run
+  - after downloading, double-click to run
 
 ## Making, Building, and Installing
 
-### System pre-requisites
+### System prerequisites
 
 - requires node 18.x on x86 Windows, Mac (Intel), and Linux (Debian)
 - requires node 18.x on ARM Mac (M1, M2)
 - requires node 16.x on ARM64 Linux (Debian)
 - ARM32 Linux not supported
-  - It is recommended you find a more lightweight project, with a non-web GUI.
+  - It is recommended you find a more lightweight project, with a non-web GUI
 - ARM64 Windows not supported
   - If you have an ARM64 Windows device and you are interested in development,
-  plase reach out to a maintainer!
+  please reach out to a maintainer!
 
 ### NPM
 
@@ -165,7 +165,7 @@ To install dependencies:
 
 ### Running Skyway Locally
 
-Make sure you have installed dependecies first:
+Make sure you have installed dependencies first:
 
 ```npm run start```
 
@@ -183,18 +183,18 @@ On x86 Windows:
 
 ```npm run makeWindows```
 
-On x86 Linux (debian):
+On x86 Linux (Debian):
 
 ```npm run makeLinux```
 
-On ARM Linux (debian):
+On ARM Linux (Debian):
 
 ```npm run makeLinuxARM```
 
 ### Using the installer file for Skyway
 
 Navigate to the `out/make` folder from the root of the project.
-Inside `make` will be another folder based on the platform Skyway was built for.
+Inside `make` will be another folder based on the platform for which Skyway was built.
 Navigate inside that folder, and navigate again inside the next folder.
 You should be two levels down from `make`.
 
@@ -207,15 +207,15 @@ If Skyway was already installed, it will be updated.
 
 - Unzip the zip file
 - Drag the unzipped file into the `Applications` folder
-- Launch the program from the applications folder,
-or by pressing `CMD` + `spacebar`
+- Launch the program from the Applications folder
+or press `CMD` + `spacebar`
 - Optionally, Skyway can be dragged or locked to the dock for convenience
 
-#### On Linux (debian, x64 + ARM64)
+#### On Linux (Debian, x64 + ARM64)
 
 - Use Eddy or "Software Store" install the .deb with a GUI
   - or
-- in terminal, in the folder contianing the .deb run `sudo dpkg -i DEB_PACKAGE`
+- In terminal, in the folder containing the .deb, run `sudo dpkg -i DEB_PACKAGE`
 and replace `DEB_PACKAGE` with the name of the .deb file
 
 ## Code of Conduct
@@ -224,7 +224,7 @@ See the Skyway [Code of Conduct](./CODE_OF_CONDUCT.md).
 
 ## Contributing to Skyway
 
-If you wish to write issues or develop features for Skyway see [here](./CONTRIBUTING.md).
+If you wish to write issues or develop features for Skyway, see [here](./CONTRIBUTING.md).
 
 ## Contributors
 
