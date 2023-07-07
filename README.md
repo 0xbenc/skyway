@@ -132,10 +132,11 @@ Download the file appropriate for your platform.
 
 - Mac:
   - Darwin .zip file
-  - After downloading:
+  - After downloading
     - Double click to unzip
-    - Drag app into Application folder, try to run app
-    - Allow app in system preferences -> security
+    - Drag app into `Applications` folder
+    - Try to run app
+    - If app will not run, allow app in system preferences -> security
 - Linux:
   - .deb file
   - see Linux installer instructions below
