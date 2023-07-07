@@ -15,7 +15,7 @@ Prerequisites: Node 18 - no `.ENV` file
 
 ## Not-a-Developer Quick Start
 
-Refer to [How do I get started using Skyway?](#how-do-i-get-started-using-skyway) below.
+Refer to [How do I get started using Skyway?](#how-do-i-start-using-skyway) below.
 
 ## FAQs
 
