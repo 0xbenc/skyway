@@ -139,7 +139,7 @@ Download the file appropriate for your platform.
     - If app will not run, allow app in system preferences -> security
 - Linux:
   - .deb file
-  - see Linux installer instructions below
+  - see [Linux installer instructions](#on-linux-debian-x64--arm64) below
 - Windows:
   - .exe file
   - after downloading, double click to run
