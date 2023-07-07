@@ -21,7 +21,7 @@ Refer to [How do I get started using Skyway?](#how-do-i-get-started-using-skyway
 
 ### What is Skyway?
 
-Skyway is desktop chatbot application powered by OpenAI models and APIs.
+Skyway is a desktop chatbot application powered by OpenAI models and APIs.
 
 Skyway currently runs models such as `gpt-3.5-turbo` and `gpt-4`.
 
@@ -32,34 +32,34 @@ Everyone!
 You do not need to know how to code or be technically inclined to use Skyway.
 If you have a desire to interact with a chatbot effectively and securely, Skyway is for you.
 
-### How do I get started using Skyway?
+### How do I start using Skyway?
 
 Obtain an API Key from OpenAI.
 See [Is Skyway Free to Use?](#is-skyway-free-to-use) if you do not have a key.
 
-To install Skyway without using a terminal / command prompt,
+Next, to install Skyway without using a terminal / command prompt,
 see the [Precompiled Binaries](#precompiled-binaries) section below.
-(This is the easiest way to install Skyway)
+This is the easiest way to install Skyway. If you do not code, this is for you.
 
-To start devloping with Skyway see [Making, Building, and Installing](#making-building-and-installing).
+To start devloping with Skyway, see [Making, Building, and Installing](#making-building-and-installing).
 
 ### Is Skyway free to use?
 
-Skyway free to use and modify as you see fit.
+Skyway is free to use and modify as you see fit.
 
-You must have an API key from OpenAI to chat using Skyway.
-Basic users can expect to pay $2 a month or less. More advanced users may see
+In order to chat using Skyway, you must have an API Key from OpenAI.
+Basic users can expect to pay $2 per month or less. More advanced users may see
 higher token usage.
 
-For more info see:
-[OpenAI Signup](https://github.com/0xbenc) | [Pricing](https://github.com/0xbenc) | [Finding your API Key](https://help.openai.com/en/articles/4936850-where-do-i-find-my-secret-api-key)
+For more info see
+[OpenAI Signup](https://github.com/0xbenc) | [Pricing](https://openai.com/pricing) | [Finding your API Key](https://help.openai.com/en/articles/4936850-where-do-i-find-my-secret-api-key)
 
 ### Why is there a password in Skyway?
 
-A Skyway design goal is that chats and prompts stored on your computer are encrypted.
+One Skyway design goal is to encrypt the chats and prompts stored on your computer.
 
-The password you create does not communicate with the internet, it decrypts the
-data you save when using Skyway.
+The password you create does not communicate with the internet; it decrypts the
+data you generate when using Skyway.
 
 ### Why should I use Skyway vs ChatGPT?
 
@@ -87,7 +87,7 @@ Mac, Windows 10 / 11, and Debian Linux (64bit) are officially supported.
 ChromeOS is not officially supported, but many modern Chromebooks and Chromeboxes
 can install .deb files from the Downloads folder.
 
-Skyway is not a website or a native mobile app. To chat and recieve messages,
+Skyway is not a website or a native mobile app. To chat and receive messages,
 an internet connection must be present.
 
 The ARM64 architecture is officially supported for Mac
@@ -105,28 +105,30 @@ officially supported, Skyway can be made / built / installed on most x86 *nix PC
 Skyway does not provide an API of its own.
 
 Skyway uses axios in the main electron thread to communicate with OpenAI APIs
-and sends the data to the renderer with IPCHandlers.
+and sends the response to the renderer with IPCHandlers.
 
-This makes Skyway ill-suited for modification into large scale projects.
-OpenAI also places limits on the numbers of requests you can make per-min per-key.
+This makes Skyway unfit for modification into large-scale projects.
+OpenAI also places limits on the number of requests you can make per minute per key.
 
-### What are the Skyway design goals?
+### What are Skyway's design goals?
 
-- intuitive UI with complete keyboard-only support
-- no compromises between ease-of-use and inclusion of power tools
-  - should not confuse noobs, should not hinder pros
-- multiple engines
-  - conversational chat (token-limited)
-  - one-shot chat (amnesia)
-- encrypted chats / system prompts
-- easily exportable chats / system prompts
+- Intuitive UI with complete keyboard-only support
+- No compromises between ease-of-use and inclusion of power tools
+  - Should not confuse noobs
+  - Should not hinder pros
+- Multiple engines
+  - Token-Limited (conversational, with memory)
+  - Amnesia (one-shot, no memory)
+- Encrypted chats / system prompts
+- Easily exportable chats / system prompts
 
 ## Precompiled Binaries
 
-### The easiest way to install skyway
+### The easiest way to install Skyway
 
-Go to the `Releases` section of this repository, go to the newest stable version,
-and download the file appropriate for your platform.
+Go to the [Releases](https://github.com/0xbenc/skyway/releases) section of this repository.
+Find the version with the 'Latest' tag.
+Download the file appropriate for your platform.
 
 - Mac:
   - Darwin .zip file
