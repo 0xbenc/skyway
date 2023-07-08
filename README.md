@@ -65,7 +65,7 @@ data you generate when using Skyway.
 
 - Customization via system prompts and engines
 - Potential to develop integrations more securely than through a web service
-- Data Privacy
+- Data privacy
 
 ### What tech does Skyway use?
 
@@ -163,7 +163,7 @@ To install dependencies:
 
 ```npm install```
 
-### Running Skyway Locally
+### Running Skyway locally
 
 Make sure you have installed dependencies first:
 
@@ -198,12 +198,12 @@ Inside `make` will be another folder based on the platform for which Skyway was 
 Navigate inside that folder, and navigate again inside the next folder.
 You should be two levels down from `make`.
 
-#### On Windows
+#### Windows
 
 - Click the .exe file to begin the install process.
 If Skyway was already installed, it will be updated.
 
-#### On Mac (x64 + ARM64)
+#### Mac (x64 + ARM64)
 
 - Unzip the zip file
 - Drag the unzipped file into the `Applications` folder
@@ -211,7 +211,7 @@ If Skyway was already installed, it will be updated.
 or press `CMD` + `spacebar`
 - Optionally, Skyway can be dragged or locked to the dock for convenience
 
-#### On Linux (Debian, x64 + ARM64)
+#### Linux (Debian, x64 + ARM64)
 
 - Use Eddy or "Software Store" install the .deb with a GUI
   - or
