@@ -20,4 +20,4 @@ const formatResponse = (str) => {
   return result;
 };
 
-export { formatResponse }
+export { formatResponse };

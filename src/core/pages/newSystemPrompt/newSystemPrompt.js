@@ -1,12 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { Menu, FormControl, TextField, Button } from "@mui/material";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import MenuItem from '@mui/material/MenuItem';
-import { BackPaper, OutPaper } from "../../mui/reusable";
+//
 import { useStore } from "../../zustand";
+//
 import { encryptPrompts } from "../../utility/encryption";
-import Stack from "@mui/material/Stack";
+//
+import { 
+  Menu, 
+  FormControl, 
+  TextField, 
+  Button, 
+  Grid, 
+  Typography, 
+  MenuItem, 
+  Stack 
+} from "@mui/material";
+//
+import { BasicBox, OutlinePaper } from "../../mui/reusable";
+
 
 // ----------------------------------------------------------------------
 
@@ -134,7 +144,7 @@ const NewSystemPrompt = () => {
   }, [titleInput, promptInput, userInput, model]);
 
   return (
-    <BackPaper>
+    <BasicBox>
       <Grid
         spacing={1}
         container
@@ -147,15 +157,15 @@ const NewSystemPrompt = () => {
         direction={"row"}
       >
         <Grid item sm={12}>
-          <OutPaper>
+          <OutlinePaper>
             <Typography variant="h2">
               New System Prompt
             </Typography>
-          </OutPaper>
+          </OutlinePaper>
         </Grid>
 
         <Grid item sm={12}>
-          <OutPaper>
+          <OutlinePaper>
             <Grid
               spacing={1}
               container
@@ -207,11 +217,11 @@ const NewSystemPrompt = () => {
                 </Stack>
               </Grid>
             </Grid>
-          </OutPaper>
+          </OutlinePaper>
         </Grid>
 
         <Grid item sm={12}>
-          <OutPaper>
+          <OutlinePaper>
             <Stack direction="column" spacing={1}>
               <Typography variant="h4">
                 Prompt:
@@ -232,11 +242,11 @@ const NewSystemPrompt = () => {
                 />
               </FormControl>
             </Stack>
-          </OutPaper>
+          </OutlinePaper>
         </Grid>
 
         <Grid item sm={12}>
-          <OutPaper>
+          <OutlinePaper>
             <Grid
               spacing={1}
               container
@@ -313,11 +323,11 @@ const NewSystemPrompt = () => {
                 </Stack>
               </Grid>
             </Grid>
-          </OutPaper>
+          </OutlinePaper>
         </Grid>
 
         <Grid item sm={12}>
-          <OutPaper>
+          <OutlinePaper>
             <Stack direction="row" spacing={1}>
               <Button
                 variant="outlined"
@@ -336,10 +346,10 @@ const NewSystemPrompt = () => {
                 Cancel
               </Button>
             </Stack>
-          </OutPaper>
+          </OutlinePaper>
         </Grid>
       </Grid>
-    </BackPaper>
+    </BasicBox>
   );
 };
 

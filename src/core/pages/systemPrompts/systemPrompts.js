@@ -1,14 +1,20 @@
 import React from "react";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import Chip from "@mui/material/Chip"
-import Stack from "@mui/material/Stack"
+//
 import { useStore } from "../../zustand";
+//
 import { previewText } from "../../utility/string";
-import { BackPaper, OutPaper } from "../../mui/reusable";
-import { deleteSystemPrompt } from "./systemPrompts_utility";
 import { navigate } from "../../utility/navigatePage";
+//
+import { 
+  Grid, 
+  Typography, 
+  Button, 
+  Chip, 
+  Stack
+} from "@mui/material";
+//
+import { BasicBox, OutlinePaper } from "../../mui/reusable";
+import { deleteSystemPrompt } from "./systemPrompts_utility";
 
 // ----------------------------------------------------------------------
 
@@ -22,7 +28,7 @@ const SystemPrompts = () => {
 
 
   return (
-    <BackPaper>
+    <BasicBox>
       <Grid
         spacing={1}
         container sx={{
@@ -34,15 +40,15 @@ const SystemPrompts = () => {
         direction={"row"}
       >
         <Grid item sm={12}>
-          <OutPaper>
+          <OutlinePaper>
             <Typography variant="h2">
               System Prompts
             </Typography>
-          </OutPaper>
+          </OutlinePaper>
         </Grid>
 
         <Grid item sm={12}>
-          <OutPaper>
+          <OutlinePaper>
             <Stack direction="row" spacing={1}>
               <Button
                 variant="outlined"
@@ -60,13 +66,13 @@ const SystemPrompts = () => {
                 Create Prompt
               </Button>
             </Stack>
-          </OutPaper>
+          </OutlinePaper>
         </Grid>
 
         {system_prompts.map((prompt, key) => {
           return (
             <Grid item sm={6} key={key}>
-              <OutPaper>
+              <OutlinePaper>
                 <Grid container>
                   <Grid item sm={12}>
                     <Typography variant="h4">
@@ -104,12 +110,12 @@ const SystemPrompts = () => {
                     </Button>
                   </Grid>}
                 </Grid>
-              </OutPaper>
+              </OutlinePaper>
             </Grid>
           )
         })}
       </Grid>
-    </BackPaper>
+    </BasicBox>
   );
 };
 

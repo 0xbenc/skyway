@@ -1,5 +1,8 @@
 import { useStore } from "../../zustand";
+//
 import { encryptPrompts } from "../../utility/encryption";
+
+// ----------------------------------------------------------------------
 
 const deleteSystemPrompt = (index) => {
   const system_prompts = useStore.getState().system_prompts;

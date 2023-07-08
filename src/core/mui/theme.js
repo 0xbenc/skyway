@@ -1,14 +1,14 @@
+const PINK = {
+  main: '#FFC0CB'
+};
+
 const light = {
   overrides: {
     MuiCssBaseline: {
       "@global": {
         "*, *::before, *::after": {
           boxSizing: "border-box",
-        },
-        body: {
-          fontSize: 14,
-          fontWeight: 400
-        },
+        }
       },
     },
   },
@@ -28,12 +28,16 @@ const light = {
       main: "#eee",
       light: "#fff",
       dark: "#ddd",
+      inside: "#ddd",
+      outside: "#fff",
       contrastText: '#000',
     },
     secondary: {
       main: "#111",
       light: "#000",
       dark: '#222',
+      outside: "#000",
+      inside: "#222",
       contrastText: '#fff',
     },
     text: {
@@ -41,6 +45,7 @@ const light = {
       secondary: '#000',
       disabled: '#000'
     },
+    pink: PINK,
   }
 };
 
@@ -50,10 +55,6 @@ const dark = {
       "@global": {
         "*, *::before, *::after": {
           boxSizing: "border-box",
-        },
-        body: {
-          fontSize: 14,
-          fontWeight: 400
         },
       },
     },
@@ -87,6 +88,7 @@ const dark = {
       secondary: '#fff',
       disabled: '#fff'
     },
+    pink: PINK,
   }
 };
 
