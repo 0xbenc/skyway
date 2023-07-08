@@ -46,15 +46,16 @@ app.on('activate', () => {
   }
 });
 
-ipcMain.on('electron-store-get', async (event, val) => {
+//Begin IPC
+ipcMain.on('store-get', async (event, val) => {
   event.returnValue = store.get(val);
 });
 
-ipcMain.on('electron-store-set', async (_, key, val) => {
+ipcMain.on('store-set', async (_, key, val) => {
   store.set(key, val);
 });
 
-ipcMain.handle('apiRequest', async (_, endpoint, data, key) => {
+ipcMain.handle('openai-api', async (_, endpoint, data, key) => {
   const bearer = `Bearer ${key}`
   try {
     const response = await axios.post('https://api.openai.com/' + endpoint, data, {
@@ -70,6 +71,7 @@ ipcMain.handle('apiRequest', async (_, endpoint, data, key) => {
   };
 });
 
-ipcMain.handle('version', () => {
+ipcMain.handle('version-get', () => {
   return app.getVersion();
 });
+// End IPC

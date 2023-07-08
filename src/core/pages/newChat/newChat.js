@@ -1,5 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
+//
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { useStore } from "../../zustand";
+//
 import { fetchChatCompletion } from "../../utility/fetchData";
+import { navigate } from "../../utility/navigatePage";
+//
 import {
   FormControl,
   TextField,
@@ -8,22 +14,21 @@ import {
   CircularProgress,
   Box,
   Stack,
-  Tooltip
+  Tooltip,
+  Backdrop
 } from "@mui/material";
-import DoneIcon from "@mui/icons-material/Done";
+//
+import HomeIcon from "@mui/icons-material/Home"
 import RefreshIcon from '@mui/icons-material/Refresh';
+import DoneIcon from "@mui/icons-material/Done";
 import EditIcon from "@mui/icons-material/Edit";
-import { useStore } from "../../zustand";
-import { LeftBox, RightBox, LeftChatBox, RightChatBox, ChatsHolder, LeftCodeBorder, RightCodeBorder } from "./newChat_styles";
-import { formatResponse } from "./newChat_utility";
-import { CopyToClipboard } from 'react-copy-to-clipboard';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
-import CloseIcon from '@mui/icons-material/Close';
-import { OutPaper } from "../../mui/reusable";
-import { navigate } from "../../utility/navigatePage";
 import AspectRatioIcon from '@mui/icons-material/AspectRatio';
 import CloseFullscreenIcon from '@mui/icons-material/CloseFullscreen';
-import { Backdrop } from "@mui/material";
+//
+import { formatResponse } from "./newChat_utility";
+import { LeftBox, RightBox, LeftChatBox, RightChatBox, ChatsHolder, LeftCodeBorder, RightCodeBorder } from "./newChat_styles";
+import { OutlinePaper } from "../../mui/reusable";
 
 function hasScrollbar(input) {
   return input.scrollHeight > input.clientHeight;
@@ -60,7 +65,7 @@ const NewChat = () => {
 
   const handleUserPromptInput = (event) => {
     setUserPromptInput(event.target.value);
-    
+
     const input = inputRef.current;
     if (hasScrollbar(input)) {
       setScrollCount(scrollCount + 1)
@@ -200,27 +205,24 @@ const NewChat = () => {
   return (
     <>
       <Stack direction="column" spacing={1}>
-        <OutPaper>
-          <IconButton
-            aria-label="close"
-            onClick={() => { navigate("landing") }}
-            sx={{
-              position: "absolute",
-              top: 0,
-              right: 0,
-            }}
-          >
-            <CloseIcon />
-          </IconButton>
+        <OutlinePaper>
           <Stack direction="row" spacing={1}>
+            <Box>
+              <IconButton
+                aria-label="close"
+                onClick={() => { navigate("landing") }}
+              >
+                <HomeIcon />
+              </IconButton>
+            </Box>
             <Typography variant="h3">
               New Chat:
             </Typography>
-            <OutPaper>
+            <OutlinePaper>
               <Typography variant="h4">
                 {activeSystemPrompt.title}
               </Typography>
-            </OutPaper>
+            </OutlinePaper>
             <Stack direction="column" spacing={1}>
               <Typography variant="body1">
                 {activeSystemPrompt.model}
@@ -230,7 +232,7 @@ const NewChat = () => {
               </Typography>
             </Stack>
           </Stack>
-        </OutPaper>
+        </OutlinePaper>
         <ChatsHolder>
           {displayedChats.length > 0 && displayedChats.map((chat, key) => {
             return (
@@ -280,7 +282,7 @@ const NewChat = () => {
 
       <Box sx={{ position: "absolute", bottom: 0, width: "100%" }}>
         <Stack direction="row" spacing={1}>
-          <OutPaper>
+          <OutlinePaper>
             <Stack direction="row" spacing={1}>
               <Tooltip title="resubmit last message">
                 <span>
@@ -306,7 +308,7 @@ const NewChat = () => {
                 </span>
               </Tooltip>
             </Stack>
-          </OutPaper>
+          </OutlinePaper>
 
           <FormControl fullWidth >
             <Box sx={{ margin: 1 }}>
@@ -363,7 +365,7 @@ const NewChat = () => {
 
           {busyUI && <CircularProgress color="secondary" />}
 
-          <OutPaper>
+          <OutlinePaper>
             <Stack direction="row" spacing={1}>
               {activeSystemPrompt.engine === "token limited" && <Typography variant="body1">
                 Total Tokens: {newTokenCount}/{activeSystemPrompt.limit}
@@ -372,15 +374,22 @@ const NewChat = () => {
                 Previous Tokens: {newTokenCount}
               </Typography>}
             </Stack>
-          </OutPaper>
+          </OutlinePaper>
         </Stack>
       </Box>
 
       <Backdrop
-        sx={{ color: '#fff', backgroundColor: "#000", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        sx={{
+          color: '#fff',
+          backgroundColor: (theme) => theme.palette.primary.outside,
+          zIndex: (theme) => theme.zIndex.drawer + 1
+        }}
         open={modalOpen}
       >
-        <FormControl fullWidth >
+        <FormControl
+          fullWidth
+          sx={{ backgroundColor: (theme) => theme.palette.primary.main }}
+        >
           <Box sx={{ margin: 1 }}>
             <TextField
               id="prompt-zone"

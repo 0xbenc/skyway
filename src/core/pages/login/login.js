@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
+//
 import { useStore } from "../../zustand";
+//
 import Prompts from "../../utility/defaultSystemPrompts";
-import { FormControl, TextField, Button, Typography, Box } from "@mui/material";
-import { decrypt, decryptPrompts, encryptPrompts, encrypt } from "../../utility/encryption";
-import { BackPaper, OutPaper } from "../../mui/reusable";
-import Stack from "@mui/material/Stack";
 import { seeds } from "../../utility/seeds";
 import { generateRandomNumbers } from "../../utility/number";
+import { decrypt, decryptPrompts, encryptPrompts, encrypt } from "../../utility/encryption";
+//
+import { FormControl, TextField, Button, Typography, Box, Stack } from "@mui/material";
+//
+import { BasicBox, OutlinePaper } from "../../mui/reusable";
 import { SeedPaper } from "./login_styles";
 
 // ----------------------------------------------------------------------
@@ -108,13 +111,13 @@ const Login = () => {
     window.electron.store.set('password_set', true);
     window.electron.store.set("integrity_check", ciphertext)
     window.electron.store.set("system_prompts", encPrompts)
-    window.electron.store.set("color_mode", "dark")
+    window.electron.store.set("color_mode", "light")
     window.electron.store.set('open_ai_api_key', cipherAPI)
 
     useStore.setState({
       password: passwordInput,
       system_prompts: Prompts,
-      color_mode: "dark",
+      color_mode: "light",
       page: "landing",
       open_ai_api_key: apiInput
     });
@@ -155,18 +158,18 @@ const Login = () => {
   }, [passwordInput, passwordMatchInput])
 
   return (
-    <BackPaper>
+    <BasicBox>
       <Stack direction="column" spacing={1}>
-        <OutPaper>
+        <OutlinePaper>
           <Typography variant="h1">
             Skyway
           </Typography>
           <Typography variant="body1">
-            v{version} {devMode_ ? "dev" : ""}
+            v{version} {devMode_ ? "pre-release" : ""}
           </Typography>
-        </OutPaper>
+        </OutlinePaper>
 
-        {showKnownPassword && <OutPaper>
+        {showKnownPassword && <OutlinePaper>
           <FormControl>
             <Stack direction="column" spacing={1}>
               <Typography variant="h4">
@@ -212,9 +215,9 @@ const Login = () => {
               </Button>}
             </Stack>
           </FormControl>
-        </OutPaper>}
+        </OutlinePaper>}
 
-        {showNewPassword && <OutPaper>
+        {showNewPassword && <OutlinePaper>
           <Stack direction="column" spacing={1}>
             <Typography variant="h4">
               Welcome! Create a Password to begin:
@@ -266,9 +269,9 @@ const Login = () => {
               </FormControl>
             </Box>
           </Stack>
-        </OutPaper>}
+        </OutlinePaper>}
 
-        {showAPI && <OutPaper>
+        {showAPI && <OutlinePaper>
           <Typography variant="h6">
             If you need an OpenAI API Key:
           </Typography>
@@ -279,9 +282,9 @@ const Login = () => {
             Create a new API key, and copy and paste it to someplace safe.
             After you have saved the key somewhere, you are ready to paste it here and continue.
           </Typography>
-        </OutPaper>}
+        </OutlinePaper>}
 
-        {showAPI && <OutPaper>
+        {showAPI && <OutlinePaper>
           <FormControl>
             <Stack direction="row" spacing={1}>
               <TextField
@@ -313,10 +316,10 @@ const Login = () => {
               </Button>
             </Stack>
           </FormControl>
-        </OutPaper>}
+        </OutlinePaper>}
 
         {showSeed && <>
-          <OutPaper>
+          <OutlinePaper>
             <Stack direction="column" spacing={1}>
               <Typography variant="h4">
                 Seed Phrase 101:
@@ -328,10 +331,10 @@ const Login = () => {
                 To safely store your seed phrase, you should write it down on a piece of paper and keep it in a secure place that only you know. You should not share your seed phrase with anyone or store it online, as this could expose your app and password to hackers or thieves.
               </Typography>
             </Stack>
-          </OutPaper>
+          </OutlinePaper>
 
 
-          <OutPaper>
+          <OutlinePaper>
             <Stack direction="row" spacing={1}>
               <Typography variant="h4">
                 WARNING:
@@ -341,9 +344,9 @@ const Login = () => {
               </Typography>
             </Stack>
 
-          </OutPaper>
+          </OutlinePaper>
 
-          <OutPaper>
+          <OutlinePaper>
             <Stack direction="row" spacing={1}>
               <Typography variant="h4">Your Seed Phrase:</Typography>
               <SeedPaper>
@@ -359,11 +362,11 @@ const Login = () => {
                 Continue
               </Button>
             </Stack>
-          </OutPaper>
+          </OutlinePaper>
         </>}
 
       </Stack>
-    </BackPaper >
+    </BasicBox >
   );
 };
 
