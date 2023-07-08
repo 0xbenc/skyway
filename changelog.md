@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.1
+
+- UI cleanup
+- dependency upgrades
+- community files added
+- project restructuring
+
 ## 1.0.0
 
 - login page
