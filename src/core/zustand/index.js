@@ -31,6 +31,6 @@ export const useStore = create(() => {
     password: "missing",
 
     // true if not a release build
-    devMode: true
+    devMode: false
   };
 });
