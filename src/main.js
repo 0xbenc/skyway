@@ -5,7 +5,12 @@ const axios = require('axios');
 
 const store = new Store({
   migrations: {
-    // '1.1.0': store => { store.set('version', '1.1.0') }
+    '<1.0.1': store => {
+      store.set('version', '1.0.0')
+    },
+    '1.0.1': store => {
+      store.set('version', '1.0.1')
+    }
   }
 });
 
