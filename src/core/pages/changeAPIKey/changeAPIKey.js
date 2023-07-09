@@ -8,6 +8,7 @@ import { encrypt } from "../../utility/encryption";
 import { Typography, FormControl, TextField, Button, Stack } from "@mui/material";
 //
 import { BasicBox, OutlinePaper } from "../../mui/reusable";
+import { eSet } from "../../utility/electronStore";
 
 // ----------------------------------------------------------------------
 
@@ -25,7 +26,7 @@ const ChangeAPIKey = () => {
 
     const encPassword = encrypt(passwordInput, password_);
 
-    window.electron.store.set("open_ai_api_key", encPassword);
+    eSet("open_ai_api_key", encPassword);
 
     navigate("landing");
   };

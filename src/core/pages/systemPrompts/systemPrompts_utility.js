@@ -1,6 +1,7 @@
 import { useStore } from "../../zustand";
 //
 import { encryptPrompts } from "../../utility/encryption";
+import { eSet } from "../../utility/electronStore";
 
 // ----------------------------------------------------------------------
 
@@ -18,7 +19,7 @@ const deleteSystemPrompt = (index) => {
 
   const encPrompts = encryptPrompts(newPrompts, password_)
 
-  window.electron.store.set("system_prompts", encPrompts);
+  eSet("system_prompts", encPrompts);
 
   useStore.setState({ system_prompts: newPrompts })
 }

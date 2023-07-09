@@ -11,6 +11,7 @@ import { FormControl, TextField, Button, Typography, Box, Stack } from "@mui/mat
 //
 import { BasicBox, OutlinePaper } from "../../mui/reusable";
 import { SeedPaper } from "./login_styles";
+import { eGet, eSet } from "../../utility/electronStore";
 
 // ----------------------------------------------------------------------
 
@@ -50,14 +51,14 @@ const Login = () => {
   };
 
   const clickSinglePassword = () => {
-    const _integrity_check = window.electron.store.get('integrity_check')
+    const _integrity_check = eGet('integrity_check')
 
     const integrity_check = decrypt(_integrity_check, passwordInput);
 
     if (integrity_check === "skynet") {
-      const _system_prompts = window.electron.store.get("system_prompts")
-      const _open_ai_api_key = window.electron.store.get("open_ai_api_key")
-      const _open_ai_api_keys = window.electron.store.get("open_ai_api_keys")
+      const _system_prompts = eGet("system_prompts")
+      const _open_ai_api_key = eGet("open_ai_api_key")
+      const _open_ai_api_keys = eGet("open_ai_api_keys")
 
       const dencPrompts = decryptPrompts(_system_prompts, passwordInput)
       
@@ -114,12 +115,12 @@ const Login = () => {
     const encPrompts = encryptPrompts(Prompts, passwordInput)
     const encPass = encrypt(passwordInput, seedKey).toString();
 
-    window.electron.store.set("recovery", encPass)
-    window.electron.store.set('password_set', true);
-    window.electron.store.set("integrity_check", ciphertext)
-    window.electron.store.set("system_prompts", encPrompts)
-    window.electron.store.set("color_mode", "light")
-    window.electron.store.set('open_ai_api_key', cipherAPI)
+    eSet("recovery", encPass)
+    eSet('password_set', true);
+    eSet("integrity_check", ciphertext)
+    eSet("system_prompts", encPrompts)
+    eSet("color_mode", "light")
+    eSet('open_ai_api_key', cipherAPI)
 
     useStore.setState({
       password: passwordInput,
@@ -139,12 +140,12 @@ const Login = () => {
     }
 
     if (!storePasswordCheck) {
-      const _password_set = window.electron.store.get('password_set');
+      const _password_set = eGet('password_set');
       getVersion();
 
       if (_password_set) {
         console.log("LOGIN: user has logged in before")
-        const _color_mode = window.electron.store.get("color_mode")
+        const _color_mode = eGet("color_mode")
         useStore.setState({ color_mode: _color_mode === "light" ? "light" : "dark" })
         setShowKnownPassword(true)
       } else {

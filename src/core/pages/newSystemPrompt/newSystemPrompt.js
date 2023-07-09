@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 //
 import { BasicBox, OutlinePaper } from "../../mui/reusable";
+import { eSet } from "../../utility/electronStore";
 
 
 // ----------------------------------------------------------------------
@@ -117,7 +118,7 @@ const NewSystemPrompt = () => {
     const password_ = useStore.getState().password;
 
     const encPrompts = encryptPrompts(system_prompts_, password_);
-    window.electron.store.set("system_prompts", encPrompts);
+    eSet("system_prompts", encPrompts);
 
     useStore.setState({ page: "system_prompts" })
 
