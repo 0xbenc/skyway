@@ -120,14 +120,16 @@ const Login = () => {
     eSet("integrity_check", ciphertext)
     eSet("system_prompts", encPrompts)
     eSet("color_mode", "light")
-    eSet('open_ai_api_key', cipherAPI)
+    eSet('open_ai_api_keys', [{key: cipherAPI, name: "default"}])
+    eSet('open_ai_api_key', 0)
 
     useStore.setState({
       password: passwordInput,
       system_prompts: Prompts,
       color_mode: "light",
       page: "landing",
-      open_ai_api_key: apiInput
+      open_ai_api_keys: [{key: apiInput, name: "default"}],
+      open_ai_api_key: 0
     });
   };
 
