@@ -26,11 +26,12 @@ export const useStore = create(() => {
 
     // decrypted OpenAI API Key
     open_ai_api_key: "missing",
+    open_ai_api_keys: [],
 
     // decrypted password
     password: "missing",
 
     // true if not a release build
-    devMode: false
+    devMode: true
   };
 });

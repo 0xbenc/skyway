@@ -57,15 +57,22 @@ const Login = () => {
     if (integrity_check === "skynet") {
       const _system_prompts = window.electron.store.get("system_prompts")
       const _open_ai_api_key = window.electron.store.get("open_ai_api_key")
+      const _open_ai_api_keys = window.electron.store.get("open_ai_api_keys")
 
       const dencPrompts = decryptPrompts(_system_prompts, passwordInput)
-      const open_ai_api_key = decrypt(_open_ai_api_key, passwordInput)
+      
+      let decryptedKeys = [];
+
+      for (let i = 0; i < _open_ai_api_keys.length; i++) {
+        decryptedKeys.push({key: decrypt(_open_ai_api_keys[i].key, passwordInput), name: _open_ai_api_keys[i].name})
+      };
 
       setBadPassword(false)
 
       useStore.setState({
         system_prompts: dencPrompts,
-        open_ai_api_key: open_ai_api_key,
+        open_ai_api_key: _open_ai_api_key,
+        open_ai_api_keys: decryptedKeys,
         page: "landing",
         password: passwordInput
       })

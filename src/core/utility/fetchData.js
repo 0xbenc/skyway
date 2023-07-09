@@ -7,9 +7,10 @@ const fetchChatCompletion = async (messages, model, params) => {
     ...params
   }
   const key = useStore.getState().open_ai_api_key
+  const keys = useStore.getState().open_ai_api_keys
 
   try {
-    const response = await window.electron.engine.chat(data, key)
+    const response = await window.electron.engine.chat(data, keys[key].key)
     return response;
   } catch (error) {
     return "error";
