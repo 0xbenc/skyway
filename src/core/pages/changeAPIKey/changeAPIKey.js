@@ -53,16 +53,15 @@ const ChangeAPIKey = () => {
     setEditNameInput(event.target.value);
   };
 
-  const deleteKey = (key) => {
-    console.log("KEY TO DELETE", key);
+  const passwordStyle = (input) => "*".repeat(String(input).length);
 
+  const deleteKey = (key) => {
     const password_ = useStore.getState().password;
 
     let newArr = [];
     let newArrEnc = [];
 
     for (let i = 0; i < open_ai_api_keys.length; i++) {
-      console.log(open_ai_api_keys)
       if (i !== key) {
         newArr.push(open_ai_api_keys[i]);
         newArrEnc.push({
@@ -86,8 +85,6 @@ const ChangeAPIKey = () => {
   };
 
   const addKey = () => {
-    console.log('KEY TO ADD');
-
     const password_ = useStore.getState().password;
 
     let newArr = [];
@@ -124,6 +121,7 @@ const ChangeAPIKey = () => {
   const openEditKey = (key) => {
     setEditKey(key);
     setEditNameInput(open_ai_api_keys[key].name)
+    setEditKeyInput(open_ai_api_keys[key].key)
   };
 
   const closeEditKey = () => {
@@ -225,7 +223,7 @@ const ChangeAPIKey = () => {
                     {key !== editKey && <>
                       <Typography variant="h6">{chat.name}</Typography>
                       <OutlinePaper>
-                        <Typography variant="body1">{chat.key}</Typography>
+                        <Typography variant="body1">{passwordStyle(chat.key)}</Typography>
                       </OutlinePaper>
                       {key > 0 && <Box>
                         <IconButton onClick={() => { deleteKey(key) }}>
