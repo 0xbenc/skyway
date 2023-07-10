@@ -56,7 +56,9 @@ const NewChat = () => {
 
   const [busyUI, setBusyUI] = useState(false);
 
-  const activeSystemPrompt = useStore.getState().active_system_prompt
+  const activeSystemPrompt = useStore.getState().active_system_prompt;
+  const open_ai_api_keys_ = useStore.getState().open_ai_api_keys;
+  const open_ai_api_key_ = useStore.getState().open_ai_api_key;
 
   const errorMessage = {
     role: "assistant",
@@ -231,6 +233,11 @@ const NewChat = () => {
                 {activeSystemPrompt.engine}
               </Typography>
             </Stack>
+            <OutlinePaper>
+              <Typography variant="body1">
+                API Key: {open_ai_api_keys_[open_ai_api_key_].name}
+              </Typography>
+            </OutlinePaper>
           </Stack>
         </OutlinePaper>
         <ChatsHolder>
@@ -403,7 +410,6 @@ const NewChat = () => {
                   ev.preventDefault();
                 };
               }}
-
               required={true}
               disabled={busyUI}
               fullWidth
