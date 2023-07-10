@@ -56,27 +56,13 @@ const ChangeAPIKey = () => {
   const passwordStyle = (input) => "*".repeat(String(input).length);
 
   const deleteKey = (key) => {
-    const password_ = useStore.getState().password;
+    const copy = [...open_ai_api_keys];
+    const filteredItems = copy.filter((_, index) => index !== key);
 
-    let newArr = [];
-    let newArrEnc = [];
+    useStore.setState({ open_ai_api_keys: filteredItems });
+    eSet("open_ai_api_keys", filteredItems);
 
-    for (let i = 0; i < open_ai_api_keys.length; i++) {
-      if (i !== key) {
-        newArr.push(open_ai_api_keys[i]);
-        newArrEnc.push({
-          name: open_ai_api_keys[i].name,
-          key: encrypt(open_ai_api_keys[i].key, password_)
-        });
-      };
-    };
-
-    useStore.setState({ open_ai_api_keys: newArr });
-    eSet("open_ai_api_keys", newArrEnc);
-
-    if (open_ai_api_key === key) {
-      useStore.setState({ open_ai_api_key: 0 })
-    };
+    if (open_ai_api_key === key) useStore.setState({ open_ai_api_key: 0 });
   };
 
   const selectKey = (key) => {
