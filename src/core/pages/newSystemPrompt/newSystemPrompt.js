@@ -192,7 +192,6 @@ const NewSystemPrompt = () => {
                       value={titleInput}
                       onChange={handleTitleInput}
                       required={true}
-                      focused
                       autoFocus
                     />
                   </FormControl>

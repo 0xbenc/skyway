@@ -204,7 +204,6 @@ const Login = () => {
                   }}
                   required={true}
                   type="password"
-                  focused
                   autoFocus
                 />
                 <Button
@@ -243,7 +242,6 @@ const Login = () => {
                   onChange={handlePasswordInput}
                   required={true}
                   type="password"
-                  focused
                   autoFocus
                   onKeyPress={(ev) => {
                     if (ev.key === 'Enter' && passwordMatch) {
@@ -306,7 +304,6 @@ const Login = () => {
                 onChange={handleAPIInput}
                 required={true}
                 type="password"
-                focused
                 autoFocus
                 fullWidth
                 onKeyPress={(ev) => {

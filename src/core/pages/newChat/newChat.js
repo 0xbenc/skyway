@@ -331,7 +331,6 @@ const NewChat = () => {
                 fullWidth
                 multiline={true}
                 maxRows={2}
-                focused
                 autoFocus
               />
             </Box>
@@ -410,7 +409,6 @@ const NewChat = () => {
               fullWidth
               multiline={true}
               rows={30}
-              focused
               autoFocus
             />
           </Box>

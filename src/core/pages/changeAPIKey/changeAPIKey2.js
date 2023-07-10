@@ -1,54 +1,34 @@
 import React, { useState } from "react";
 //
-import { seeds } from "../../utility/seeds";
+import { useStore } from "../../zustand";
+//
 import { navigate } from "../../utility/navigatePage";
-import { decrypt } from "../../utility/encryption";
+import { encrypt } from "../../utility/encryption";
 //
 import { Typography, FormControl, TextField, Button, Stack } from "@mui/material";
 //
 import { BasicBox, OutlinePaper } from "../../mui/reusable";
-import { eGet } from "../../utility/electronStore";
+import { eSet } from "../../utility/electronStore";
 
 // ----------------------------------------------------------------------
 
-const Recovery = () => {
+const ChangeAPIKey = () => {
   const [passwordInput, setPasswordInput] = useState("");
-  const [passwordOutput, setPasswordOutput] = useState("");
-  const [bad, setBad] = useState("");
 
   const handlePasswordInput = (event) => {
     setPasswordInput(event.target.value);
   };
 
-  const convertKey = () => {
-    const splitKey = String(passwordInput).split(" ");
-    const nums = [];
-    let key = "";
+  const changeAPI = () => {
+    const password_ = useStore.getState().password;
 
-    for (let i = 0; i < splitKey.length; i++) {
-      nums.push(seeds.indexOf(splitKey[i]));
-    };
+    useStore.setState({ open_ai_api_key: passwordInput });
 
-    for (let e = 0; e < nums.length; e++) {
-      key += nums[e];
-      if (e !== nums.length - 1) {
-        key += "x";
-      };
-    };
+    const encPassword = encrypt(passwordInput, password_);
 
-    const _recovery = eGet("recovery")
-    const _integrity_check = eGet("integrity_check")
+    eSet("open_ai_api_key", encPassword);
 
-    const recovery = decrypt(_recovery, key)
-    const integrity_check = decrypt(_integrity_check, recovery)
-
-    if (integrity_check === "skynet") {
-      setPasswordOutput(recovery)
-      setBad(false)
-    } else {
-      setBad(true)
-      setPasswordOutput("")
-    }
+    navigate("landing");
   };
 
   return (
@@ -56,23 +36,24 @@ const Recovery = () => {
       <Stack direction="column" spacing={1}>
         <OutlinePaper>
           <Typography variant="h2">
-            Password Recovery
+            Change API Key
           </Typography>
         </OutlinePaper>
 
         <OutlinePaper>
           <Stack direction="column" spacing={1}>
-            <Typography>Enter every word of your seed phrase, all lowercase, separated by spaces, no space at the end.</Typography>
+            <Typography>Enter new OpenAI API key</Typography>
             <FormControl>
               <Stack direction="row" spacing={1}>
                 <TextField
                   id="user-input"
-                  label="Seed Phrase"
+                  label="OpanAI API Key"
                   variant="filled"
                   color="secondary"
                   value={passwordInput}
                   onChange={handlePasswordInput}
                   required={true}
+                  focused
                   autoFocus
                   fullWidth={true}
                 />
@@ -80,31 +61,23 @@ const Recovery = () => {
                   color={"secondary"}
                   variant="outlined"
                   disabled={passwordInput === ""}
-                  onClick={convertKey}
+                  onClick={changeAPI}
                   fullWidth={false}
                 >
-                  Recover Password
+                  Change API Key
                 </Button>
               </Stack>
             </FormControl>
           </Stack>
         </OutlinePaper>
-        {(bad || passwordOutput !== "") && <OutlinePaper>
-          {passwordOutput !== "" && <Typography variant="body">
-            Password: {passwordOutput}
-          </Typography>}
-          {bad && <Typography variant="body">
-            Incorrect Seed Phrase
-          </Typography>}
-        </OutlinePaper>}
         <OutlinePaper>
           <Button
             color={"secondary"}
             variant="outlined"
-            onClick={() => {navigate("login")}}
+            onClick={() => { navigate("landing") }}
             fullWidth={false}
           >
-            Return to Login
+            Cancel
           </Button>
         </OutlinePaper>
       </Stack>
@@ -112,4 +85,4 @@ const Recovery = () => {
   );
 };
 
-export default Recovery;
+export default ChangeAPIKey;
