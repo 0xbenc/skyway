@@ -2,7 +2,6 @@ import React, { useState } from "react";
 //
 import { useStore } from "../../zustand";
 //
-import { navigate } from "../../utility/navigatePage";
 import { encrypt } from "../../utility/encryption";
 //
 import {
@@ -24,6 +23,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 //
 import { BasicBox, OutlinePaper } from "../../mui/reusable";
 import { eSet } from "../../utility/electronStore";
+import Title from "../../components/title";
 
 // ----------------------------------------------------------------------
 
@@ -170,11 +170,7 @@ const ChangeAPIKey = () => {
   return (
     <BasicBox>
       <Stack direction="column" spacing={1}>
-        <OutlinePaper>
-          <Typography variant="h2">
-            Change API Key
-          </Typography>
-        </OutlinePaper>
+        <Title value={"Change API Key"} />
 
         <OutlinePaper>
           <Stack direction="column" spacing={1}>
@@ -286,17 +282,6 @@ const ChangeAPIKey = () => {
               )
             })}
           </Stack>
-        </OutlinePaper>
-
-        <OutlinePaper>
-          <Button
-            color={"secondary"}
-            variant="outlined"
-            onClick={() => { navigate("landing") }}
-            fullWidth={false}
-          >
-            Cancel
-          </Button>
         </OutlinePaper>
       </Stack>
     </BasicBox>
