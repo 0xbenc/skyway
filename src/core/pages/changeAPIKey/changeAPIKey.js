@@ -20,10 +20,14 @@ import EditIcon from "@mui/icons-material/Edit";
 import LaunchIcon from '@mui/icons-material/Launch';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CloudDoneIcon from '@mui/icons-material/CloudDone';
+import CloudOffIcon from '@mui/icons-material/CloudOff';
+import CloudSyncIcon from '@mui/icons-material/CloudSync';
 //
 import { BasicBox, OutlinePaper } from "../../mui/reusable";
 import { eSet } from "../../utility/electronStore";
 import Title from "../../components/title";
+import { fetchChatCompletionConnectionTest } from "../../utility/fetchData";
 
 // ----------------------------------------------------------------------
 
@@ -53,6 +57,14 @@ const ChangeAPIKey = () => {
     setEditNameInput(event.target.value);
   };
 
+  const [netKey, setNetKey] = useState(-1);
+  const [netStatus, setNetStatus] = useState(false);
+
+  const clearNetStatus = () => {
+    setNetKey(-1);
+    setNetStatus(-1);
+  };
+
   const passwordStyle = (input) => "*".repeat(String(input).length);
 
   const deleteKey = (key) => {
@@ -74,6 +86,7 @@ const ChangeAPIKey = () => {
     useStore.setState({ open_ai_api_keys: newArr, open_ai_api_key: 0 });
     eSet("open_ai_api_keys", newArrEnc);
     eSet("open_ai_api_key", 0);
+    clearNetStatus();
 
     console.log("API KEY: deleted key")
   };
@@ -81,6 +94,8 @@ const ChangeAPIKey = () => {
   const selectKey = (key) => {
     useStore.setState({ open_ai_api_key: key })
     eSet("open_ai_api_key", key)
+    clearNetStatus();
+
     console.log("API KEY: selected key")
   };
 
@@ -116,6 +131,7 @@ const ChangeAPIKey = () => {
     setKeyInput("");
     setEditNameInput("");
     setEditKeyInput("");
+    clearNetStatus();
 
     console.log("API KEY: added key")
   };
@@ -124,6 +140,7 @@ const ChangeAPIKey = () => {
     setEditKey(key);
     setEditNameInput(open_ai_api_keys[key].name)
     setEditKeyInput(open_ai_api_keys[key].key)
+    clearNetStatus();
   };
 
   const closeEditKey = () => {
@@ -163,8 +180,25 @@ const ChangeAPIKey = () => {
     setEditNameInput("");
     setEditKeyInput("");
     setEditKey(-1);
+    clearNetStatus();
 
     console.log("API KEY: adjusted key")
+  };
+
+  const checkConnection = async (key) => {
+    selectKey(key);
+    console.log("API KEY: validating key")
+
+    const value = await fetchChatCompletionConnectionTest();
+    if (value === "success") {
+      setNetStatus(true);
+      setNetKey(key);
+      console.log("API KEY: key is valid")
+    } else {
+      setNetStatus(false);
+      setNetKey(key);
+      console.log("API KEY: ERROR: key is not valid")
+    };
   };
 
   return (
@@ -235,12 +269,23 @@ const ChangeAPIKey = () => {
                           <EditIcon />
                         </IconButton>
                       </Box>
-                      {key !== open_ai_api_key && <Box>
-                        <IconButton onClick={() => { selectKey(key) }}>
-                          <LaunchIcon />
+                      {key !== open_ai_api_key && <IconButton onClick={() => { selectKey(key) }}>
+                        <LaunchIcon />
+                      </IconButton>}
+                      {netKey !== key && < Box >
+                        <IconButton onClick={() => { checkConnection(key) }}>
+                          <CloudSyncIcon />
                         </IconButton>
                       </Box>}
-                      {key === open_ai_api_key && <Chip label="selected" />}
+                      {netKey === key && netStatus && <Box display="flex" alignItems="center">
+                        <CloudDoneIcon />
+                      </Box>}
+                      {netKey === key && !netStatus && <Box display="flex" alignItems="center">
+                        <CloudOffIcon />
+                      </Box>}
+                      {key === open_ai_api_key && <Box display="flex" alignItems="center">
+                        <Chip label="selected" />
+                      </Box>}
                     </>}
                     {key === editKey && <>
                       <FormControl>
@@ -283,8 +328,8 @@ const ChangeAPIKey = () => {
             })}
           </Stack>
         </OutlinePaper>
-      </Stack>
-    </BasicBox>
+      </Stack >
+    </BasicBox >
   );
 };
 
