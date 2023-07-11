@@ -2,65 +2,242 @@ import React, { useState } from "react";
 //
 import { useStore } from "../../zustand";
 //
-import { navigate } from "../../utility/navigatePage";
 import { encrypt } from "../../utility/encryption";
 //
-import { Typography, FormControl, TextField, Button, Stack } from "@mui/material";
+import {
+  Typography,
+  FormControl,
+  TextField,
+  Button,
+  Stack,
+  Box,
+  IconButton,
+  Chip,
+  Tooltip
+} from "@mui/material";
+//
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import LaunchIcon from '@mui/icons-material/Launch';
+import CancelIcon from '@mui/icons-material/Cancel';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CloudDoneIcon from '@mui/icons-material/CloudDone';
+import CloudOffIcon from '@mui/icons-material/CloudOff';
+import CloudSyncIcon from '@mui/icons-material/CloudSync';
 //
 import { BasicBox, OutlinePaper } from "../../mui/reusable";
+import { eSet } from "../../utility/electronStore";
+import Title from "../../components/title";
+import { fetchChatCompletionConnectionTest } from "../../utility/fetchData";
 
 // ----------------------------------------------------------------------
 
 const ChangeAPIKey = () => {
-  const [passwordInput, setPasswordInput] = useState("");
+  const open_ai_api_key = useStore(state => state.open_ai_api_key);
+  const open_ai_api_keys = useStore(state => state.open_ai_api_keys);
 
-  const handlePasswordInput = (event) => {
-    setPasswordInput(event.target.value);
+  const [editKey, setEditKey] = useState(-1);
+
+  const [keyInput, setKeyInput] = useState("");
+  const handleKeyInput = (event) => {
+    setKeyInput(event.target.value);
   };
 
-  const changeAPI = () => {
+  const [nameInput, setNameInput] = useState("");
+  const handleNameInput = (event) => {
+    setNameInput(event.target.value);
+  };
+
+  const [editKeyInput, setEditKeyInput] = useState("");
+  const handleEditKeyInput = (event) => {
+    setEditKeyInput(event.target.value);
+  };
+
+  const [editNameInput, setEditNameInput] = useState("");
+  const handleEditNameInput = (event) => {
+    setEditNameInput(event.target.value);
+  };
+
+  const [netKey, setNetKey] = useState(-1);
+  const [netStatus, setNetStatus] = useState(false);
+
+  const clearNetStatus = () => {
+    setNetKey(-1);
+    setNetStatus(-1);
+  };
+
+  const passwordStyle = (input) => "*".repeat(String(input).length);
+
+  const deleteKey = (key) => {
     const password_ = useStore.getState().password;
 
-    useStore.setState({ open_ai_api_key: passwordInput });
+    let newArr = [];
+    let newArrEnc = [];
 
-    const encPassword = encrypt(passwordInput, password_);
+    for (let i = 0; i < open_ai_api_keys.length; i++) {
+      if (i !== key) {
+        newArr.push(open_ai_api_keys[i]);
+        newArrEnc.push({
+          name: open_ai_api_keys[i].name,
+          key: encrypt(open_ai_api_keys[i].key, password_)
+        });
+      };
+    };
 
-    window.electron.store.set("open_ai_api_key", encPassword);
+    useStore.setState({ open_ai_api_keys: newArr, open_ai_api_key: 0 });
+    eSet("open_ai_api_keys", newArrEnc);
+    eSet("open_ai_api_key", 0);
+    clearNetStatus();
 
-    navigate("landing");
+    console.log("API KEY: deleted key")
+  };
+
+  const selectKey = (key) => {
+    useStore.setState({ open_ai_api_key: key })
+    eSet("open_ai_api_key", key)
+    clearNetStatus();
+
+    console.log("API KEY: selected key")
+  };
+
+  const addKey = () => {
+    const password_ = useStore.getState().password;
+
+    let newArr = [];
+    let newArrEnc = [];
+
+    for (let i = 0; i < open_ai_api_keys.length; i++) {
+      newArr.push(open_ai_api_keys[i]);
+      newArrEnc.push({
+        name: open_ai_api_keys[i].name,
+        key: encrypt(open_ai_api_keys[i].key, password_)
+      })
+    };
+
+    newArr.push({ name: nameInput, key: keyInput });
+    newArrEnc.push({
+      name: nameInput,
+      key: encrypt(keyInput, password_)
+    });
+
+    useStore.setState({
+      open_ai_api_keys: newArr,
+      open_ai_api_key: newArr.length - 1
+    });
+
+    eSet("open_ai_api_keys", newArrEnc);
+    eSet("open_ai_api_key", newArr.length - 1);
+
+    setNameInput("");
+    setKeyInput("");
+    setEditNameInput("");
+    setEditKeyInput("");
+    clearNetStatus();
+
+    console.log("API KEY: added key")
+  };
+
+  const openEditKey = (key) => {
+    setEditKey(key);
+    setEditNameInput(open_ai_api_keys[key].name)
+    setEditKeyInput(open_ai_api_keys[key].key)
+    clearNetStatus();
+  };
+
+  const closeEditKey = () => {
+    setEditKey(-1);
+    setEditKeyInput("");
+    setEditNameInput("");
+  };
+
+  const saveEditKey = (key) => {
+    const password_ = useStore.getState().password;
+
+    let newArr = [];
+    let newArrEnc = [];
+
+    for (let i = 0; i < open_ai_api_keys.length; i++) {
+      if (i !== key) {
+        newArr.push(open_ai_api_keys[i])
+        newArrEnc.push({
+          name: open_ai_api_keys[i].name,
+          key: encrypt(open_ai_api_keys[i].key, password_)
+        })
+      } else {
+        newArr.push({ name: editNameInput, key: editKeyInput });
+        newArrEnc.push({
+          name: editNameInput,
+          key: encrypt(editKeyInput, password_)
+        });
+      }
+    }
+
+    useStore.setState({ open_ai_api_keys: newArr, });
+
+    eSet("open_ai_api_keys", newArrEnc);
+
+    setNameInput("");
+    setKeyInput("");
+    setEditNameInput("");
+    setEditKeyInput("");
+    setEditKey(-1);
+    clearNetStatus();
+
+    console.log("API KEY: adjusted key")
+  };
+
+  const checkConnection = async (key) => {
+    selectKey(key);
+    console.log("API KEY: validating key")
+
+    const value = await fetchChatCompletionConnectionTest();
+    if (value === "success") {
+      setNetStatus(true);
+      setNetKey(key);
+      console.log("API KEY: key is valid")
+    } else {
+      setNetStatus(false);
+      setNetKey(key);
+      console.log("API KEY: ERROR: key is not valid")
+    };
   };
 
   return (
     <BasicBox>
       <Stack direction="column" spacing={1}>
-        <OutlinePaper>
-          <Typography variant="h2">
-            Change API Key
-          </Typography>
-        </OutlinePaper>
+        <Title value={"Change API Key"} />
 
         <OutlinePaper>
           <Stack direction="column" spacing={1}>
-            <Typography>Enter new OpenAI API key</Typography>
+            <Typography>New API Key</Typography>
             <FormControl>
               <Stack direction="row" spacing={1}>
                 <TextField
-                  id="user-input"
-                  label="OpanAI API Key"
+                  id="user-input2"
+                  label="Preset Name"
                   variant="filled"
                   color="secondary"
-                  value={passwordInput}
-                  onChange={handlePasswordInput}
+                  value={nameInput}
+                  onChange={handleNameInput}
                   required={true}
-                  focused
                   autoFocus
+                  fullWidth={true}
+                />
+                <TextField
+                  id="user-input"
+                  label="OpenAI API Key"
+                  variant="filled"
+                  color="secondary"
+                  value={keyInput}
+                  onChange={handleKeyInput}
+                  required={true}
                   fullWidth={true}
                 />
                 <Button
                   color={"secondary"}
                   variant="outlined"
-                  disabled={passwordInput === ""}
-                  onClick={changeAPI}
+                  disabled={keyInput === "" || nameInput === ""}
+                  onClick={addKey}
                   fullWidth={false}
                 >
                   Change API Key
@@ -69,18 +246,99 @@ const ChangeAPIKey = () => {
             </FormControl>
           </Stack>
         </OutlinePaper>
+
         <OutlinePaper>
-          <Button
-            color={"secondary"}
-            variant="outlined"
-            onClick={() => { navigate("landing") }}
-            fullWidth={false}
-          >
-            Cancel
-          </Button>
+          <Stack direction="column" spacing={1}>
+            <Typography>Stored Keys</Typography>
+
+            {open_ai_api_keys.map((chat, key) => {
+              return (
+                <OutlinePaper key={key}>
+                  <Stack direction="row" spacing={1}>
+                    {key !== editKey && <>
+                      <Typography variant="h6">{chat.name}</Typography>
+                      <OutlinePaper>
+                        <Typography variant="body1">{passwordStyle(chat.key)}</Typography>
+                      </OutlinePaper>
+                      {key > 0 && <Tooltip title="Delete">
+                        <Box>
+                          <IconButton onClick={() => { deleteKey(key) }}>
+                            <DeleteIcon />
+                          </IconButton>
+                        </Box>
+                      </Tooltip>}
+                      <Tooltip title="Edit">
+                        <Box>
+                          <IconButton onClick={() => { openEditKey(key) }}>
+                            <EditIcon />
+                          </IconButton>
+                        </Box>
+                      </Tooltip>
+                      {key !== open_ai_api_key && <Tooltip title="Select">
+                        <IconButton onClick={() => { selectKey(key) }}>
+                          <LaunchIcon />
+                        </IconButton>
+                      </Tooltip>}
+                      {netKey !== key && <Tooltip title="Validate">
+                        <Box>
+                          <IconButton onClick={() => { checkConnection(key) }}>
+                            <CloudSyncIcon />
+                          </IconButton>
+                        </Box>
+                      </Tooltip>}
+                      {netKey === key && netStatus && <Box display="flex" alignItems="center">
+                        <CloudDoneIcon />
+                      </Box>}
+                      {netKey === key && !netStatus && <Box display="flex" alignItems="center">
+                        <CloudOffIcon />
+                      </Box>}
+                      {key === open_ai_api_key && <Box display="flex" alignItems="center">
+                        <Chip label="selected" />
+                      </Box>}
+                    </>}
+                    {key === editKey && <>
+                      <FormControl>
+                        <Stack direction="row" spacing={1}>
+                          <TextField
+                            id="user-input3"
+                            label="Name"
+                            variant="filled"
+                            color="secondary"
+                            value={editNameInput}
+                            onChange={handleEditNameInput}
+                            required={true}
+                            fullWidth={true}
+                          />
+                          <TextField
+                            id="user-input4"
+                            label="OpenAI API Key"
+                            variant="filled"
+                            color="secondary"
+                            value={editKeyInput}
+                            onChange={handleEditKeyInput}
+                            required={true}
+                            fullWidth={true}
+                          />
+                          <IconButton onClick={closeEditKey}>
+                            <CancelIcon />
+                          </IconButton>
+                          <IconButton
+                            onClick={() => { saveEditKey(key) }}
+                            disabled={editNameInput === "" || editKeyInput === ""}
+                          >
+                            <CheckCircleIcon />
+                          </IconButton>
+                        </Stack>
+                      </FormControl>
+                    </>}
+                  </Stack>
+                </OutlinePaper>
+              )
+            })}
+          </Stack>
         </OutlinePaper>
-      </Stack>
-    </BasicBox>
+      </Stack >
+    </BasicBox >
   );
 };
 

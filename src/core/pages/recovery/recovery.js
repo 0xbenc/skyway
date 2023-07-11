@@ -7,6 +7,7 @@ import { decrypt } from "../../utility/encryption";
 import { Typography, FormControl, TextField, Button, Stack } from "@mui/material";
 //
 import { BasicBox, OutlinePaper } from "../../mui/reusable";
+import { eGet } from "../../utility/electronStore";
 
 // ----------------------------------------------------------------------
 
@@ -35,8 +36,8 @@ const Recovery = () => {
       };
     };
 
-    const _recovery = window.electron.store.get("recovery")
-    const _integrity_check = window.electron.store.get("integrity_check")
+    const _recovery = eGet("recovery")
+    const _integrity_check = eGet("integrity_check")
 
     const recovery = decrypt(_recovery, key)
     const integrity_check = decrypt(_integrity_check, recovery)
@@ -72,7 +73,6 @@ const Recovery = () => {
                   value={passwordInput}
                   onChange={handlePasswordInput}
                   required={true}
-                  focused
                   autoFocus
                   fullWidth={true}
                 />
