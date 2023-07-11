@@ -12,7 +12,8 @@ import {
   Stack,
   Box,
   IconButton,
-  Chip
+  Chip,
+  Tooltip
 } from "@mui/material";
 //
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -259,24 +260,32 @@ const ChangeAPIKey = () => {
                       <OutlinePaper>
                         <Typography variant="body1">{passwordStyle(chat.key)}</Typography>
                       </OutlinePaper>
-                      {key > 0 && <Box>
-                        <IconButton onClick={() => { deleteKey(key) }}>
-                          <DeleteIcon />
+                      {key > 0 && <Tooltip title="Delete">
+                        <Box>
+                          <IconButton onClick={() => { deleteKey(key) }}>
+                            <DeleteIcon />
+                          </IconButton>
+                        </Box>
+                      </Tooltip>}
+                      <Tooltip title="Edit">
+                        <Box>
+                          <IconButton onClick={() => { openEditKey(key) }}>
+                            <EditIcon />
+                          </IconButton>
+                        </Box>
+                      </Tooltip>
+                      {key !== open_ai_api_key && <Tooltip title="Select">
+                        <IconButton onClick={() => { selectKey(key) }}>
+                          <LaunchIcon />
                         </IconButton>
-                      </Box>}
-                      <Box>
-                        <IconButton onClick={() => { openEditKey(key) }}>
-                          <EditIcon />
-                        </IconButton>
-                      </Box>
-                      {key !== open_ai_api_key && <IconButton onClick={() => { selectKey(key) }}>
-                        <LaunchIcon />
-                      </IconButton>}
-                      {netKey !== key && < Box >
-                        <IconButton onClick={() => { checkConnection(key) }}>
-                          <CloudSyncIcon />
-                        </IconButton>
-                      </Box>}
+                      </Tooltip>}
+                      {netKey !== key && <Tooltip title="Validate">
+                        <Box>
+                          <IconButton onClick={() => { checkConnection(key) }}>
+                            <CloudSyncIcon />
+                          </IconButton>
+                        </Box>
+                      </Tooltip>}
                       {netKey === key && netStatus && <Box display="flex" alignItems="center">
                         <CloudDoneIcon />
                       </Box>}
