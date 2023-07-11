@@ -56,18 +56,32 @@ const ChangeAPIKey = () => {
   const passwordStyle = (input) => "*".repeat(String(input).length);
 
   const deleteKey = (key) => {
-    const copy = [...open_ai_api_keys];
-    const filteredItems = copy.filter((_, index) => index !== key);
+    const password_ = useStore.getState().password;
 
-    useStore.setState({ open_ai_api_keys: filteredItems });
-    eSet("open_ai_api_keys", filteredItems);
+    let newArr = [];
+    let newArrEnc = [];
 
-    if (open_ai_api_key === key) useStore.setState({ open_ai_api_key: 0 });
+    for (let i = 0; i < open_ai_api_keys.length; i++) {
+      if (i !== key) {
+        newArr.push(open_ai_api_keys[i]);
+        newArrEnc.push({
+          name: open_ai_api_keys[i].name,
+          key: encrypt(open_ai_api_keys[i].key, password_)
+        });
+      };
+    };
+
+    useStore.setState({ open_ai_api_keys: newArr, open_ai_api_key: 0 });
+    eSet("open_ai_api_keys", newArrEnc);
+    eSet("open_ai_api_key", 0);
+
+    console.log("API KEY: deleted key")
   };
 
   const selectKey = (key) => {
     useStore.setState({ open_ai_api_key: key })
     eSet("open_ai_api_key", key)
+    console.log("API KEY: selected key")
   };
 
   const addKey = () => {
@@ -102,6 +116,8 @@ const ChangeAPIKey = () => {
     setKeyInput("");
     setEditNameInput("");
     setEditKeyInput("");
+
+    console.log("API KEY: added key")
   };
 
   const openEditKey = (key) => {
@@ -147,6 +163,8 @@ const ChangeAPIKey = () => {
     setEditNameInput("");
     setEditKeyInput("");
     setEditKey(-1);
+
+    console.log("API KEY: adjusted key")
   };
 
   return (

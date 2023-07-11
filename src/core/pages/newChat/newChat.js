@@ -235,7 +235,7 @@ const NewChat = () => {
             </Stack>
             <OutlinePaper>
               <Typography variant="body1">
-                API Key: {open_ai_api_keys_[open_ai_api_key_].name}
+                API Key: {open_ai_api_keys_[open_ai_api_key_]?.name}
               </Typography>
             </OutlinePaper>
           </Stack>
