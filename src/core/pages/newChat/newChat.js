@@ -37,18 +37,18 @@ function hasScrollbar(input) {
 const NewChat = () => {
   const inputRef = useRef();
 
-  const scrollRef = useRef(null);
+  const conversationScrollRef = useRef(null);
 
   const [scrollCount, setScrollCount] = useState(0);
-  const [autoScroll, setAutoScroll] = useState(false);
+  const [autoModalOpen, setAutoModalOpen] = useState(false);
 
-  const [userPromptInput, setUserPromptInput] = useState("");
+  const [userMessageInput, setUserMessageInput] = useState("");
 
   const [modalOpen, setModalOpen] = useState(false);
   const handleModalOpen = () => setModalOpen(true);
   const handleModalClose = () => setModalOpen(false);
 
-  const [displayedChats, setDisplayedChats] = useState([]);
+  const [conversation, setConversation] = useState([]);
 
   const [newTokenCount, setNewTokenCount] = useState(0)
 
@@ -66,14 +66,14 @@ const NewChat = () => {
   }
 
   const handleUserPromptInput = (event) => {
-    setUserPromptInput(event.target.value);
+    setUserMessageInput(event.target.value);
 
     const input = inputRef.current;
     if (hasScrollbar(input)) {
       setScrollCount(scrollCount + 1)
     }
-    if (scrollCount > 1 && !autoScroll) {
-      setAutoScroll(true)
+    if (scrollCount > 1 && !autoModalOpen) {
+      setAutoModalOpen(true)
       handleModalOpen()
     }
   };
@@ -129,80 +129,80 @@ const NewChat = () => {
 
     let upstream = [];
 
-    const displayedChats_ = [...displayedChats];
+    const conversation_ = [...conversation];
     const activeSystemPrompt_ = { role: "system", content: activeSystemPrompt.prompt };
-    const userPrompt_ = { role: "user", content: userPromptInput };
+    const userPrompt_ = { role: "user", content: userMessageInput };
 
     if (activeSystemPrompt.engine === "amnesia") {
-      displayedChats_.push(userPrompt_)
+      conversation_.push(userPrompt_)
       upstream = [activeSystemPrompt_, userPrompt_]
     } else {
-      if (!displayedChats_.length) {
-        displayedChats_.push(activeSystemPrompt_)
+      if (!conversation_.length) {
+        conversation_.push(activeSystemPrompt_)
       };
 
-      displayedChats_.push(userPrompt_)
-      upstream = [...displayedChats_]
+      conversation_.push(userPrompt_)
+      upstream = [...conversation_]
     };
 
     const response = await fetchChatCompletion(upstream, activeSystemPrompt.model, activeSystemPrompt.params)
 
     if (response === "error") {
-      displayedChats_.push(errorMessage);
+      conversation_.push(errorMessage);
     } else {
       setNewTokenCount(response.usage.total_tokens)
-      displayedChats_.push(response.choices[0].message);
+      conversation_.push(response.choices[0].message);
       setBusyUI(false);
     };
 
-    setUserPromptInput("");
-    setDisplayedChats(displayedChats_);
+    setUserMessageInput("");
+    setConversation(conversation_);
   };
 
   const ReSubmitPrompt = async () => {
     setBusyUI(true);
     setEditMode(false);
 
-    const displayedChats_ = [...displayedChats];
+    const conversation_ = [...conversation];
     let upstream = [];
 
-    displayedChats.pop()
-    displayedChats_.pop()
+    conversation.pop()
+    conversation_.pop()
 
     if (activeSystemPrompt.engine === "amnesia") {
-      upstream = [{ role: "system", content: activeSystemPrompt.prompt }, displayedChats_[displayedChats_.length - 1]];
+      upstream = [{ role: "system", content: activeSystemPrompt.prompt }, conversation_[conversation_.length - 1]];
     } else {
-      upstream = displayedChats_;
+      upstream = conversation_;
     }
 
     const response = await fetchChatCompletion(upstream, activeSystemPrompt.model, activeSystemPrompt.params)
 
     if (response === "error") {
-      setUserPromptInput("");
-      displayedChats_.push(errorMessage);
+      setUserMessageInput("");
+      conversation_.push(errorMessage);
     } else {
       setNewTokenCount(response.usage.total_tokens)
-      displayedChats_.push(response.choices[0].message);
+      conversation_.push(response.choices[0].message);
       setBusyUI(false);
     };
 
-    setDisplayedChats(displayedChats_);
+    setConversation(conversation_);
   };
 
   const EditMode = () => {
     setEditMode(true)
-    const displayedChats_ = [...displayedChats]
-    displayedChats_.pop()
-    setUserPromptInput(displayedChats_[displayedChats_.length - 1].content)
-    displayedChats_.pop()
-    setDisplayedChats(displayedChats_)
+    const conversation_ = [...conversation]
+    conversation_.pop()
+    setUserMessageInput(conversation_[conversation_.length - 1].content)
+    conversation_.pop()
+    setConversation(conversation_)
   };
 
   useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollIntoView({ behaviour: "smooth" });
+    if (conversationScrollRef.current) {
+      conversationScrollRef.current.scrollIntoView({ behaviour: "smooth" });
     }
-  }, [displayedChats]);
+  }, [conversation]);
 
   return (
     <>
@@ -241,7 +241,7 @@ const NewChat = () => {
           </Stack>
         </OutlinePaper>
         <ChatsHolder>
-          {displayedChats.length > 0 && displayedChats.map((chat, key) => {
+          {conversation.length > 0 && conversation.map((chat, key) => {
             return (
               <React.Fragment key={key}>
                 {chat.role !== "system" && <>
@@ -277,13 +277,13 @@ const NewChat = () => {
             )
           })}
 
-          {displayedChats.length > 0 && <CopyToClipboard text={JSON.stringify(displayedChats)}>
+          {conversation.length > 0 && <CopyToClipboard text={JSON.stringify(conversation)}>
             <IconButton size="small">
               <ContentCopyIcon />
             </IconButton>
           </CopyToClipboard>}
 
-          <div ref={scrollRef} />
+          <div ref={conversationScrollRef} />
         </ChatsHolder>
       </Stack>
 
@@ -296,7 +296,7 @@ const NewChat = () => {
                   <IconButton
                     onClick={() => { ReSubmitPrompt() }}
                     size="large"
-                    disabled={busyUI || !displayedChats.length}
+                    disabled={busyUI || !conversation.length}
                   >
                     <RefreshIcon />
                   </IconButton>
@@ -308,7 +308,7 @@ const NewChat = () => {
                   <IconButton
                     onClick={() => { EditMode() }}
                     size="large"
-                    disabled={busyUI || !displayedChats.length || editMode}
+                    disabled={busyUI || !conversation.length || editMode}
                   >
                     <EditIcon />
                   </IconButton>
@@ -324,11 +324,11 @@ const NewChat = () => {
                 label={activeSystemPrompt.userInputLabel}
                 variant="filled"
                 color="secondary"
-                value={userPromptInput}
+                value={userMessageInput}
                 inputRef={inputRef}
                 onChange={handleUserPromptInput}
                 onKeyPress={(ev) => {
-                  if (ev.key === 'Enter' && userPromptInput !== "") {
+                  if (ev.key === 'Enter' && userMessageInput !== "") {
                     SubmitPrompt();
                     ev.preventDefault();
                   }
@@ -348,7 +348,7 @@ const NewChat = () => {
               <IconButton
                 onClick={handleModalOpen}
                 size="large"
-                disabled={userPromptInput === "" || busyUI || modalOpen}
+                disabled={userMessageInput === "" || busyUI || modalOpen}
                 variant="outlined"
               >
                 <AspectRatioIcon />
@@ -361,7 +361,7 @@ const NewChat = () => {
               <IconButton
                 onClick={() => { SubmitPrompt() }}
                 size="large"
-                disabled={userPromptInput === "" || busyUI}
+                disabled={userMessageInput === "" || busyUI}
                 variant="outlined"
               >
                 <DoneIcon />
@@ -402,10 +402,10 @@ const NewChat = () => {
               label={activeSystemPrompt.userInputLabel}
               variant="filled"
               color="secondary"
-              value={userPromptInput}
+              value={userMessageInput}
               onChange={handleUserPromptInput}
               onKeyPress={(ev) => {
-                if (ev.key === 'Enter' && userPromptInput !== "") {
+                if (ev.key === 'Enter' && userMessageInput !== "") {
                   SubmitPrompt();
                   ev.preventDefault();
                 };
@@ -436,7 +436,7 @@ const NewChat = () => {
                 <IconButton
                   onClick={() => { SubmitPrompt() }}
                   size="large"
-                  disabled={userPromptInput === "" || busyUI}
+                  disabled={userMessageInput === "" || busyUI}
                   variant="outlined"
                 >
                   <DoneIcon />

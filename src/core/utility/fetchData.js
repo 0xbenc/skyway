@@ -11,6 +11,7 @@ const fetchChatCompletion = async (messages, model, params) => {
 
   try {
     const response = await window.electron.engine.chat(data, keys[key].key)
+    // timestamp here
     return response;
   } catch (error) {
     return "error";
