@@ -286,12 +286,16 @@ const ChangeAPIKey = () => {
                           </IconButton>
                         </Box>
                       </Tooltip>}
-                      {netKey === key && netStatus && <Box display="flex" alignItems="center">
-                        <CloudDoneIcon />
-                      </Box>}
-                      {netKey === key && !netStatus && <Box display="flex" alignItems="center">
-                        <CloudOffIcon />
-                      </Box>}
+                      {netKey === key && netStatus && <Tooltip title="Valid Key">
+                        <Box display="flex" alignItems="center">
+                          <CloudDoneIcon />
+                        </Box>
+                      </Tooltip>}
+                      {netKey === key && !netStatus && <Tooltip title="Invalid Key">
+                        <Box display="flex" alignItems="center">
+                          <CloudOffIcon />
+                        </Box>
+                      </Tooltip>}
                       {key === open_ai_api_key && <Box display="flex" alignItems="center">
                         <Chip label="selected" />
                       </Box>}
