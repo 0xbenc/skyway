@@ -34,6 +34,12 @@ function hasScrollbar(input) {
   return input.scrollHeight > input.clientHeight;
 }
 
+const convertUnixTimeToISOString = (unixTime) => {
+  const date = new Date(unixTime * 1000); // Convert unixTime to milliseconds
+
+  return date.toISOString();
+};
+
 const NewChat = () => {
   const inputRef = useRef();
 
@@ -123,6 +129,9 @@ const NewChat = () => {
   };
 
   const SubmitPrompt = async () => {
+    const sendDate = new Date();
+    const sendDateISO = String(sendDate.toISOString());
+
     setBusyUI(true);
     setEditMode(false);
     handleModalClose();
@@ -153,6 +162,9 @@ const NewChat = () => {
       setNewTokenCount(response.usage.total_tokens)
       conversation_.push(response.choices[0].message);
       setBusyUI(false);
+
+      console.log(sendDateISO)
+      console.log(convertUnixTimeToISOString(response.created))
     };
 
     setUserMessageInput("");
