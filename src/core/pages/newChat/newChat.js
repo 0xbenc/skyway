@@ -40,6 +40,16 @@ const convertUnixTimeToISOString = (unixTime) => {
   return date.toISOString();
 };
 
+const convertToHumanReadableTime = (isoTimeString) => {
+  const date = new Date(isoTimeString);
+  const humanReadableDate = date.toLocaleDateString('en-US',
+    { year: 'numeric', month: 'short', day: 'numeric' });
+  const humanReadableTime = date.toLocaleTimeString('en-US',
+    { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+  return `${humanReadableDate}, ${humanReadableTime}`;
+}
+
 const NewChat = () => {
   const inputRef = useRef();
 
@@ -61,6 +71,8 @@ const NewChat = () => {
   const [editMode, setEditMode] = useState(false)
 
   const [busyUI, setBusyUI] = useState(false);
+
+  const [timeStamps, setTimeStamps] = useState([]);
 
   const activeSystemPrompt = useStore.getState().active_system_prompt;
   const open_ai_api_keys_ = useStore.getState().open_ai_api_keys;
@@ -128,14 +140,7 @@ const NewChat = () => {
     </>
   };
 
-  const SubmitPrompt = async () => {
-    const sendDate = new Date();
-    const sendDateISO = String(sendDate.toISOString());
-
-    setBusyUI(true);
-    setEditMode(false);
-    handleModalClose();
-
+  const SubmitPromptAsync = async (sendDateISO) => {
     let upstream = [];
 
     const conversation_ = [...conversation];
@@ -163,12 +168,26 @@ const NewChat = () => {
       conversation_.push(response.choices[0].message);
       setBusyUI(false);
 
-      console.log(sendDateISO)
-      console.log(convertUnixTimeToISOString(response.created))
+      const oldArr = [...timeStamps];
+      oldArr.push(sendDateISO);
+      oldArr.push(convertUnixTimeToISOString(response.created));
+
+      setTimeStamps(oldArr);
     };
 
     setUserMessageInput("");
     setConversation(conversation_);
+  };
+
+  const SubmitPrompt = () => {
+    const sendDate = new Date();
+    const sendDateISO = String(sendDate.toISOString());
+
+    setBusyUI(true);
+    setEditMode(false);
+    handleModalClose();
+
+    SubmitPromptAsync(sendDateISO);
   };
 
   const ReSubmitPrompt = async () => {
@@ -262,11 +281,14 @@ const NewChat = () => {
                       <Stack direction="column" spacing={1}>
                         <FormattedLeftResponse content={chat.content} />
                         <Box>
-                          <CopyToClipboard text={chat.content}>
-                            <IconButton size="small">
-                              <ContentCopyIcon />
-                            </IconButton>
-                          </CopyToClipboard>
+                          <Stack direction="row" spacing={1}>
+                            <CopyToClipboard text={chat.content}>
+                              <IconButton size="small">
+                                <ContentCopyIcon />
+                              </IconButton>
+                            </CopyToClipboard>
+                            <Typography>{convertToHumanReadableTime(timeStamps[key - 1])}</Typography>
+                          </Stack>
                         </Box>
                       </Stack>
                     </LeftChatBox>
@@ -275,11 +297,14 @@ const NewChat = () => {
                       <Stack direction="column" spacing={1}>
                         <FormattedRightResponse content={chat.content} />
                         <Box>
-                          <CopyToClipboard text={chat.content}>
-                            <IconButton size="small">
-                              <ContentCopyIcon />
-                            </IconButton>
-                          </CopyToClipboard>
+                          <Stack direction="row" spacing={1}>
+                            <CopyToClipboard text={chat.content}>
+                              <IconButton size="small">
+                                <ContentCopyIcon />
+                              </IconButton>
+                            </CopyToClipboard>
+                            <Typography>{convertToHumanReadableTime(timeStamps[key - 1])}</Typography>
+                          </Stack>
                         </Box>
                       </Stack>
                     </RightChatBox>
