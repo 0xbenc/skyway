@@ -5,6 +5,7 @@ const GPT35Turbo = {
   userInputLabel: "Chat message",
   model: "gpt-3.5-turbo",
   engine: "token limited",
+  prefil: "",
   limit: 4096
 };
 
@@ -15,6 +16,7 @@ const GPT4 = {
   userInputLabel: "Chat message",
   model: "gpt-4",
   engine: "token limited",
+  prefil: "",
   limit: 8192
 };
 

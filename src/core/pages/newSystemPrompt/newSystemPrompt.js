@@ -28,6 +28,8 @@ const NewSystemPrompt = () => {
 
   const [userInput, setUserInput] = useState("")
 
+  const [prefilInput, setPrefilInput] = useState('');
+
   const [model, setModel] = useState("gpt-3.5-turbo")
 
   const [engine, setEngine] = useState("token limited");
@@ -52,6 +54,10 @@ const NewSystemPrompt = () => {
 
   const handleUserInput = (event) => {
     setUserInput(event.target.value);
+  };
+
+  const handlePrefilInput = (event) => {
+    setPrefilInput(event.target.value);
   };
 
   const handleModel = (event) => {
@@ -112,7 +118,8 @@ const NewSystemPrompt = () => {
       userInputLabel: userInput,
       model: model,
       engine: engine,
-      limit: limit
+      limit: limit,
+      prefil: prefilInput
     });
 
     const password_ = useStore.getState().password;
@@ -235,6 +242,31 @@ const NewSystemPrompt = () => {
                   color="secondary"
                   value={promptInput}
                   onChange={handlePromptInput}
+                  required={true}
+                  fullWidth
+                  multiline
+                  minRows={4}
+                />
+              </FormControl>
+            </Stack>
+          </OutlinePaper>
+        </Grid>
+
+        <Grid item sm={12}>
+          <OutlinePaper>
+            <Stack direction="column" spacing={1}>
+              <Typography variant="h4">
+                Input Prefil:
+              </Typography>
+
+              <FormControl fullWidth>
+                <TextField
+                  id="prefil-input"
+                  label=""
+                  variant="filled"
+                  color="secondary"
+                  value={prefilInput}
+                  onChange={handlePrefilInput}
                   required={true}
                   fullWidth
                   multiline
