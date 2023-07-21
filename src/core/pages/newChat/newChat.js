@@ -43,7 +43,7 @@ const convertUnixTimeToISOString = (unixTime) => {
 const convertToHumanReadableTime = (isoTimeString) => {
   const date = new Date(isoTimeString);
   const humanReadableDate = date.toLocaleDateString('en-US',
-    { year: 'numeric', month: 'short', day: 'numeric' });
+    { year: '2-digit', month: '2-digit', day: 'numeric' });
   const humanReadableTime = date.toLocaleTimeString('en-US',
     { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
