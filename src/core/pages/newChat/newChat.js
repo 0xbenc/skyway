@@ -28,9 +28,12 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 import AspectRatioIcon from '@mui/icons-material/AspectRatio';
 import CloseFullscreenIcon from '@mui/icons-material/CloseFullscreen';
 //
-import { formatResponse } from "./newChat_utility";
-import { LeftBox, RightBox, LeftChatBox, RightChatBox, ChatsHolder, LeftCodeBorder, RightCodeBorder } from "./newChat_styles";
+import { LeftBox, RightBox, LeftChatBox, RightChatBox, ChatsHolder } from "./newChat_styles";
 import { OutlinePaper } from "../../mui/reusable";
+import ReactMarkdown from 'react-markdown';
+import rehypeRaw from 'rehype-raw';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
+import { materialDark, materialLight } from 'react-syntax-highlighter/dist/esm/styles/prism'
 
 function hasScrollbar(input) {
   return input.scrollHeight > input.clientHeight;
@@ -63,6 +66,7 @@ const NewChat = () => {
   const active_system_prompt_ = useStore.getState().active_system_prompt;
   const open_ai_api_keys_ = useStore.getState().open_ai_api_keys;
   const open_ai_api_key_ = useStore.getState().open_ai_api_key;
+  const color_mode_ = useStore.getState().color_mode;
 
   const errorMessage = {
     role: "assistant",
@@ -83,46 +87,54 @@ const NewChat = () => {
   };
 
   const FormattedLeftResponse = ({ content }) => {
-    const array = formatResponse(content);
-
     return <>
-      {array.map((chat, key) => {
-        return (
-          <Box key={key}>
-            {
-              chat.type === "code" ? <CopyToClipboard text={chat.text}>
-                <LeftCodeBorder>
-                  <Typography style={{ whiteSpace: 'pre-wrap' }}>{chat.text}</Typography>
-                </LeftCodeBorder>
-              </CopyToClipboard> : <Box>
-                <Typography style={{ whiteSpace: 'pre-wrap' }}>{chat.text}</Typography>
-              </Box>
-            }
-          </Box>
-        )
-      })}
+      <ReactMarkdown rehypePlugins={[rehypeRaw]}
+        children={content}
+        components={{
+          code({ node, inline, className, children, ...props }) {
+            const match = /language-(\w+)/.exec(className || '')
+            return !inline && match ? (
+              <SyntaxHighlighter
+                {...props}
+                children={String(children).replace(/\n$/, '')}
+                style={color_mode_ === "light" ? materialLight : materialDark}
+                language={match[1]}
+                PreTag="div"
+              />
+            ) : (
+              <code {...props} className={className}>
+                {children}
+              </code>
+            )
+          }
+        }}
+      />
     </>
   };
 
   const FormattedRightResponse = ({ content }) => {
-    const array = formatResponse(content);
-
     return <>
-      {array.map((chat, key) => {
-        return (
-          <Box key={key}>
-            {
-              chat.type === "code" ? <CopyToClipboard text={chat.text}>
-                <RightCodeBorder>
-                  <Typography style={{ whiteSpace: 'pre-wrap' }}>{chat.text}</Typography>
-                </RightCodeBorder>
-              </CopyToClipboard> : <Box>
-                <Typography style={{ whiteSpace: 'pre-wrap' }}>{chat.text}</Typography>
-              </Box>
-            }
-          </Box>
-        )
-      })}
+      <ReactMarkdown rehypePlugins={[rehypeRaw]}
+        children={content}
+        components={{
+          code({ node, inline, className, children, ...props }) {
+            const match = /language-(\w+)/.exec(className || '')
+            return !inline && match ? (
+              <SyntaxHighlighter
+                {...props}
+                children={String(children).replace(/\n$/, '')}
+                style={color_mode_ === "light" ? materialLight : materialDark}
+                language={match[1]}
+                PreTag="div"
+              />
+            ) : (
+              <code {...props} className={className}>
+                {children}
+              </code>
+            )
+          }
+        }}
+      />
     </>
   };
 
