@@ -6,6 +6,7 @@ import { useStore } from "../../zustand";
 import { fetchChatCompletion } from "../../utility/fetchData";
 import { navigate } from "../../utility/navigatePage";
 import { isoToHuman, unixToISO } from "../../utility/time";
+import error from "../../utility/error";
 //
 import {
   FormControl,
@@ -65,7 +66,7 @@ const NewChat = () => {
 
   const errorMessage = {
     role: "assistant",
-    content: "t̷h̴i̴s̸ ̷i̷s̷ ̴n̵o̴t̷ ̷a̶i̸. Critical Error, please check your connection, refresh, and try again. If the problem persists, you may need a new API key."
+    content: error
   }
 
   const handleUserPromptInput = (event) => {
