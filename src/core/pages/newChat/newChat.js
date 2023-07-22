@@ -59,7 +59,7 @@ const NewChat = () => {
 
   const [timeStamps, setTimeStamps] = useState([]);
 
-  const activeSystemPrompt = useStore.getState().active_system_prompt;
+  const active_system_prompt_ = useStore.getState().active_system_prompt;
   const open_ai_api_keys_ = useStore.getState().open_ai_api_keys;
   const open_ai_api_key_ = useStore.getState().open_ai_api_key;
 
@@ -129,10 +129,10 @@ const NewChat = () => {
     let upstream = [];
 
     const conversation_ = [...conversation];
-    const activeSystemPrompt_ = { role: "system", content: activeSystemPrompt.prompt };
+    const activeSystemPrompt_ = { role: "system", content: active_system_prompt_.prompt };
     const userPrompt_ = { role: "user", content: userMessageInput };
 
-    if (activeSystemPrompt.engine === "amnesia") {
+    if (active_system_prompt_.engine === "amnesia") {
       conversation_.push(userPrompt_)
       upstream = [activeSystemPrompt_, userPrompt_]
     } else {
@@ -144,7 +144,11 @@ const NewChat = () => {
       upstream = [...conversation_]
     };
 
-    const response = await fetchChatCompletion(upstream, activeSystemPrompt.model, activeSystemPrompt.params)
+    const response = await fetchChatCompletion(
+      upstream,
+      active_system_prompt_.model,
+      active_system_prompt_.params
+    );
 
     if (response === "error") {
       conversation_.push(errorMessage);
@@ -160,8 +164,8 @@ const NewChat = () => {
       setTimeStamps(oldArr);
     };
 
-    setUserMessageInput("");
     setConversation(conversation_);
+    setUserMessageInput(active_system_prompt_.prefil ? active_system_prompt_.prefil : "");
   };
 
   const SubmitPrompt = () => {
@@ -175,36 +179,6 @@ const NewChat = () => {
     SubmitPromptAsync(sendDateISO);
   };
 
-  const ReSubmitPrompt = async () => {
-    setBusyUI(true);
-    setEditMode(false);
-
-    const conversation_ = [...conversation];
-    let upstream = [];
-
-    conversation.pop()
-    conversation_.pop()
-
-    if (activeSystemPrompt.engine === "amnesia") {
-      upstream = [{ role: "system", content: activeSystemPrompt.prompt }, conversation_[conversation_.length - 1]];
-    } else {
-      upstream = conversation_;
-    }
-
-    const response = await fetchChatCompletion(upstream, activeSystemPrompt.model, activeSystemPrompt.params)
-
-    if (response === "error") {
-      setUserMessageInput("");
-      conversation_.push(errorMessage);
-    } else {
-      setNewTokenCount(response.usage.total_tokens)
-      conversation_.push(response.choices[0].message);
-      setBusyUI(false);
-    };
-
-    setConversation(conversation_);
-  };
-
   const EditMode = () => {
     setEditMode(true)
     const conversation_ = [...conversation]
@@ -212,6 +186,14 @@ const NewChat = () => {
     setUserMessageInput(conversation_[conversation_.length - 1].content)
     conversation_.pop()
     setConversation(conversation_)
+
+    let arr = [];
+
+    for (let i = 0; i < timeStamps.length - 2; i++) {
+      arr.push(timeStamps[i]);
+    };
+
+    setTimeStamps(arr)
   };
 
   useEffect(() => {
@@ -238,15 +220,15 @@ const NewChat = () => {
             </Typography>
             <OutlinePaper>
               <Typography variant="h4">
-                {activeSystemPrompt.title}
+                {active_system_prompt_.title}
               </Typography>
             </OutlinePaper>
             <Stack direction="column" spacing={1}>
               <Typography variant="body1">
-                {activeSystemPrompt.model}
+                {active_system_prompt_.model}
               </Typography>
               <Typography variant="body1">
-                {activeSystemPrompt.engine}
+                {active_system_prompt_.engine}
               </Typography>
             </Stack>
             <OutlinePaper>
@@ -343,7 +325,7 @@ const NewChat = () => {
             <Box sx={{ margin: 1 }}>
               <TextField
                 id="prompt-zone"
-                label={activeSystemPrompt.userInputLabel}
+                label={active_system_prompt_.userInputLabel}
                 variant="filled"
                 color="secondary"
                 value={userMessageInput}
@@ -395,10 +377,10 @@ const NewChat = () => {
 
           <OutlinePaper>
             <Stack direction="row" spacing={1}>
-              {activeSystemPrompt.engine === "token limited" && <Typography variant="body1">
-                Total Tokens: {newTokenCount}/{activeSystemPrompt.limit}
+              {active_system_prompt_.engine === "token limited" && <Typography variant="body1">
+                Total Tokens: {newTokenCount}/{active_system_prompt_.limit}
               </Typography>}
-              {activeSystemPrompt.engine === "amnesia" && <Typography variant="body1">
+              {active_system_prompt_.engine === "amnesia" && <Typography variant="body1">
                 Previous Tokens: {newTokenCount}
               </Typography>}
             </Stack>
@@ -421,7 +403,7 @@ const NewChat = () => {
           <Box sx={{ margin: 1 }}>
             <TextField
               id="prompt-zone"
-              label={activeSystemPrompt.userInputLabel}
+              label={active_system_prompt_.userInputLabel}
               variant="filled"
               color="secondary"
               value={userMessageInput}
