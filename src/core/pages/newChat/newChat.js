@@ -237,6 +237,48 @@ const NewChat = () => {
     setTimeStamps(arr)
   };
 
+  const ResubmitPromptAsync = async (sendDateISO) => {
+    const conversation_ = [...conversation];
+    let upstream = [];
+
+    conversation.pop()
+    conversation_.pop()
+
+    if (active_system_prompt_.engine === "amnesia") {
+      upstream = [{ role: "system", content: active_system_prompt_.prompt }, conversation_[conversation_.length - 1]];
+    } else {
+      upstream = conversation_;
+    }
+
+    const response = await fetchChatCompletion(upstream, active_system_prompt_.model, active_system_prompt_.params)
+
+    if (response === "error") {
+      setUserMessageInput("");
+      conversation_.push(errorMessage);
+    } else {
+      setNewTokenCount(response.usage.total_tokens)
+      conversation_.push(response.choices[0].message);
+      setBusyUI(false);
+      let timeArray = [];
+      for (let i = 0; i < timeStamps.length - 1; i++) {
+        timeArray.push(timeStamps[i])
+      };
+
+      timeArray.push(unixToISO(response.created));
+
+      setTimeStamps(timeArray);
+    };
+
+    setConversation(conversation_);
+  };
+
+  const ReSubmitPrompt = () => {
+    setBusyUI(true);
+    setEditMode(false);
+
+    ResubmitPromptAsync();
+  };
+
   useEffect(() => {
     if (conversationScrollRef.current) {
       conversationScrollRef.current.scrollIntoView({ behaviour: "smooth" });
@@ -320,7 +362,7 @@ const NewChat = () => {
                             </IconButton>
                           </CopyToClipboard>
 
-                          {key === conversation.length - 1 && <IconButton size="small">
+                          {key === conversation.length - 1 && <IconButton onClick={ReSubmitPrompt} size="small">
                             <RefreshIcon />
                           </IconButton>}
 
