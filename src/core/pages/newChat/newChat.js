@@ -34,6 +34,34 @@ import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { materialDark, materialLight } from 'react-syntax-highlighter/dist/esm/styles/prism'
+import { styled } from '@mui/material/styles';
+
+const TopBar = styled(Box)(({ theme }) => ({
+  height: "10vh",
+  position: "absolute",
+  top: 0,
+  // backgroundColor: "green",
+  width: "100vw"
+}));
+
+const Middle = styled(Box)(({ theme }) => ({
+  height: "80vh",
+  maxHeight: "80vh",
+  // backgroundColor: "pink",
+  width: "100vw",
+  top: "10vh",
+  position: "absolute",
+  overflowY: "auto"
+}));
+
+const BottomBar = styled(Box)(({ theme }) => ({
+  height: "10vh",
+  position: "absolute",
+  bottom: 0,
+  // backgroundColor: "green",
+  width: "100vw"
+}));
+
 
 function hasScrollbar(input) {
   return input.scrollHeight > input.clientHeight;
@@ -217,7 +245,7 @@ const NewChat = () => {
 
   return (
     <>
-      <Stack direction="column" spacing={1}>
+      <TopBar>
         <OutlinePaper>
           <Stack direction="row" spacing={1}>
             <Box>
@@ -228,241 +256,177 @@ const NewChat = () => {
                 <HomeIcon />
               </IconButton>
             </Box>
-            <Typography variant="h3">
-              New Chat:
+            <Typography variant="h4">
+              New Chat
             </Typography>
             <OutlinePaper>
               <Typography variant="h4">
                 {active_system_prompt_.title}
               </Typography>
             </OutlinePaper>
-            <Stack direction="column" spacing={1}>
-              <Typography variant="body1">
-                {active_system_prompt_.model}
-              </Typography>
-              <Typography variant="body1">
-                {active_system_prompt_.engine}
-              </Typography>
-            </Stack>
             <OutlinePaper>
-              <Typography variant="body1">
-                API Key: {open_ai_api_keys_[open_ai_api_key_]?.name}
-              </Typography>
+              <Stack direction="column" spacing={1}>
+                <Typography variant="body1">
+                  {active_system_prompt_.model}
+                </Typography>
+                <Typography variant="body1">
+                  {active_system_prompt_.engine}
+                </Typography>
+              </Stack>
+            </OutlinePaper>
+            <OutlinePaper>
+              <Stack direction="column" spacing={1}>
+                <Typography variant="body1">
+                  API Key:
+                </Typography>
+                <Typography variant="body1">
+                  {open_ai_api_keys_[open_ai_api_key_]?.name}
+                </Typography>
+              </Stack>
+            </OutlinePaper>
+            <OutlinePaper>
+              <Stack direction="column" spacing={1}>
+                {active_system_prompt_.engine === "token limited" && <Typography variant="body1">
+                  Total Tokens:
+                </Typography>}
+                {active_system_prompt_.engine === "token limited" && <Typography variant="body1">
+                  {newTokenCount}/{active_system_prompt_.limit}
+                </Typography>}
+                {active_system_prompt_.engine === "amnesia" && <Typography variant="body1">
+                  Previous Tokens:
+                </Typography>}
+                {active_system_prompt_.engine === "amnesia" && <Typography variant="body1">
+                  {newTokenCount}
+                </Typography>}
+              </Stack>
             </OutlinePaper>
           </Stack>
         </OutlinePaper>
-        <ChatsHolder>
-          {conversation.length > 0 && conversation.map((chat, key) => {
-            return (
-              <React.Fragment key={key}>
-                {chat.role !== "system" && <>
-                  {chat.role === "assistant" ? <LeftBox>
-                    <LeftChatBox>
-                      <Stack direction="column" spacing={1}>
-                        <FormattedLeftResponse content={chat.content} />
-                        <Box>
-                          <Stack direction="row" spacing={1}>
-                            <CopyToClipboard text={chat.content}>
-                              <IconButton size="small">
-                                <ContentCopyIcon />
-                              </IconButton>
-                            </CopyToClipboard>
-                            <Typography>{isoToHuman(timeStamps[key - 1])}</Typography>
-                          </Stack>
-                        </Box>
-                      </Stack>
-                    </LeftChatBox>
-                  </LeftBox> : <RightBox>
-                    <RightChatBox>
-                      <Stack direction="column" spacing={1}>
-                        <FormattedRightResponse content={chat.content} />
-                        <Box>
-                          <Stack direction="row" spacing={1}>
-                            <CopyToClipboard text={chat.content}>
-                              <IconButton size="small">
-                                <ContentCopyIcon />
-                              </IconButton>
-                            </CopyToClipboard>
-                            <Typography>{isoToHuman(timeStamps[key - 1])}</Typography>
-                          </Stack>
-                        </Box>
-                      </Stack>
-                    </RightChatBox>
-                  </RightBox>}
-                </>}
-              </React.Fragment>
-            )
-          })}
+      </TopBar>
+      <Middle>
+        {conversation.length > 0 && conversation.map((chat, key) => {
+          return (
+            <React.Fragment key={key}>
+              {chat.role !== "system" && <>
+                {chat.role === "assistant" ? <LeftBox>
+                  <LeftChatBox>
+                    <Stack direction="column" spacing={1}>
+                      <FormattedLeftResponse content={chat.content} />
+                      <Box>
+                        <Stack direction="row" spacing={1}>
+                          <CopyToClipboard text={chat.content}>
+                            <IconButton size="small">
+                              <ContentCopyIcon />
+                            </IconButton>
+                          </CopyToClipboard>
 
-          {conversation.length > 0 && <CopyToClipboard text={JSON.stringify(conversation)}>
-            <IconButton size="small">
-              <ContentCopyIcon />
-            </IconButton>
-          </CopyToClipboard>}
+                          {key === conversation.length - 1 && <IconButton size="small">
+                            <RefreshIcon />
+                          </IconButton>}
 
-          <div ref={conversationScrollRef} />
-        </ChatsHolder>
-      </Stack>
+                          <Typography>{isoToHuman(timeStamps[key - 1])}</Typography>
+                        </Stack>
+                      </Box>
+                    </Stack>
+                  </LeftChatBox>
+                </LeftBox> : <RightBox>
+                  <RightChatBox>
+                    <Stack direction="column" spacing={1}>
+                      <FormattedRightResponse content={chat.content} />
+                      <Box>
+                        <Stack direction="row" spacing={1}>
+                          <CopyToClipboard text={chat.content}>
+                            <IconButton size="small">
+                              <ContentCopyIcon />
+                            </IconButton>
+                          </CopyToClipboard>
 
-      <Box sx={{ position: "absolute", bottom: 0, width: "100%" }}>
+                          {key === conversation.length - 2 && <IconButton size="small">
+                            <EditIcon />
+                          </IconButton>}
+
+                          <Typography>{isoToHuman(timeStamps[key - 1])}</Typography>
+                        </Stack>
+                      </Box>
+                    </Stack>
+                  </RightChatBox>
+                </RightBox>}
+              </>}
+            </React.Fragment>
+          )
+        })}
+
+        {conversation.length > 0 && <CopyToClipboard text={JSON.stringify(conversation)}>
+          <IconButton size="small">
+            <ContentCopyIcon />
+          </IconButton>
+        </CopyToClipboard>}
+
+        <div ref={conversationScrollRef} />
+      </Middle>
+      <BottomBar>
         <Stack direction="row" spacing={1}>
-          <OutlinePaper>
-            <Stack direction="row" spacing={1}>
-              <Tooltip title="resubmit last message">
-                <span>
-                  <IconButton
-                    onClick={() => { ReSubmitPrompt() }}
-                    size="large"
-                    disabled={busyUI || !conversation.length}
-                  >
-                    <RefreshIcon />
-                  </IconButton>
-                </span>
-              </Tooltip>
+          <OutlinePaper sx={{ width: "100vw" }}>
+            <Box >
+              <Stack direction="row" spacing={1}>
+                <FormControl fullWidth >
+                  <Box sx={{ margin: 1 }}>
+                    <TextField
+                      id="prompt-zone"
+                      label={active_system_prompt_.userInputLabel}
+                      variant="filled"
+                      color="secondary"
+                      value={userMessageInput}
+                      inputRef={inputRef}
+                      onChange={handleUserPromptInput}
+                      onKeyPress={(ev) => {
+                        if (ev.key === 'Enter' && userMessageInput !== "") {
+                          SubmitPrompt();
+                          ev.preventDefault();
+                        }
+                      }}
+                      required={true}
+                      disabled={busyUI}
+                      fullWidth
+                      multiline={true}
+                      maxRows={2}
+                      autoFocus
+                    />
+                  </Box>
+                </FormControl>
 
-              <Tooltip title="adjust last message">
-                <span>
-                  <IconButton
-                    onClick={() => { EditMode() }}
-                    size="large"
-                    disabled={busyUI || !conversation.length || editMode}
-                  >
-                    <EditIcon />
-                  </IconButton>
-                </span>
-              </Tooltip>
-            </Stack>
-          </OutlinePaper>
+                <Tooltip title="expand typing area">
+                  <span>
+                    <IconButton
+                      onClick={handleModalOpen}
+                      size="large"
+                      disabled={userMessageInput === "" || busyUI || modalOpen}
+                      variant="outlined"
+                    >
+                      <AspectRatioIcon />
+                    </IconButton>
+                  </span>
+                </Tooltip>
 
-          <FormControl fullWidth >
-            <Box sx={{ margin: 1 }}>
-              <TextField
-                id="prompt-zone"
-                label={active_system_prompt_.userInputLabel}
-                variant="filled"
-                color="secondary"
-                value={userMessageInput}
-                inputRef={inputRef}
-                onChange={handleUserPromptInput}
-                onKeyPress={(ev) => {
-                  if (ev.key === 'Enter' && userMessageInput !== "") {
-                    SubmitPrompt();
-                    ev.preventDefault();
-                  }
-                }}
-                required={true}
-                disabled={busyUI}
-                fullWidth
-                multiline={true}
-                maxRows={2}
-                autoFocus
-              />
+                <Tooltip title="submit message">
+                  <span>
+                    <IconButton
+                      onClick={() => { SubmitPrompt() }}
+                      size="large"
+                      disabled={userMessageInput === "" || busyUI}
+                      variant="outlined"
+                    >
+                      <DoneIcon />
+                    </IconButton>
+                  </span>
+                </Tooltip>
+
+                {busyUI && <CircularProgress color="secondary" />}
+              </Stack>
             </Box>
-          </FormControl>
-
-          <Tooltip title="expand typing area">
-            <span>
-              <IconButton
-                onClick={handleModalOpen}
-                size="large"
-                disabled={userMessageInput === "" || busyUI || modalOpen}
-                variant="outlined"
-              >
-                <AspectRatioIcon />
-              </IconButton>
-            </span>
-          </Tooltip>
-
-          <Tooltip title="submit message">
-            <span>
-              <IconButton
-                onClick={() => { SubmitPrompt() }}
-                size="large"
-                disabled={userMessageInput === "" || busyUI}
-                variant="outlined"
-              >
-                <DoneIcon />
-              </IconButton>
-            </span>
-          </Tooltip>
-
-          {busyUI && <CircularProgress color="secondary" />}
-
-          <OutlinePaper>
-            <Stack direction="row" spacing={1}>
-              {active_system_prompt_.engine === "token limited" && <Typography variant="body1">
-                Total Tokens: {newTokenCount}/{active_system_prompt_.limit}
-              </Typography>}
-              {active_system_prompt_.engine === "amnesia" && <Typography variant="body1">
-                Previous Tokens: {newTokenCount}
-              </Typography>}
-            </Stack>
           </OutlinePaper>
         </Stack>
-      </Box>
-
-      <Backdrop
-        sx={{
-          color: '#fff',
-          backgroundColor: (theme) => theme.palette.primary.outside,
-          zIndex: (theme) => theme.zIndex.drawer + 1
-        }}
-        open={modalOpen}
-      >
-        <FormControl
-          fullWidth
-          sx={{ backgroundColor: (theme) => theme.palette.primary.main }}
-        >
-          <Box sx={{ margin: 1 }}>
-            <TextField
-              id="prompt-zone"
-              label={active_system_prompt_.userInputLabel}
-              variant="filled"
-              color="secondary"
-              value={userMessageInput}
-              onChange={handleUserPromptInput}
-              onKeyPress={(ev) => {
-                if (ev.key === 'Enter' && userMessageInput !== "") {
-                  SubmitPrompt();
-                  ev.preventDefault();
-                };
-              }}
-              required={true}
-              disabled={busyUI}
-              fullWidth
-              multiline={true}
-              rows={30}
-              autoFocus
-            />
-          </Box>
-          <Stack direction="row" spacing={1}>
-            <Tooltip title="minimize typing area">
-              <span>
-                <IconButton
-                  onClick={handleModalClose}
-                  size="large"
-                  variant="outlined"
-                >
-                  <CloseFullscreenIcon />
-                </IconButton>
-              </span>
-            </Tooltip>
-
-            <Tooltip title="submit message">
-              <span>
-                <IconButton
-                  onClick={() => { SubmitPrompt() }}
-                  size="large"
-                  disabled={userMessageInput === "" || busyUI}
-                  variant="outlined"
-                >
-                  <DoneIcon />
-                </IconButton>
-              </span>
-            </Tooltip>
-          </Stack>
-        </FormControl>
-      </Backdrop>
+      </BottomBar>
     </>
   );
 };
