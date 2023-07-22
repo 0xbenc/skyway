@@ -4,15 +4,15 @@ import { useStore } from "../../zustand";
 //
 import { encryptPrompts } from "../../utility/encryption";
 //
-import { 
-  Menu, 
-  FormControl, 
-  TextField, 
-  Button, 
-  Grid, 
-  Typography, 
-  MenuItem, 
-  Stack 
+import {
+  Menu,
+  FormControl,
+  TextField,
+  Button,
+  Grid,
+  Typography,
+  MenuItem,
+  Stack
 } from "@mui/material";
 //
 import { BasicBox, OutlinePaper } from "../../mui/reusable";
@@ -24,13 +24,15 @@ const EditSystemPrompt = () => {
   const system_prompts_ = useStore.getState().system_prompts;
   const system_prompt_to_edit = useStore.getState().system_prompt_to_edit;
 
-  const [titleInput, setTitleInput] = useState(system_prompts_[system_prompt_to_edit].title)
+  const [titleInput, setTitleInput] = useState(system_prompts_[system_prompt_to_edit].title);
 
-  const [promptInput, setPromptInput] = useState(system_prompts_[system_prompt_to_edit].prompt)
+  const [promptInput, setPromptInput] = useState(system_prompts_[system_prompt_to_edit].prompt);
 
-  const [userInput, setUserInput] = useState(system_prompts_[system_prompt_to_edit].userInputLabel)
+  const [userInput, setUserInput] = useState(system_prompts_[system_prompt_to_edit].userInputLabel);
 
-  const [model, setModel] = useState(system_prompts_[system_prompt_to_edit].model)
+  const [prefilInput, setPrefilInput] = useState(system_prompts_[system_prompt_to_edit].prefil);
+
+  const [model, setModel] = useState(system_prompts_[system_prompt_to_edit].model);
 
   const [engine, setEngine] = useState(system_prompts_[system_prompt_to_edit].engine);
 
@@ -54,6 +56,10 @@ const EditSystemPrompt = () => {
 
   const handleUserInput = (event) => {
     setUserInput(event.target.value);
+  };
+
+  const handlePrefilInput = (event) => {
+    setPrefilInput(event.target.value);
   };
 
   const handleModel = (event) => {
@@ -112,6 +118,7 @@ const EditSystemPrompt = () => {
     system_prompts_[system_prompt_to_edit].model = model;
     system_prompts_[system_prompt_to_edit].engine = engine;
     system_prompts_[system_prompt_to_edit].limit = limit;
+    system_prompts_[system_prompt_to_edit].prefil = prefilInput;
 
     const password_ = useStore.getState().password;
 
@@ -231,6 +238,31 @@ const EditSystemPrompt = () => {
                   color="secondary"
                   value={promptInput}
                   onChange={handlePromptInput}
+                  required={true}
+                  fullWidth
+                  multiline
+                  minRows={4}
+                />
+              </FormControl>
+            </Stack>
+          </OutlinePaper>
+        </Grid>
+
+        <Grid item sm={12}>
+          <OutlinePaper>
+            <Stack direction="column" spacing={1}>
+              <Typography variant="h4">
+                Input Prefil:
+              </Typography>
+
+              <FormControl fullWidth>
+                <TextField
+                  id="prefil-input"
+                  label=""
+                  variant="filled"
+                  color="secondary"
+                  value={prefilInput}
+                  onChange={handlePrefilInput}
                   required={true}
                   fullWidth
                   multiline

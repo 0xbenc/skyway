@@ -5,6 +5,8 @@ import { useStore } from "../../zustand";
 //
 import { fetchChatCompletion } from "../../utility/fetchData";
 import { navigate } from "../../utility/navigatePage";
+import { isoToHuman, unixToISO } from "../../utility/time";
+import error from "../../utility/error";
 //
 import {
   FormControl,
@@ -32,23 +34,23 @@ import { OutlinePaper } from "../../mui/reusable";
 
 function hasScrollbar(input) {
   return input.scrollHeight > input.clientHeight;
-}
+};
 
 const NewChat = () => {
   const inputRef = useRef();
 
-  const scrollRef = useRef(null);
+  const conversationScrollRef = useRef(null);
 
   const [scrollCount, setScrollCount] = useState(0);
-  const [autoScroll, setAutoScroll] = useState(false);
+  const [autoModalOpen, setAutoModalOpen] = useState(false);
 
-  const [userPromptInput, setUserPromptInput] = useState("");
+  const [userMessageInput, setUserMessageInput] = useState("");
 
   const [modalOpen, setModalOpen] = useState(false);
   const handleModalOpen = () => setModalOpen(true);
   const handleModalClose = () => setModalOpen(false);
 
-  const [displayedChats, setDisplayedChats] = useState([]);
+  const [conversation, setConversation] = useState([]);
 
   const [newTokenCount, setNewTokenCount] = useState(0)
 
@@ -56,24 +58,26 @@ const NewChat = () => {
 
   const [busyUI, setBusyUI] = useState(false);
 
-  const activeSystemPrompt = useStore.getState().active_system_prompt;
+  const [timeStamps, setTimeStamps] = useState([]);
+
+  const active_system_prompt_ = useStore.getState().active_system_prompt;
   const open_ai_api_keys_ = useStore.getState().open_ai_api_keys;
   const open_ai_api_key_ = useStore.getState().open_ai_api_key;
 
   const errorMessage = {
     role: "assistant",
-    content: "t̷h̴i̴s̸ ̷i̷s̷ ̴n̵o̴t̷ ̷a̶i̸. Critical Error, please check your connection, refresh, and try again. If the problem persists, you may need a new API key."
+    content: error
   }
 
   const handleUserPromptInput = (event) => {
-    setUserPromptInput(event.target.value);
+    setUserMessageInput(event.target.value);
 
     const input = inputRef.current;
     if (hasScrollbar(input)) {
       setScrollCount(scrollCount + 1)
     }
-    if (scrollCount > 1 && !autoScroll) {
-      setAutoScroll(true)
+    if (scrollCount > 1 && !autoModalOpen) {
+      setAutoModalOpen(true)
       handleModalOpen()
     }
   };
@@ -122,87 +126,82 @@ const NewChat = () => {
     </>
   };
 
-  const SubmitPrompt = async () => {
+  const SubmitPromptAsync = async (sendDateISO) => {
+    let upstream = [];
+
+    const conversation_ = [...conversation];
+    const activeSystemPrompt_ = { role: "system", content: active_system_prompt_.prompt };
+    const userPrompt_ = { role: "user", content: userMessageInput };
+
+    if (active_system_prompt_.engine === "amnesia") {
+      conversation_.push(userPrompt_)
+      upstream = [activeSystemPrompt_, userPrompt_]
+    } else {
+      if (!conversation_.length) {
+        conversation_.push(activeSystemPrompt_)
+      };
+
+      conversation_.push(userPrompt_)
+      upstream = [...conversation_]
+    };
+
+    const response = await fetchChatCompletion(
+      upstream,
+      active_system_prompt_.model,
+      active_system_prompt_.params
+    );
+
+    if (response === "error") {
+      conversation_.push(errorMessage);
+    } else {
+      setNewTokenCount(response.usage.total_tokens)
+      conversation_.push(response.choices[0].message);
+      setBusyUI(false);
+
+      const oldArr = [...timeStamps];
+      oldArr.push(sendDateISO);
+      oldArr.push(unixToISO(response.created));
+
+      setTimeStamps(oldArr);
+    };
+
+    setConversation(conversation_);
+    setUserMessageInput(active_system_prompt_.prefil ? active_system_prompt_.prefil : "");
+  };
+
+  const SubmitPrompt = () => {
+    const sendDate = new Date();
+    const sendDateISO = String(sendDate.toISOString());
+
     setBusyUI(true);
     setEditMode(false);
     handleModalClose();
 
-    let upstream = [];
-
-    const displayedChats_ = [...displayedChats];
-    const activeSystemPrompt_ = { role: "system", content: activeSystemPrompt.prompt };
-    const userPrompt_ = { role: "user", content: userPromptInput };
-
-    if (activeSystemPrompt.engine === "amnesia") {
-      displayedChats_.push(userPrompt_)
-      upstream = [activeSystemPrompt_, userPrompt_]
-    } else {
-      if (!displayedChats_.length) {
-        displayedChats_.push(activeSystemPrompt_)
-      };
-
-      displayedChats_.push(userPrompt_)
-      upstream = [...displayedChats_]
-    };
-
-    const response = await fetchChatCompletion(upstream, activeSystemPrompt.model, activeSystemPrompt.params)
-
-    if (response === "error") {
-      displayedChats_.push(errorMessage);
-    } else {
-      setNewTokenCount(response.usage.total_tokens)
-      displayedChats_.push(response.choices[0].message);
-      setBusyUI(false);
-    };
-
-    setUserPromptInput("");
-    setDisplayedChats(displayedChats_);
-  };
-
-  const ReSubmitPrompt = async () => {
-    setBusyUI(true);
-    setEditMode(false);
-
-    const displayedChats_ = [...displayedChats];
-    let upstream = [];
-
-    displayedChats.pop()
-    displayedChats_.pop()
-
-    if (activeSystemPrompt.engine === "amnesia") {
-      upstream = [{ role: "system", content: activeSystemPrompt.prompt }, displayedChats_[displayedChats_.length - 1]];
-    } else {
-      upstream = displayedChats_;
-    }
-
-    const response = await fetchChatCompletion(upstream, activeSystemPrompt.model, activeSystemPrompt.params)
-
-    if (response === "error") {
-      setUserPromptInput("");
-      displayedChats_.push(errorMessage);
-    } else {
-      setNewTokenCount(response.usage.total_tokens)
-      displayedChats_.push(response.choices[0].message);
-      setBusyUI(false);
-    };
-
-    setDisplayedChats(displayedChats_);
+    SubmitPromptAsync(sendDateISO);
   };
 
   const EditMode = () => {
     setEditMode(true)
-    const displayedChats_ = [...displayedChats]
-    displayedChats_.pop()
-    setUserPromptInput(displayedChats_[displayedChats_.length - 1].content)
-    displayedChats_.pop()
-    setDisplayedChats(displayedChats_)
+    const conversation_ = [...conversation]
+    conversation_.pop()
+    setUserMessageInput(conversation_[conversation_.length - 1].content)
+    conversation_.pop()
+    setConversation(conversation_)
+
+    let arr = [];
+
+    for (let i = 0; i < timeStamps.length - 2; i++) {
+      arr.push(timeStamps[i]);
+    };
+
+    setTimeStamps(arr)
   };
 
   useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollIntoView({ behaviour: "smooth" });
+    if (conversationScrollRef.current) {
+      conversationScrollRef.current.scrollIntoView({ behaviour: "smooth" });
     }
-  }, [displayedChats]);
+  }, [conversation]);
 
   return (
     <>
@@ -222,15 +221,15 @@ const NewChat = () => {
             </Typography>
             <OutlinePaper>
               <Typography variant="h4">
-                {activeSystemPrompt.title}
+                {active_system_prompt_.title}
               </Typography>
             </OutlinePaper>
             <Stack direction="column" spacing={1}>
               <Typography variant="body1">
-                {activeSystemPrompt.model}
+                {active_system_prompt_.model}
               </Typography>
               <Typography variant="body1">
-                {activeSystemPrompt.engine}
+                {active_system_prompt_.engine}
               </Typography>
             </Stack>
             <OutlinePaper>
@@ -241,7 +240,7 @@ const NewChat = () => {
           </Stack>
         </OutlinePaper>
         <ChatsHolder>
-          {displayedChats.length > 0 && displayedChats.map((chat, key) => {
+          {conversation.length > 0 && conversation.map((chat, key) => {
             return (
               <React.Fragment key={key}>
                 {chat.role !== "system" && <>
@@ -250,11 +249,14 @@ const NewChat = () => {
                       <Stack direction="column" spacing={1}>
                         <FormattedLeftResponse content={chat.content} />
                         <Box>
-                          <CopyToClipboard text={chat.content}>
-                            <IconButton size="small">
-                              <ContentCopyIcon />
-                            </IconButton>
-                          </CopyToClipboard>
+                          <Stack direction="row" spacing={1}>
+                            <CopyToClipboard text={chat.content}>
+                              <IconButton size="small">
+                                <ContentCopyIcon />
+                              </IconButton>
+                            </CopyToClipboard>
+                            <Typography>{isoToHuman(timeStamps[key - 1])}</Typography>
+                          </Stack>
                         </Box>
                       </Stack>
                     </LeftChatBox>
@@ -263,11 +265,14 @@ const NewChat = () => {
                       <Stack direction="column" spacing={1}>
                         <FormattedRightResponse content={chat.content} />
                         <Box>
-                          <CopyToClipboard text={chat.content}>
-                            <IconButton size="small">
-                              <ContentCopyIcon />
-                            </IconButton>
-                          </CopyToClipboard>
+                          <Stack direction="row" spacing={1}>
+                            <CopyToClipboard text={chat.content}>
+                              <IconButton size="small">
+                                <ContentCopyIcon />
+                              </IconButton>
+                            </CopyToClipboard>
+                            <Typography>{isoToHuman(timeStamps[key - 1])}</Typography>
+                          </Stack>
                         </Box>
                       </Stack>
                     </RightChatBox>
@@ -277,13 +282,13 @@ const NewChat = () => {
             )
           })}
 
-          {displayedChats.length > 0 && <CopyToClipboard text={JSON.stringify(displayedChats)}>
+          {conversation.length > 0 && <CopyToClipboard text={JSON.stringify(conversation)}>
             <IconButton size="small">
               <ContentCopyIcon />
             </IconButton>
           </CopyToClipboard>}
 
-          <div ref={scrollRef} />
+          <div ref={conversationScrollRef} />
         </ChatsHolder>
       </Stack>
 
@@ -296,7 +301,7 @@ const NewChat = () => {
                   <IconButton
                     onClick={() => { ReSubmitPrompt() }}
                     size="large"
-                    disabled={busyUI || !displayedChats.length}
+                    disabled={busyUI || !conversation.length}
                   >
                     <RefreshIcon />
                   </IconButton>
@@ -308,7 +313,7 @@ const NewChat = () => {
                   <IconButton
                     onClick={() => { EditMode() }}
                     size="large"
-                    disabled={busyUI || !displayedChats.length || editMode}
+                    disabled={busyUI || !conversation.length || editMode}
                   >
                     <EditIcon />
                   </IconButton>
@@ -321,14 +326,14 @@ const NewChat = () => {
             <Box sx={{ margin: 1 }}>
               <TextField
                 id="prompt-zone"
-                label={activeSystemPrompt.userInputLabel}
+                label={active_system_prompt_.userInputLabel}
                 variant="filled"
                 color="secondary"
-                value={userPromptInput}
+                value={userMessageInput}
                 inputRef={inputRef}
                 onChange={handleUserPromptInput}
                 onKeyPress={(ev) => {
-                  if (ev.key === 'Enter' && userPromptInput !== "") {
+                  if (ev.key === 'Enter' && userMessageInput !== "") {
                     SubmitPrompt();
                     ev.preventDefault();
                   }
@@ -348,7 +353,7 @@ const NewChat = () => {
               <IconButton
                 onClick={handleModalOpen}
                 size="large"
-                disabled={userPromptInput === "" || busyUI || modalOpen}
+                disabled={userMessageInput === "" || busyUI || modalOpen}
                 variant="outlined"
               >
                 <AspectRatioIcon />
@@ -361,7 +366,7 @@ const NewChat = () => {
               <IconButton
                 onClick={() => { SubmitPrompt() }}
                 size="large"
-                disabled={userPromptInput === "" || busyUI}
+                disabled={userMessageInput === "" || busyUI}
                 variant="outlined"
               >
                 <DoneIcon />
@@ -373,10 +378,10 @@ const NewChat = () => {
 
           <OutlinePaper>
             <Stack direction="row" spacing={1}>
-              {activeSystemPrompt.engine === "token limited" && <Typography variant="body1">
-                Total Tokens: {newTokenCount}/{activeSystemPrompt.limit}
+              {active_system_prompt_.engine === "token limited" && <Typography variant="body1">
+                Total Tokens: {newTokenCount}/{active_system_prompt_.limit}
               </Typography>}
-              {activeSystemPrompt.engine === "amnesia" && <Typography variant="body1">
+              {active_system_prompt_.engine === "amnesia" && <Typography variant="body1">
                 Previous Tokens: {newTokenCount}
               </Typography>}
             </Stack>
@@ -399,13 +404,13 @@ const NewChat = () => {
           <Box sx={{ margin: 1 }}>
             <TextField
               id="prompt-zone"
-              label={activeSystemPrompt.userInputLabel}
+              label={active_system_prompt_.userInputLabel}
               variant="filled"
               color="secondary"
-              value={userPromptInput}
+              value={userMessageInput}
               onChange={handleUserPromptInput}
               onKeyPress={(ev) => {
-                if (ev.key === 'Enter' && userPromptInput !== "") {
+                if (ev.key === 'Enter' && userMessageInput !== "") {
                   SubmitPrompt();
                   ev.preventDefault();
                 };
@@ -436,7 +441,7 @@ const NewChat = () => {
                 <IconButton
                   onClick={() => { SubmitPrompt() }}
                   size="large"
-                  disabled={userPromptInput === "" || busyUI}
+                  disabled={userMessageInput === "" || busyUI}
                   variant="outlined"
                 >
                   <DoneIcon />
