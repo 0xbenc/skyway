@@ -5,6 +5,7 @@ import { useStore } from "../../zustand";
 //
 import { fetchChatCompletion } from "../../utility/fetchData";
 import { navigate } from "../../utility/navigatePage";
+import { isoToHuman, unixToISO } from "../../utility/time";
 //
 import {
   FormControl,
@@ -32,23 +33,7 @@ import { OutlinePaper } from "../../mui/reusable";
 
 function hasScrollbar(input) {
   return input.scrollHeight > input.clientHeight;
-}
-
-const convertUnixTimeToISOString = (unixTime) => {
-  const date = new Date(unixTime * 1000); // Convert unixTime to milliseconds
-
-  return date.toISOString();
 };
-
-const convertToHumanReadableTime = (isoTimeString) => {
-  const date = new Date(isoTimeString);
-  const humanReadableDate = date.toLocaleDateString('en-US',
-    { year: '2-digit', month: '2-digit', day: 'numeric' });
-  const humanReadableTime = date.toLocaleTimeString('en-US',
-    { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-
-  return `${humanReadableDate}, ${humanReadableTime}`;
-}
 
 const NewChat = () => {
   const inputRef = useRef();
@@ -170,7 +155,7 @@ const NewChat = () => {
 
       const oldArr = [...timeStamps];
       oldArr.push(sendDateISO);
-      oldArr.push(convertUnixTimeToISOString(response.created));
+      oldArr.push(unixToISO(response.created));
 
       setTimeStamps(oldArr);
     };
@@ -287,7 +272,7 @@ const NewChat = () => {
                                 <ContentCopyIcon />
                               </IconButton>
                             </CopyToClipboard>
-                            <Typography>{convertToHumanReadableTime(timeStamps[key - 1])}</Typography>
+                            <Typography>{isoToHuman(timeStamps[key - 1])}</Typography>
                           </Stack>
                         </Box>
                       </Stack>
@@ -303,7 +288,7 @@ const NewChat = () => {
                                 <ContentCopyIcon />
                               </IconButton>
                             </CopyToClipboard>
-                            <Typography>{convertToHumanReadableTime(timeStamps[key - 1])}</Typography>
+                            <Typography>{isoToHuman(timeStamps[key - 1])}</Typography>
                           </Stack>
                         </Box>
                       </Stack>
