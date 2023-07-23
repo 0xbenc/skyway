@@ -114,27 +114,7 @@ const NewChat = () => {
 
   const FormattedRightResponse = ({ content }) => {
     return <>
-      <ReactMarkdown rehypePlugins={[rehypeRaw]}
-        children={content}
-        components={{
-          code({ node, inline, className, children, ...props }) {
-            const match = /language-(\w+)/.exec(className || '')
-            return !inline && match ? (
-              <SyntaxHighlighter
-                {...props}
-                children={String(children).replace(/\n$/, '')}
-                style={color_mode_ === "light" ? materialLight : materialDark}
-                language={match[1]}
-                PreTag="div"
-              />
-            ) : (
-              <code {...props} className={className}>
-                {children}
-              </code>
-            )
-          }
-        }}
-      />
+      <Typography style={{ whiteSpace: 'pre-wrap' }}>{content}</Typography>
     </>
   };
 

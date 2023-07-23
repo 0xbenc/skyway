@@ -113,7 +113,7 @@ const NewChat = () => {
   };
 
   const FormattedLeftResponse = ({ content }) => {
-    return <Box sx={{wordWrap: 'break-word', overflowX: "auto"}}>
+    return <Box sx={{ wordWrap: 'break-word', overflowX: "auto" }}>
       <ReactMarkdown rehypePlugins={[rehypeRaw]}
         children={content}
         components={{
@@ -139,29 +139,9 @@ const NewChat = () => {
   };
 
   const FormattedRightResponse = ({ content }) => {
-    return <Box sx={{wordWrap: 'break-word', overflowX: "auto"}}>
-      <ReactMarkdown rehypePlugins={[rehypeRaw]}
-        children={content}
-        components={{
-          code({ node, inline, className, children, ...props }) {
-            const match = /language-(\w+)/.exec(className || '')
-            return !inline && match ? (
-              <SyntaxHighlighter
-                {...props}
-                children={String(children).replace(/\n$/, '')}
-                style={color_mode_ === "light" ? materialLight : materialDark}
-                language={match[1]}
-                PreTag="div"
-              />
-            ) : (
-              <code {...props} className={className}>
-                {children}
-              </code>
-            )
-          }
-        }}
-      />
-    </Box>
+    return <>
+      <Typography style={{ whiteSpace: 'pre-wrap' }}>{content}</Typography>
+    </>
   };
 
   const SubmitPromptAsync = async (sendDateISO) => {
@@ -275,6 +255,13 @@ const NewChat = () => {
     setEditMode(false);
 
     ResubmitPromptAsync();
+  };
+
+  const handleKeyDown = (event) => {
+    if (!event.shiftKey && event.key === 'Enter') {
+      SubmitPrompt();
+      event.preventDefault();
+    };
   };
 
   useEffect(() => {
@@ -421,12 +408,7 @@ const NewChat = () => {
                       value={userMessageInput}
                       inputRef={inputRef}
                       onChange={handleUserPromptInput}
-                      // onKeyPress={(ev) => {
-                      //   if (ev.key === 'Enter' && userMessageInput !== "") {
-                      //     SubmitPrompt();
-                      //     ev.preventDefault();
-                      //   }
-                      // }}
+                      onKeyDown={handleKeyDown}
                       required={true}
                       disabled={busyUI}
                       fullWidth
