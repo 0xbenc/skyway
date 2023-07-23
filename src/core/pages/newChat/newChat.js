@@ -17,7 +17,6 @@ import {
   Box,
   Stack,
   Tooltip,
-  Backdrop
 } from "@mui/material";
 //
 import HomeIcon from "@mui/icons-material/Home"
@@ -26,9 +25,8 @@ import DoneIcon from "@mui/icons-material/Done";
 import EditIcon from "@mui/icons-material/Edit";
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 import AspectRatioIcon from '@mui/icons-material/AspectRatio';
-import CloseFullscreenIcon from '@mui/icons-material/CloseFullscreen';
 //
-import { LeftBox, RightBox, LeftChatBox, RightChatBox, ChatsHolder } from "./newChat_styles";
+import { LeftBox, RightBox, LeftChatBox, RightChatBox } from "./newChat_styles";
 import { OutlinePaper } from "../../mui/reusable";
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
@@ -383,7 +381,7 @@ const NewChat = () => {
                             </IconButton>
                           </CopyToClipboard>
 
-                          {key === conversation.length - 2 && <IconButton size="small">
+                          {key === conversation.length - 2 && <IconButton size="small" onClick={EditMode}>
                             <EditIcon />
                           </IconButton>}
 
@@ -450,7 +448,7 @@ const NewChat = () => {
                   </span>
                 </Tooltip>
 
-                <Tooltip title="submit message">
+                {!busyUI && <Tooltip title="submit message">
                   <span>
                     <IconButton
                       onClick={() => { SubmitPrompt() }}
@@ -461,7 +459,7 @@ const NewChat = () => {
                       <DoneIcon />
                     </IconButton>
                   </span>
-                </Tooltip>
+                </Tooltip>}
 
                 {busyUI && <CircularProgress color="secondary" />}
               </Stack>
