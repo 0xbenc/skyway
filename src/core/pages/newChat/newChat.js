@@ -49,7 +49,8 @@ const Middle = styled(Box)(({ theme }) => ({
   width: "100vw",
   top: "10vh",
   position: "absolute",
-  overflowY: "auto"
+  overflowY: "auto",
+  overflowX: "hidden"
 }));
 
 const BottomBar = styled(Box)(({ theme }) => ({
@@ -113,7 +114,7 @@ const NewChat = () => {
   };
 
   const FormattedLeftResponse = ({ content }) => {
-    return <>
+    return <Box sx={{wordWrap: 'break-word', overflowX: "auto"}}>
       <ReactMarkdown rehypePlugins={[rehypeRaw]}
         children={content}
         components={{
@@ -135,11 +136,11 @@ const NewChat = () => {
           }
         }}
       />
-    </>
+    </Box>
   };
 
   const FormattedRightResponse = ({ content }) => {
-    return <>
+    return <Box sx={{wordWrap: 'break-word', overflowX: "auto"}}>
       <ReactMarkdown rehypePlugins={[rehypeRaw]}
         children={content}
         components={{
@@ -161,7 +162,7 @@ const NewChat = () => {
           }
         }}
       />
-    </>
+    </Box>
   };
 
   const SubmitPromptAsync = async (sendDateISO) => {
@@ -287,43 +288,45 @@ const NewChat = () => {
     <>
       <TopBar>
         <OutlinePaper>
-          <Stack direction="row" spacing={1} alignItems="center">
-            <Box>
-              <IconButton
-                aria-label="close"
-                onClick={() => { navigate("landing") }}
-              >
-                <HomeIcon />
-              </IconButton>
-            </Box>
-            <Typography variant="h4">
-              New Chat
-            </Typography>
-            <OutlinePaper>
+          <Stack direction="row" spacing={1} alignItems="center" justifyContent="space-between">
+            <Stack direction="row" spacing={1} alignItems="center">
+              <Box>
+                <IconButton
+                  aria-label="close"
+                  onClick={() => { navigate("landing") }}
+                >
+                  <HomeIcon />
+                </IconButton>
+              </Box>
               <Typography variant="h4">
-                {active_system_prompt_.title}
+                New Chat
               </Typography>
-            </OutlinePaper>
-            <OutlinePaper>
-              <Stack direction="column" spacing={1}>
-                <Typography variant="body1">
-                  {active_system_prompt_.model}
+              <OutlinePaper>
+                <Typography variant="h4">
+                  {active_system_prompt_.title}
                 </Typography>
-                <Typography variant="body1">
-                  {active_system_prompt_.engine}
-                </Typography>
-              </Stack>
-            </OutlinePaper>
-            <OutlinePaper>
-              <Stack direction="column" spacing={1}>
-                <Typography variant="body1">
-                  API Key:
-                </Typography>
-                <Typography variant="body1">
-                  {open_ai_api_keys_[open_ai_api_key_]?.name}
-                </Typography>
-              </Stack>
-            </OutlinePaper>
+              </OutlinePaper>
+              <OutlinePaper>
+                <Stack direction="column" spacing={1}>
+                  <Typography variant="body1">
+                    {active_system_prompt_.model}
+                  </Typography>
+                  <Typography variant="body1">
+                    {active_system_prompt_.engine}
+                  </Typography>
+                </Stack>
+              </OutlinePaper>
+              <OutlinePaper>
+                <Stack direction="column" spacing={1}>
+                  <Typography variant="body1">
+                    API Key:
+                  </Typography>
+                  <Typography variant="body1">
+                    {open_ai_api_keys_[open_ai_api_key_]?.name}
+                  </Typography>
+                </Stack>
+              </OutlinePaper>
+            </Stack>
             <OutlinePaper>
               <Stack direction="column" spacing={1}>
                 {active_system_prompt_.engine === "token limited" && <Typography variant="body1">
@@ -419,12 +422,12 @@ const NewChat = () => {
                       value={userMessageInput}
                       inputRef={inputRef}
                       onChange={handleUserPromptInput}
-                      onKeyPress={(ev) => {
-                        if (ev.key === 'Enter' && userMessageInput !== "") {
-                          SubmitPrompt();
-                          ev.preventDefault();
-                        }
-                      }}
+                      // onKeyPress={(ev) => {
+                      //   if (ev.key === 'Enter' && userMessageInput !== "") {
+                      //     SubmitPrompt();
+                      //     ev.preventDefault();
+                      //   }
+                      // }}
                       required={true}
                       disabled={busyUI}
                       fullWidth
