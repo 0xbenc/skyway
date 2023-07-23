@@ -21,10 +21,9 @@ import {
 //
 import HomeIcon from "@mui/icons-material/Home"
 import RefreshIcon from '@mui/icons-material/Refresh';
-import DoneIcon from "@mui/icons-material/Done";
+import SendIcon from '@mui/icons-material/Send';
 import EditIcon from "@mui/icons-material/Edit";
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
-import AspectRatioIcon from '@mui/icons-material/AspectRatio';
 //
 import { LeftBox, RightBox, LeftChatBox, RightChatBox } from "./newChat_styles";
 import { OutlinePaper } from "../../mui/reusable";
@@ -61,6 +60,12 @@ const BottomBar = styled(Box)(({ theme }) => ({
   bottom: 0,
   width: "100vw"
 }));
+
+const CustomTextField = styled(TextField)({
+  '& .MuiInputBase-root': {
+    backgroundColor: 'rgba(10, 10, 10, 0.95)', // solid white background
+  },
+});
 
 function hasScrollbar(input) {
   return input.scrollHeight > input.clientHeight;
@@ -400,7 +405,7 @@ const NewChat = () => {
             <Stack direction="row" spacing={1} alignItems="center">
               <FormControl fullWidth >
                 <Box sx={{ margin: 1 }}>
-                  <TextField
+                  <CustomTextField
                     id="prompt-zone"
                     label={active_system_prompt_.userInputLabel}
                     variant="filled"
@@ -414,7 +419,7 @@ const NewChat = () => {
                     fullWidth
                     multiline={true}
                     minRows={1}
-                    maxRows={5}
+                    maxRows={10}
                     autoFocus
                   />
                 </Box>
@@ -428,7 +433,7 @@ const NewChat = () => {
                     disabled={userMessageInput === "" || busyUI}
                     variant="outlined"
                   >
-                    <DoneIcon />
+                    <SendIcon />
                   </IconButton>
                 </span>
               </Tooltip>}
