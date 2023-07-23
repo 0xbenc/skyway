@@ -46,6 +46,7 @@ const Middle = styled(Box)(({ theme }) => ({
   width: "100vw",
   top: theme.spacing(12),
   bottom: theme.spacing(16),
+  // backgroundColor: "green",
   position: "absolute",
   overflowY: "auto",
   overflowX: "hidden"
@@ -394,62 +395,47 @@ const NewChat = () => {
         <div ref={conversationScrollRef} />
       </Middle>
       <BottomBar>
-        <Stack direction="row" spacing={1}>
-          <OutlinePaper sx={{ width: "100vw" }}>
-            <Box >
-              <Stack direction="row" spacing={1} alignItems="center">
-                <FormControl fullWidth >
-                  <Box sx={{ margin: 1 }}>
-                    <TextField
-                      id="prompt-zone"
-                      label={active_system_prompt_.userInputLabel}
-                      variant="filled"
-                      color="secondary"
-                      value={userMessageInput}
-                      inputRef={inputRef}
-                      onChange={handleUserPromptInput}
-                      onKeyDown={handleKeyDown}
-                      required={true}
-                      disabled={busyUI}
-                      fullWidth
-                      multiline={true}
-                      minRows={2}
-                      maxRows={2}
-                      autoFocus
-                    />
-                  </Box>
-                </FormControl>
+        <Stack direction="column" spacing={1} alignItems="center">
+          <Box sx={{ width: "82%" }}>
+            <Stack direction="row" spacing={1} alignItems="center">
+              <FormControl fullWidth >
+                <Box sx={{ margin: 1 }}>
+                  <TextField
+                    id="prompt-zone"
+                    label={active_system_prompt_.userInputLabel}
+                    variant="filled"
+                    color="secondary"
+                    value={userMessageInput}
+                    inputRef={inputRef}
+                    onChange={handleUserPromptInput}
+                    onKeyDown={handleKeyDown}
+                    required={true}
+                    disabled={busyUI}
+                    fullWidth
+                    multiline={true}
+                    minRows={1}
+                    maxRows={5}
+                    autoFocus
+                  />
+                </Box>
+              </FormControl>
 
-                <Tooltip title="expand typing area">
-                  <span>
-                    <IconButton
-                      onClick={handleModalOpen}
-                      size="large"
-                      disabled={userMessageInput === "" || busyUI || modalOpen}
-                      variant="outlined"
-                    >
-                      <AspectRatioIcon />
-                    </IconButton>
-                  </span>
-                </Tooltip>
+              {!busyUI && <Tooltip title="submit message">
+                <span>
+                  <IconButton
+                    onClick={() => { SubmitPrompt() }}
+                    size="large"
+                    disabled={userMessageInput === "" || busyUI}
+                    variant="outlined"
+                  >
+                    <DoneIcon />
+                  </IconButton>
+                </span>
+              </Tooltip>}
 
-                {!busyUI && <Tooltip title="submit message">
-                  <span>
-                    <IconButton
-                      onClick={() => { SubmitPrompt() }}
-                      size="large"
-                      disabled={userMessageInput === "" || busyUI}
-                      variant="outlined"
-                    >
-                      <DoneIcon />
-                    </IconButton>
-                  </span>
-                </Tooltip>}
-
-                {busyUI && <CircularProgress color="secondary" />}
-              </Stack>
-            </Box>
-          </OutlinePaper>
+              {busyUI && <CircularProgress color="secondary" />}
+            </Stack>
+          </Box>
         </Stack>
       </BottomBar>
     </>
