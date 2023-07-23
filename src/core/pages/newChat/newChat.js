@@ -35,32 +35,31 @@ import { materialDark, materialLight } from 'react-syntax-highlighter/dist/esm/s
 import { styled } from '@mui/material/styles';
 
 const TopBar = styled(Box)(({ theme }) => ({
-  height: "10vh",
+  height: theme.spacing(12),
+  maxHeight: theme.spacing(12),
   position: "absolute",
   top: 0,
-  // backgroundColor: "green",
   width: "100vw"
 }));
 
 const Middle = styled(Box)(({ theme }) => ({
-  height: "80vh",
-  maxHeight: "80vh",
-  // backgroundColor: "pink",
   width: "100vw",
-  top: "10vh",
+  top: theme.spacing(12),
+  bottom: theme.spacing(16),
   position: "absolute",
   overflowY: "auto",
   overflowX: "hidden"
 }));
 
 const BottomBar = styled(Box)(({ theme }) => ({
-  height: "10vh",
+  display: 'flex',
+  flexDirection: 'column-reverse',
+  height: theme.spacing(16),
+  maxHeight: theme.spacing(16),
   position: "absolute",
   bottom: 0,
-  // backgroundColor: "green",
   width: "100vw"
 }));
-
 
 function hasScrollbar(input) {
   return input.scrollHeight > input.clientHeight;
@@ -432,6 +431,7 @@ const NewChat = () => {
                       disabled={busyUI}
                       fullWidth
                       multiline={true}
+                      minRows={2}
                       maxRows={2}
                       autoFocus
                     />
