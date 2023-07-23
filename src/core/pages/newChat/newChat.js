@@ -287,7 +287,7 @@ const NewChat = () => {
     <>
       <TopBar>
         <OutlinePaper>
-          <Stack direction="row" spacing={1}>
+          <Stack direction="row" spacing={1} alignItems="center">
             <Box>
               <IconButton
                 aria-label="close"
@@ -408,7 +408,7 @@ const NewChat = () => {
         <Stack direction="row" spacing={1}>
           <OutlinePaper sx={{ width: "100vw" }}>
             <Box >
-              <Stack direction="row" spacing={1}>
+              <Stack direction="row" spacing={1} alignItems="center">
                 <FormControl fullWidth >
                   <Box sx={{ margin: 1 }}>
                     <TextField
