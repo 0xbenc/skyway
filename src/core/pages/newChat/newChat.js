@@ -16,7 +16,6 @@ import {
   CircularProgress,
   Box,
   Stack,
-  Tooltip,
 } from "@mui/material";
 //
 import HomeIcon from "@mui/icons-material/Home"
@@ -24,6 +23,7 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import SendIcon from '@mui/icons-material/Send';
 import EditIcon from "@mui/icons-material/Edit";
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
+import InputAdornment from '@mui/material/InputAdornment';
 //
 import { LeftBox, RightBox, LeftChatBox, RightChatBox } from "./newChat_styles";
 import { OutlinePaper } from "../../mui/reusable";
@@ -32,6 +32,7 @@ import rehypeRaw from 'rehype-raw';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { materialDark, materialLight } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { styled } from '@mui/material/styles';
+import { useTheme } from '@mui/material/styles';
 
 const TopBar = styled(Box)(({ theme }) => ({
   height: theme.spacing(12),
@@ -45,7 +46,6 @@ const Middle = styled(Box)(({ theme }) => ({
   width: "100vw",
   top: theme.spacing(12),
   bottom: theme.spacing(16),
-  // backgroundColor: "green",
   position: "absolute",
   overflowY: "auto",
   overflowX: "hidden"
@@ -72,6 +72,7 @@ function hasScrollbar(input) {
 };
 
 const NewChat = () => {
+  const theme = useTheme();
   const inputRef = useRef();
 
   const conversationScrollRef = useRef(null);
@@ -119,7 +120,7 @@ const NewChat = () => {
   };
 
   const FormattedLeftResponse = ({ content }) => {
-    return <Box sx={{ wordWrap: 'break-word', overflowX: "auto" }}>
+    return <Box sx={{ wordWrap: 'break-word', overflowX: "auto", marginY: -1 }}>
       <ReactMarkdown rehypePlugins={[rehypeRaw]}
         children={content}
         components={{
@@ -351,7 +352,7 @@ const NewChat = () => {
               {chat.role !== "system" && <>
                 {chat.role === "assistant" ? <LeftBox>
                   <LeftChatBox>
-                    <Stack direction="column" spacing={1}>
+                    <Stack direction="column" spacing={0}>
                       <FormattedLeftResponse content={chat.content} />
                       <Box>
                         <Stack direction="row" spacing={1}>
@@ -427,24 +428,26 @@ const NewChat = () => {
                     minRows={1}
                     maxRows={10}
                     autoFocus
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment sx={{
+                          position: 'absolute',
+                          bottom: theme.spacing(3),
+                          right: 0,
+                        }}>
+                          {!busyUI && <IconButton
+                            onClick={SubmitPrompt}
+                          >
+                            <SendIcon />
+                          </IconButton>}
+
+                          {busyUI && <CircularProgress color="secondary" />}
+                        </InputAdornment>
+                      )
+                    }}
                   />
                 </Box>
               </FormControl>
-
-              {!busyUI && <Tooltip title="submit message">
-                <span>
-                  <IconButton
-                    onClick={() => { SubmitPrompt() }}
-                    size="large"
-                    disabled={userMessageInput === "" || busyUI}
-                    variant="outlined"
-                  >
-                    <SendIcon />
-                  </IconButton>
-                </span>
-              </Tooltip>}
-
-              {busyUI && <CircularProgress color="secondary" />}
             </Stack>
           </Box>
         </Stack>
