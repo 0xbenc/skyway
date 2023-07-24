@@ -61,15 +61,18 @@ const BottomBar = styled(Box)(({ theme }) => ({
   width: "100vw"
 }));
 
-const CustomTextField = styled(TextField)({
+const CustomTextField = styled(TextField)(({ theme }) => ({
   '& .MuiInputBase-root': {
-    backgroundColor: 'rgba(10, 10, 10, 0.95)', // solid white background
+    backgroundColor: theme.palette.primary.main,
+    border: `1px solid ${theme.palette.secondary.main}`
   },
-});
-
-function hasScrollbar(input) {
-  return input.scrollHeight > input.clientHeight;
-};
+  '& label.Mui-focused': {
+    color: theme.palette.secondary.main
+  },
+  '& .MuiInput-underline:after': {
+    borderBottomColor: theme.palette.secondary.main
+  },
+}));
 
 const NewChat = () => {
   const theme = useTheme();
@@ -77,20 +80,11 @@ const NewChat = () => {
 
   const conversationScrollRef = useRef(null);
 
-  const [scrollCount, setScrollCount] = useState(0);
-  const [autoModalOpen, setAutoModalOpen] = useState(false);
-
   const [userMessageInput, setUserMessageInput] = useState("");
-
-  const [modalOpen, setModalOpen] = useState(false);
-  const handleModalOpen = () => setModalOpen(true);
-  const handleModalClose = () => setModalOpen(false);
 
   const [conversation, setConversation] = useState([]);
 
   const [newTokenCount, setNewTokenCount] = useState(0)
-
-  const [editMode, setEditMode] = useState(false)
 
   const [busyUI, setBusyUI] = useState(false);
 
@@ -108,15 +102,6 @@ const NewChat = () => {
 
   const handleUserPromptInput = (event) => {
     setUserMessageInput(event.target.value);
-
-    const input = inputRef.current;
-    if (hasScrollbar(input)) {
-      setScrollCount(scrollCount + 1)
-    }
-    if (scrollCount > 1 && !autoModalOpen) {
-      setAutoModalOpen(true)
-      handleModalOpen()
-    }
   };
 
   const FormattedLeftResponse = ({ content }) => {
@@ -199,14 +184,10 @@ const NewChat = () => {
     const sendDateISO = String(sendDate.toISOString());
 
     setBusyUI(true);
-    setEditMode(false);
-    handleModalClose();
-
     SubmitPromptAsync(sendDateISO);
   };
 
   const EditMode = () => {
-    setEditMode(true)
     const conversation_ = [...conversation]
     conversation_.pop()
     setUserMessageInput(conversation_[conversation_.length - 1].content)
@@ -222,7 +203,7 @@ const NewChat = () => {
     setTimeStamps(arr)
   };
 
-  const ResubmitPromptAsync = async (sendDateISO) => {
+  const ResubmitPromptAsync = async () => {
     const conversation_ = [...conversation];
     let upstream = [];
 
@@ -259,8 +240,6 @@ const NewChat = () => {
 
   const ReSubmitPrompt = () => {
     setBusyUI(true);
-    setEditMode(false);
-
     ResubmitPromptAsync();
   };
 
@@ -416,7 +395,6 @@ const NewChat = () => {
                     id="prompt-zone"
                     label={active_system_prompt_.userInputLabel}
                     variant="filled"
-                    color="secondary"
                     value={userMessageInput}
                     inputRef={inputRef}
                     onChange={handleUserPromptInput}
@@ -426,17 +404,21 @@ const NewChat = () => {
                     fullWidth
                     multiline={true}
                     minRows={1}
-                    maxRows={10}
+                    maxRows={12}
                     autoFocus
                     InputProps={{
                       endAdornment: (
-                        <InputAdornment sx={{
-                          position: 'absolute',
-                          bottom: theme.spacing(3),
-                          right: 0,
-                        }}>
+                        <InputAdornment
+                          position="end"
+                          sx={{
+                            position: 'absolute',
+                            bottom: theme.spacing(3),
+                            right: 0,
+                          }}
+                        >
                           {!busyUI && <IconButton
                             onClick={SubmitPrompt}
+                            position="end"
                           >
                             <SendIcon />
                           </IconButton>}
