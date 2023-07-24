@@ -276,6 +276,12 @@ const NewChat = () => {
     }
   }, [conversation]);
 
+  useEffect(() => {
+    if (!busyUI) {
+      inputRef.current.focus();
+    }
+  }, [busyUI]);
+
   return (
     <>
       <TopBar>
