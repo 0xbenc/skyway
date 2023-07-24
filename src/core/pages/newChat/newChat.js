@@ -35,11 +35,11 @@ import { styled } from '@mui/material/styles';
 import { useTheme } from '@mui/material/styles';
 
 const TopBar = styled(Box)(({ theme }) => ({
+  width: "100vw",
   height: theme.spacing(12),
   maxHeight: theme.spacing(12),
   position: "absolute",
-  top: 0,
-  width: "100vw"
+  top: 0
 }));
 
 const Middle = styled(Box)(({ theme }) => ({
@@ -52,13 +52,13 @@ const Middle = styled(Box)(({ theme }) => ({
 }));
 
 const BottomBar = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'column-reverse',
-  height: theme.spacing(16),
+  width: "100vw",
   maxHeight: theme.spacing(16),
+  height: theme.spacing(16),
   position: "absolute",
   bottom: 0,
-  width: "100vw"
+  display: 'flex',
+  flexDirection: 'column-reverse'
 }));
 
 const CustomTextField = styled(TextField)(({ theme }) => ({
@@ -71,7 +71,7 @@ const CustomTextField = styled(TextField)(({ theme }) => ({
   },
   '& .MuiInput-underline:after': {
     borderBottomColor: theme.palette.secondary.main
-  },
+  }
 }));
 
 const NewChat = () => {
