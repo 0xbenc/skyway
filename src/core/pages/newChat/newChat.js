@@ -10,7 +10,6 @@ import error from "../../utility/error";
 //
 import {
   FormControl,
-  TextField,
   IconButton,
   Typography,
   CircularProgress,
@@ -25,63 +24,13 @@ import EditIcon from "@mui/icons-material/Edit";
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 import InputAdornment from '@mui/material/InputAdornment';
 //
-import { LeftBox, RightBox, LeftChatBox, RightChatBox } from "./newChat_styles";
+import { LeftBox, RightBox, LeftChatBox, RightChatBox, ChatField, Top, Middle, Bottom } from "./newChat_styles";
 import { OutlinePaper } from "../../mui/reusable";
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { materialDark, materialLight } from 'react-syntax-highlighter/dist/esm/styles/prism'
-import { styled } from '@mui/material/styles';
 import { useTheme } from '@mui/material/styles';
-
-const TopBar = styled(Box)(({ theme }) => ({
-  width: "100vw",
-  height: theme.spacing(12),
-  maxHeight: theme.spacing(12),
-  position: "absolute",
-  top: 0
-}));
-
-const Middle = styled(Box)(({ theme }) => ({
-  width: "100vw",
-  top: theme.spacing(12),
-  bottom: theme.spacing(16),
-  position: "absolute",
-  overflowY: "auto",
-  overflowX: "hidden"
-}));
-
-const BottomBar = styled(Box)(({ theme }) => ({
-  width: "100vw",
-  maxHeight: theme.spacing(16),
-  height: theme.spacing(16),
-  position: "absolute",
-  bottom: 0,
-  display: 'flex',
-  flexDirection: 'column-reverse'
-}));
-
-const CustomTextField = styled(TextField)(({ theme }) => ({
-  "& .MuiFilledInput-root": {
-    backgroundColor: theme.palette.primary.main,
-  },
-  "& .MuiFilledInput-root:hover": {
-    backgroundColor: theme.palette.primary.main,
-    "@media (hover: none)": {
-      backgroundColor: theme.palette.primary.main
-    }
-  },
-  "& .MuiFilledInput-root.Mui-focused": {
-    backgroundColor: theme.palette.primary.main,
-  },
-  '& .MuiInputBase-root': {
-    backgroundColor: theme.palette.primary.main,
-    border: `1px solid ${theme.palette.secondary.main}`,
-  },
-  '& label.Mui-focused': {
-    color: theme.palette.secondary.main,
-  },
-}));
 
 const NewChat = () => {
   const theme = useTheme();
@@ -107,7 +56,7 @@ const NewChat = () => {
   const errorMessage = {
     role: "assistant",
     content: error
-  }
+  };
 
   const handleUserPromptInput = (event) => {
     setUserMessageInput(event.target.value);
@@ -273,7 +222,7 @@ const NewChat = () => {
 
   return (
     <>
-      <TopBar>
+      <Top>
         <OutlinePaper>
           <Stack direction="row" spacing={1} alignItems="center" justifyContent="space-between">
             <Stack direction="row" spacing={1} alignItems="center">
@@ -332,7 +281,7 @@ const NewChat = () => {
             </OutlinePaper>
           </Stack>
         </OutlinePaper>
-      </TopBar>
+      </Top>
       <Middle>
         {conversation.length > 0 && conversation.map((chat, key) => {
           return (
@@ -394,13 +343,13 @@ const NewChat = () => {
 
         <div ref={conversationScrollRef} />
       </Middle>
-      <BottomBar>
+      <Bottom>
         <Stack direction="column" spacing={1} alignItems="center">
           <Box sx={{ width: "82%" }}>
             <Stack direction="row" spacing={1} alignItems="center">
               <FormControl fullWidth >
                 <Box sx={{ margin: 1 }}>
-                  <CustomTextField
+                  <ChatField
                     id="prompt-zone"
                     label={active_system_prompt_.userInputLabel}
                     variant="filled"
@@ -441,7 +390,7 @@ const NewChat = () => {
             </Stack>
           </Box>
         </Stack>
-      </BottomBar>
+      </Bottom>
     </>
   );
 };
