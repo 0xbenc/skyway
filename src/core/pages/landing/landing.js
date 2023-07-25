@@ -7,7 +7,7 @@ import { navigate } from "../../utility/navigatePage";
 import { MenuItem, Button, Menu, Typography, Stack } from "@mui/material";
 //
 import { BasicBox, OutlinePaper } from "../../mui/reusable";
-import { switchColor } from "./landing_utility";
+import { switchColor } from "../../utility/switchColor";
 
 // ----------------------------------------------------------------------
 

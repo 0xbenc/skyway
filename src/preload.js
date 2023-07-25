@@ -20,3 +20,7 @@ contextBridge.exposeInMainWorld('electron', {
     }
   }
 });
+
+contextBridge.exposeInMainWorld('ipc', {
+  on: (channel, func) => ipcRenderer.on(channel, (event, ...args) => func(...args))
+});

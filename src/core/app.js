@@ -7,6 +7,7 @@ import { CssBaseline } from '@mui/material';
 //
 import { light, dark } from "./mui/theme";
 import HandlePages from './pages';
+import HandleIPC from './ipc';
 
 const App = () => {
   const color_mode = useStore(state => state.color_mode);
@@ -21,6 +22,7 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <HandlePages />
+      <HandleIPC />
     </ThemeProvider>
   );
 }
