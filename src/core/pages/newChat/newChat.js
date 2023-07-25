@@ -20,7 +20,6 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import SendIcon from '@mui/icons-material/Send';
 import EditIcon from "@mui/icons-material/Edit";
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
-import InputAdornment from '@mui/material/InputAdornment';
 //
 import { LeftBox, RightBox, LeftChatBox, RightChatBox, ChatField, Middle, Bottom } from "./newChat_styles";
 import { useTheme } from '@mui/material/styles';
@@ -161,9 +160,12 @@ const NewChat = () => {
   };
 
   const handleKeyDown = (event) => {
-    if (!event.shiftKey && event.key === 'Enter') {
-      SubmitPrompt();
+    if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
+
+      if (userMessageInput !== "") {
+        SubmitPrompt();
+      };
     };
   };
 
@@ -248,47 +250,34 @@ const NewChat = () => {
       <Bottom>
         <Stack direction="column" spacing={1} alignItems="center">
           <Box sx={{ width: "82%" }}>
-            <Stack direction="row" spacing={1} alignItems="center">
+            <Stack direction="row" spacing={1} alignItems="bottom">
               <FormControl fullWidth >
-                <Box sx={{ margin: 1 }}>
-                  <ChatField
-                    id="prompt-zone"
-                    label={active_system_prompt_.userInputLabel}
-                    variant="filled"
-                    value={userMessageInput}
-                    inputRef={inputRef}
-                    onChange={handleUserPromptInput}
-                    onKeyDown={handleKeyDown}
-                    required={true}
-                    disabled={busyUI}
-                    fullWidth
-                    multiline={true}
-                    minRows={1}
-                    maxRows={12}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment
-                          position="end"
-                          sx={{
-                            position: 'absolute',
-                            bottom: theme.spacing(3),
-                            right: 0,
-                          }}
-                        >
-                          {!busyUI && <IconButton
-                            onClick={SubmitPrompt}
-                            position="end"
-                          >
-                            <SendIcon />
-                          </IconButton>}
-
-                          {busyUI && <CircularProgress color="secondary" />}
-                        </InputAdornment>
-                      )
-                    }}
-                  />
-                </Box>
+                <ChatField
+                  id="prompt-zone"
+                  label={active_system_prompt_.userInputLabel}
+                  variant="filled"
+                  value={userMessageInput}
+                  inputRef={inputRef}
+                  onChange={handleUserPromptInput}
+                  onKeyDown={handleKeyDown}
+                  required={true}
+                  disabled={busyUI}
+                  fullWidth
+                  multiline={true}
+                  minRows={1}
+                  maxRows={12}
+                />
               </FormControl>
+              <Box display="flex" flexDirection="column" justifyContent="flex-end">
+                <Box margin={1}>
+                  {!busyUI &&
+                    <IconButton onClick={SubmitPrompt} disabled={!userMessageInput.length}>
+                      <SendIcon />
+                    </IconButton>
+                  }
+                  {busyUI && <CircularProgress size="2rem" color="secondary" />}
+                </Box>
+              </Box>
             </Stack>
           </Box>
         </Stack>
