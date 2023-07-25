@@ -23,12 +23,9 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 import InputAdornment from '@mui/material/InputAdornment';
 //
 import { LeftBox, RightBox, LeftChatBox, RightChatBox, ChatField, Middle, Bottom } from "./newChat_styles";
-import ReactMarkdown from 'react-markdown';
-import rehypeRaw from 'rehype-raw';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
-import { materialDark, materialLight } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { useTheme } from '@mui/material/styles';
 import TopBar from "./topBar";
+import { FormattedLeftResponse, FormattedRightResponse } from "./chats";
 
 const NewChat = () => {
   const theme = useTheme();
@@ -54,38 +51,6 @@ const NewChat = () => {
 
   const handleUserPromptInput = (event) => {
     setUserMessageInput(event.target.value);
-  };
-
-  const FormattedLeftResponse = ({ content }) => {
-    return <Box sx={{ wordWrap: 'break-word', overflowX: "auto", marginY: -1 }}>
-      <ReactMarkdown rehypePlugins={[rehypeRaw]}
-        children={content}
-        components={{
-          code({ node, inline, className, children, ...props }) {
-            const match = /language-(\w+)/.exec(className || '')
-            return !inline && match ? (
-              <SyntaxHighlighter
-                {...props}
-                children={String(children).replace(/\n$/, '')}
-                style={color_mode_ === "light" ? materialLight : materialDark}
-                language={match[1]}
-                PreTag="div"
-              />
-            ) : (
-              <code {...props} className={className}>
-                {children}
-              </code>
-            )
-          }
-        }}
-      />
-    </Box>
-  };
-
-  const FormattedRightResponse = ({ content }) => {
-    return <>
-      <Typography style={{ whiteSpace: 'pre-wrap' }}>{content}</Typography>
-    </>
   };
 
   const SubmitPromptAsync = async (sendDateISO) => {
@@ -226,7 +191,7 @@ const NewChat = () => {
                 {chat.role === "assistant" ? <LeftBox>
                   <LeftChatBox>
                     <Stack direction="column" spacing={0}>
-                      <FormattedLeftResponse content={chat.content} />
+                      <FormattedLeftResponse content={chat.content} color_mode={color_mode_} />
                       <Box>
                         <Stack direction="row" spacing={1}>
                           <CopyToClipboard text={chat.content}>
