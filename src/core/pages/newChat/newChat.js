@@ -62,16 +62,25 @@ const BottomBar = styled(Box)(({ theme }) => ({
 }));
 
 const CustomTextField = styled(TextField)(({ theme }) => ({
+  "& .MuiFilledInput-root": {
+    backgroundColor: theme.palette.primary.main,
+  },
+  "& .MuiFilledInput-root:hover": {
+    backgroundColor: theme.palette.primary.main,
+    "@media (hover: none)": {
+      backgroundColor: theme.palette.primary.main
+    }
+  },
+  "& .MuiFilledInput-root.Mui-focused": {
+    backgroundColor: theme.palette.primary.main,
+  },
   '& .MuiInputBase-root': {
     backgroundColor: theme.palette.primary.main,
-    border: `1px solid ${theme.palette.secondary.main}`
+    border: `1px solid ${theme.palette.secondary.main}`,
   },
   '& label.Mui-focused': {
-    color: theme.palette.secondary.main
+    color: theme.palette.secondary.main,
   },
-  '& .MuiInput-underline:after': {
-    borderBottomColor: theme.palette.secondary.main
-  }
 }));
 
 const NewChat = () => {
@@ -405,7 +414,6 @@ const NewChat = () => {
                     multiline={true}
                     minRows={1}
                     maxRows={12}
-                    autoFocus
                     InputProps={{
                       endAdornment: (
                         <InputAdornment
