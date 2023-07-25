@@ -28,7 +28,7 @@ import rehypeRaw from 'rehype-raw';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { materialDark, materialLight } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { useTheme } from '@mui/material/styles';
-import TopBar from "./TopBar";
+import TopBar from "./topBar";
 
 const NewChat = () => {
   const theme = useTheme();
@@ -116,7 +116,7 @@ const NewChat = () => {
     if (response === "error") {
       conversation_.push(errorMessage);
     } else {
-      useStore.setState({token_count: response.usage.total_tokens});
+      useStore.setState({ token_count: response.usage.total_tokens });
       conversation_.push(response.choices[0].message);
       setBusyUI(false);
 
@@ -174,7 +174,7 @@ const NewChat = () => {
       setUserMessageInput("");
       conversation_.push(errorMessage);
     } else {
-      useStore.setState({token_count: response.usage.total_tokens});
+      useStore.setState({ token_count: response.usage.total_tokens });
       conversation_.push(response.choices[0].message);
       setBusyUI(false);
       let timeArray = [];
@@ -279,6 +279,7 @@ const NewChat = () => {
 
         <div ref={conversationScrollRef} />
       </Middle>
+
       <Bottom>
         <Stack direction="column" spacing={1} alignItems="center">
           <Box sx={{ width: "82%" }}>
