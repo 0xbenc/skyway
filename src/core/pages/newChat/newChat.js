@@ -22,12 +22,10 @@ import EditIcon from "@mui/icons-material/Edit";
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 //
 import { LeftBox, RightBox, LeftChatBox, RightChatBox, ChatField, Middle, Bottom } from "./newChat_styles";
-import { useTheme } from '@mui/material/styles';
 import TopBar from "./topBar";
 import { FormattedLeftResponse, FormattedRightResponse } from "./chats";
 
 const NewChat = () => {
-  const theme = useTheme();
   const inputRef = useRef();
 
   const conversationScrollRef = useRef(null);
@@ -172,13 +170,13 @@ const NewChat = () => {
   useEffect(() => {
     if (conversationScrollRef.current) {
       conversationScrollRef.current.scrollIntoView({ behaviour: "smooth" });
-    }
+    };
   }, [conversation]);
 
   useEffect(() => {
     if (!busyUI) {
       inputRef.current.focus();
-    }
+    };
   }, [busyUI]);
 
   return (
