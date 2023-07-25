@@ -4,7 +4,6 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useStore } from "../../zustand";
 //
 import { fetchChatCompletion } from "../../utility/fetchData";
-import { navigate } from "../../utility/navigatePage";
 import { isoToHuman, unixToISO } from "../../utility/time";
 import error from "../../utility/error";
 //
@@ -17,20 +16,19 @@ import {
   Stack,
 } from "@mui/material";
 //
-import HomeIcon from "@mui/icons-material/Home"
 import RefreshIcon from '@mui/icons-material/Refresh';
 import SendIcon from '@mui/icons-material/Send';
 import EditIcon from "@mui/icons-material/Edit";
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 import InputAdornment from '@mui/material/InputAdornment';
 //
-import { LeftBox, RightBox, LeftChatBox, RightChatBox, ChatField, Top, Middle, Bottom } from "./newChat_styles";
-import { OutlinePaper } from "../../mui/reusable";
+import { LeftBox, RightBox, LeftChatBox, RightChatBox, ChatField, Middle, Bottom } from "./newChat_styles";
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { materialDark, materialLight } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { useTheme } from '@mui/material/styles';
+import TopBar from "./TopBar";
 
 const NewChat = () => {
   const theme = useTheme();
@@ -42,15 +40,11 @@ const NewChat = () => {
 
   const [conversation, setConversation] = useState([]);
 
-  const [newTokenCount, setNewTokenCount] = useState(0)
-
   const [busyUI, setBusyUI] = useState(false);
 
   const [timeStamps, setTimeStamps] = useState([]);
 
   const active_system_prompt_ = useStore.getState().active_system_prompt;
-  const open_ai_api_keys_ = useStore.getState().open_ai_api_keys;
-  const open_ai_api_key_ = useStore.getState().open_ai_api_key;
   const color_mode_ = useStore.getState().color_mode;
 
   const errorMessage = {
@@ -122,7 +116,7 @@ const NewChat = () => {
     if (response === "error") {
       conversation_.push(errorMessage);
     } else {
-      setNewTokenCount(response.usage.total_tokens)
+      useStore.setState({token_count: response.usage.total_tokens});
       conversation_.push(response.choices[0].message);
       setBusyUI(false);
 
@@ -180,7 +174,7 @@ const NewChat = () => {
       setUserMessageInput("");
       conversation_.push(errorMessage);
     } else {
-      setNewTokenCount(response.usage.total_tokens)
+      useStore.setState({token_count: response.usage.total_tokens});
       conversation_.push(response.choices[0].message);
       setBusyUI(false);
       let timeArray = [];
@@ -222,66 +216,8 @@ const NewChat = () => {
 
   return (
     <>
-      <Top>
-        <OutlinePaper>
-          <Stack direction="row" spacing={1} alignItems="center" justifyContent="space-between">
-            <Stack direction="row" spacing={1} alignItems="center">
-              <Box>
-                <IconButton
-                  aria-label="close"
-                  onClick={() => { navigate("landing") }}
-                >
-                  <HomeIcon />
-                </IconButton>
-              </Box>
-              <Typography variant="h4">
-                New Chat
-              </Typography>
-              <OutlinePaper>
-                <Typography variant="h4">
-                  {active_system_prompt_.title}
-                </Typography>
-              </OutlinePaper>
-              <OutlinePaper>
-                <Stack direction="column" spacing={1}>
-                  <Typography variant="body1">
-                    {active_system_prompt_.model}
-                  </Typography>
-                  <Typography variant="body1">
-                    {active_system_prompt_.engine}
-                  </Typography>
-                </Stack>
-              </OutlinePaper>
-              <OutlinePaper>
-                <Stack direction="column" spacing={1}>
-                  <Typography variant="body1">
-                    API Key:
-                  </Typography>
-                  <Typography variant="body1">
-                    {open_ai_api_keys_[open_ai_api_key_]?.name}
-                  </Typography>
-                </Stack>
-              </OutlinePaper>
-            </Stack>
-            <OutlinePaper>
-              <Stack direction="column" spacing={1}>
-                {active_system_prompt_.engine === "token limited" && <Typography variant="body1">
-                  Total Tokens:
-                </Typography>}
-                {active_system_prompt_.engine === "token limited" && <Typography variant="body1">
-                  {newTokenCount}/{active_system_prompt_.limit}
-                </Typography>}
-                {active_system_prompt_.engine === "amnesia" && <Typography variant="body1">
-                  Previous Tokens:
-                </Typography>}
-                {active_system_prompt_.engine === "amnesia" && <Typography variant="body1">
-                  {newTokenCount}
-                </Typography>}
-              </Stack>
-            </OutlinePaper>
-          </Stack>
-        </OutlinePaper>
-      </Top>
+      <TopBar />
+
       <Middle>
         {conversation.length > 0 && conversation.map((chat, key) => {
           return (
