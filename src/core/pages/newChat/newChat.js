@@ -115,6 +115,7 @@ const NewChat = () => {
     };
 
     setTimeStamps(arr)
+    inputRef.current.focus();
   };
 
   const ResubmitPromptAsync = async () => {
