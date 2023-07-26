@@ -193,6 +193,7 @@ const NewChat = () => {
   useEffect(() => {
     if (!justOnce) {
       setJustOnce(true)
+      setUserMessageInput(active_system_prompt_.prefil ? active_system_prompt_.prefil : "");
       useStore.setState({ token_count: 0 })
     };
   }, [justOnce]);
