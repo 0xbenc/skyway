@@ -90,16 +90,17 @@ const Top = styled(Box)(({ theme }) => ({
 const Middle = styled(Box)(({ theme }) => ({
   width: "100vw",
   top: theme.spacing(12),
-  bottom: theme.spacing(16),
+  bottom: theme.spacing(6),
   position: "absolute",
   overflowY: "auto",
-  overflowX: "hidden"
+  overflowX: "hidden",
+  padding: theme.spacing(1)
 }));
 
 const Bottom = styled(Box)(({ theme }) => ({
   width: "100vw",
-  maxHeight: theme.spacing(16),
-  height: theme.spacing(16),
+  maxHeight: theme.spacing(6),
+  height: theme.spacing(6),
   position: "absolute",
   bottom: 0,
   display: 'flex',
