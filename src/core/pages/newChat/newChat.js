@@ -38,6 +38,8 @@ const NewChat = () => {
 
   const [timeStamps, setTimeStamps] = useState([]);
 
+  const [justOnce, setJustOnce] = useState(false);
+
   const active_system_prompt_ = useStore.getState().active_system_prompt;
   const color_mode_ = useStore.getState().color_mode;
 
@@ -179,6 +181,13 @@ const NewChat = () => {
       inputRef.current.focus();
     };
   }, [busyUI]);
+
+  useEffect(() => {
+    if(!justOnce){
+      setJustOnce(true)
+      useStore.setState({token_count: 0})
+    };
+  }, [justOnce]);
 
   return (
     <>
