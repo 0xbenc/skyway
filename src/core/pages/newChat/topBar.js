@@ -11,7 +11,7 @@ import {
   Stack,
 } from "@mui/material";
 //
-import HomeIcon from "@mui/icons-material/Home"
+import ArrowBackIcon from "@mui/icons-material/ArrowBack"
 //
 import { Top } from "./newChat_styles";
 import { OutlinePaper } from "../../mui/reusable";
@@ -32,52 +32,65 @@ const TopBar = () => {
               <IconButton
                 aria-label="close"
                 onClick={() => { navigate("landing") }}
+                size="large"
               >
-                <HomeIcon />
+                <ArrowBackIcon fontSize="inheret" />
               </IconButton>
             </Box>
-            <Typography variant="h4">
-              New Chat
-            </Typography>
-            <OutlinePaper>
-              <Typography variant="h4">
-                {active_system_prompt_.title}
-              </Typography>
-            </OutlinePaper>
             <OutlinePaper>
               <Stack direction="column" spacing={1}>
                 <Typography variant="body1">
-                  {active_system_prompt_.model}
+                  System Prompt
                 </Typography>
                 <Typography variant="body1">
-                  {active_system_prompt_.engine}
+                  <b>{active_system_prompt_.title}</b>
                 </Typography>
               </Stack>
             </OutlinePaper>
             <OutlinePaper>
               <Stack direction="column" spacing={1}>
                 <Typography variant="body1">
-                  API Key:
+                  Model
                 </Typography>
                 <Typography variant="body1">
-                  {open_ai_api_keys_[open_ai_api_key_]?.name}
+                  <b>{active_system_prompt_.model}</b>
+                </Typography>
+              </Stack>
+            </OutlinePaper>
+            <OutlinePaper>
+              <Stack direction="column" spacing={1}>
+                <Typography variant="body1">
+                  Engine
+                </Typography>
+                <Typography variant="body1">
+                  <b>{active_system_prompt_.engine}</b>
+                </Typography>
+              </Stack>
+            </OutlinePaper>
+            <OutlinePaper>
+              <Stack direction="column" spacing={1}>
+                <Typography variant="body1">
+                  API Key
+                </Typography>
+                <Typography variant="body1">
+                  <b>{open_ai_api_keys_[open_ai_api_key_]?.name}</b>
                 </Typography>
               </Stack>
             </OutlinePaper>
           </Stack>
           <OutlinePaper>
-            <Stack direction="column" spacing={1}>
+            <Stack direction="column" spacing={1} textAlign={"right"}>
               {active_system_prompt_.engine === "token limited" && <Typography variant="body1">
-                Total Tokens:
+                Total Tokens
               </Typography>}
               {active_system_prompt_.engine === "token limited" && <Typography variant="body1">
-                {token_count}/{active_system_prompt_.limit}
+                <b>{token_count}/{active_system_prompt_.limit}</b>
               </Typography>}
               {active_system_prompt_.engine === "amnesia" && <Typography variant="body1">
-                Previous Tokens:
+                Previous Tokens
               </Typography>}
               {active_system_prompt_.engine === "amnesia" && <Typography variant="body1">
-                {token_count}
+                <b>{token_count}</b>
               </Typography>}
             </Stack>
           </OutlinePaper>

@@ -9,7 +9,7 @@ import {
   IconButton
 } from "@mui/material";
 //
-import HomeIcon from "@mui/icons-material/Home"
+import ArrowBackIcon from "@mui/icons-material/ArrowBack"
 //
 import { OutlinePaper } from "../mui/reusable";
 
@@ -23,8 +23,9 @@ const Title = ({ value }) => {
           <IconButton
             aria-label="close"
             onClick={() => { navigate("landing") }}
+            size="large"
           >
-            <HomeIcon />
+            <ArrowBackIcon fontSize="inheret"/>
           </IconButton>
         </Box>
         <Typography variant="h2">
