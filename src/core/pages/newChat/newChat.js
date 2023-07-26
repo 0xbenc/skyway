@@ -43,6 +43,8 @@ const NewChat = () => {
   const active_system_prompt_ = useStore.getState().active_system_prompt;
   const color_mode_ = useStore.getState().color_mode;
 
+  const [scrollTime, setScrollTime] = useState(false);
+
   const errorMessage = {
     role: "assistant",
     content: error
@@ -71,6 +73,13 @@ const NewChat = () => {
       upstream = [...conversation_];
     };
 
+    const oldArr = [...timeStamps];
+    oldArr.push(sendDateISO);
+    setTimeStamps(oldArr);
+    setConversation(conversation_);
+    setUserMessageInput(active_system_prompt_.prefil ? active_system_prompt_.prefil : "");
+    setScrollTime(true)
+
     const response = await fetchChatCompletion(
       upstream,
       active_system_prompt_.model,
@@ -82,17 +91,15 @@ const NewChat = () => {
     } else {
       useStore.setState({ token_count: response.usage.total_tokens });
       conversation_.push(response.choices[0].message);
-      setBusyUI(false);
 
-      const oldArr = [...timeStamps];
-      oldArr.push(sendDateISO);
       oldArr.push(unixToISO(response.created));
 
       setTimeStamps(oldArr);
+      setBusyUI(false);
     };
 
     setConversation(conversation_);
-    setUserMessageInput(active_system_prompt_.prefil ? active_system_prompt_.prefil : "");
+    setScrollTime(true);
   };
 
   const SubmitPrompt = () => {
@@ -171,10 +178,11 @@ const NewChat = () => {
   };
 
   useEffect(() => {
-    if (conversationScrollRef.current) {
+    if (scrollTime) {
+      setScrollTime(false);
       conversationScrollRef.current.scrollIntoView({ behaviour: "smooth" });
     };
-  }, [conversation]);
+  }, [scrollTime]);
 
   useEffect(() => {
     if (!busyUI) {
