@@ -59,16 +59,16 @@ const NewChat = () => {
     const activeSystemPrompt_ = { role: "system", content: active_system_prompt_.prompt };
     const userPrompt_ = { role: "user", content: userMessageInput };
 
-    if (active_system_prompt_.engine === "amnesia") {
-      conversation_.push(userPrompt_)
-      upstream = [activeSystemPrompt_, userPrompt_]
-    } else {
-      if (!conversation_.length) {
-        conversation_.push(activeSystemPrompt_)
-      };
+    if (!conversation_.length) {
+      conversation_.push(activeSystemPrompt_);
+    };
 
-      conversation_.push(userPrompt_)
-      upstream = [...conversation_]
+    conversation_.push(userPrompt_);
+
+    if (active_system_prompt_.engine === "amnesia") {
+      upstream = [activeSystemPrompt_, userPrompt_];
+    } else {
+      upstream = [...conversation_];
     };
 
     const response = await fetchChatCompletion(
@@ -183,9 +183,9 @@ const NewChat = () => {
   }, [busyUI]);
 
   useEffect(() => {
-    if(!justOnce){
+    if (!justOnce) {
       setJustOnce(true)
-      useStore.setState({token_count: 0})
+      useStore.setState({ token_count: 0 })
     };
   }, [justOnce]);
 
