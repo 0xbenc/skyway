@@ -16,6 +16,9 @@ const ChatField = styled(TextField)(({ theme }) => ({
   "& .MuiFilledInput-root.Mui-focused": {
     backgroundColor: theme.palette.primary.main,
   },
+  "& .MuiFilledInput-root.Mui-disabled": {
+    backgroundColor: theme.palette.primary.light,
+  },
   '& .MuiInputBase-root': {
     backgroundColor: theme.palette.primary.main,
     border: `1px solid ${theme.palette.secondary.main}`,
