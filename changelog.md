@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.1.0
+
+- UI evolution
+- Markdown / code syntax highlighting in AI responses
+- Messages are timestamped
+- Optional input prefils for prompts
+- User can store multiple API keys and switch between them
+
 ## 1.0.1
 
 - UI cleanup

@@ -7,7 +7,7 @@ import { navigate } from "../../utility/navigatePage";
 import { MenuItem, Button, Menu, Typography, Stack } from "@mui/material";
 //
 import { BasicBox, OutlinePaper } from "../../mui/reusable";
-import { switchColor } from "./landing_utility";
+import { switchColor } from "../../utility/switchColor";
 
 // ----------------------------------------------------------------------
 
@@ -50,30 +50,7 @@ const Landing = () => {
         </OutlinePaper>
 
         <OutlinePaper>
-          <Stack direction="row" spacing={1}>
-            <Button
-              variant="outlined"
-              color="secondary"
-              onClick={switchColor}
-            >
-              Toggle Color Theme
-            </Button>
-
-            <Button
-              variant="outlined"
-              color="secondary"
-              onClick={apiKey}
-            >
-              Change API Key
-            </Button>
-
-            <Button
-              variant="outlined"
-              color="secondary"
-              onClick={() => { navigate("system_prompts") }}
-            >
-              Prompt Editor
-            </Button>
+          <Stack direction="row" spacing={1} alignItems="center" justifyContent="space-between">
 
             <Button
               id="basic-button"
@@ -87,21 +64,48 @@ const Landing = () => {
             >
               New Chat
             </Button>
-            <Menu
-              id="basic-menu"
-              anchorEl={newChatAnchor}
-              open={open}
-              onClose={newChatClose}
-              MenuListProps={{
-                'aria-labelledby': 'basic-button',
-              }}
-            >
-              {system_prompts.map((prompt, key) => {
-                return (
-                  <MenuItem key={key} value={key} onClick={newChatSelect}>{prompt.title}</MenuItem>
-                )
-              })}
-            </Menu>
+
+            <Stack direction="row" spacing={1}>
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={() => { navigate("system_prompts") }}
+              >
+                Prompt Editor
+              </Button>
+
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={apiKey}
+              >
+                Change API Key
+              </Button>
+
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={switchColor}
+              >
+                Toggle Color Theme
+              </Button>
+
+              <Menu
+                id="basic-menu"
+                anchorEl={newChatAnchor}
+                open={open}
+                onClose={newChatClose}
+                MenuListProps={{
+                  'aria-labelledby': 'basic-button',
+                }}
+              >
+                {system_prompts.map((prompt, key) => {
+                  return (
+                    <MenuItem key={key} value={key} onClick={newChatSelect}>{prompt.title}</MenuItem>
+                  )
+                })}
+              </Menu>
+            </Stack>
           </Stack>
         </OutlinePaper>
       </Stack>

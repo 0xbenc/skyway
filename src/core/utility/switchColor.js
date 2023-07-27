@@ -1,5 +1,5 @@
-import { eSet } from "../../utility/electronStore";
-import { useStore } from "../../zustand";
+import { eSet } from "./electronStore";
+import { useStore } from "../zustand";
 
 const switchColor = () => {
   const color_mode_ = useStore.getState().color_mode;

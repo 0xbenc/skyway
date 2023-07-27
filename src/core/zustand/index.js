@@ -31,7 +31,10 @@ export const useStore = create(() => {
     // decrypted password
     password: "missing",
 
+    // current conversation tokens
+    token_count: 0,
+
     // true if not a release build
-    devMode: true
+    devMode: false
   };
 });

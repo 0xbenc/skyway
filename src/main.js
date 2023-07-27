@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, Menu } = require('electron');
 const path = require('path')
 const Store = require('electron-store');
 const axios = require('axios');
@@ -13,7 +13,7 @@ const store = new Store({
     },
     '1.1.0': store => {
       store.set('version', '1.1.0')
-      store.set('open_ai_api_keys', [{key: store.get("open_ai_api_key"), name: "default"}])
+      store.set('open_ai_api_keys', [{ key: store.get("open_ai_api_key"), name: "default" }])
       store.set('open_ai_api_key', 0)
     }
   }
@@ -39,8 +39,35 @@ const createWindow = () => {
   });
 
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
-};
 
+  const template = [
+    {
+      label: 'View',
+      submenu: [
+        { role: 'reload' },
+        { role: 'forcereload' },
+        { role: 'toggledevtools' },
+        { type: 'separator' },
+        { role: 'resetzoom' },
+        { role: 'zoomin' },
+        { role: 'zoomout' },
+        { type: 'separator' },
+        { role: 'togglefullscreen' },
+        {
+          label: 'Toggle Color Mode',
+          accelerator: 'Ctrl+Shift+C',
+          click: () => {
+            mainWindow.webContents.send("toggle color");
+          }
+        }
+      ]
+    },
+  ];
+
+  const menu = Menu.buildFromTemplate(template)
+
+  Menu.setApplicationMenu(menu)
+};
 
 app.on('ready', createWindow);
 
