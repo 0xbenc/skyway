@@ -1,6 +1,6 @@
 # Skyway
 
-> A cross-platform, desktop, ChatGPT-esque interface featuring encryption and custom system prompts
+> A desktop chatbot interface featuring encryption and custom system prompts
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
