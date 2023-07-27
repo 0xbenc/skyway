@@ -4,444 +4,301 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useStore } from "../../zustand";
 //
 import { fetchChatCompletion } from "../../utility/fetchData";
-import { navigate } from "../../utility/navigatePage";
+import { isoToHuman, unixToISO } from "../../utility/time";
+import error from "../../utility/error";
 //
 import {
   FormControl,
-  TextField,
   IconButton,
   Typography,
   CircularProgress,
   Box,
   Stack,
-  Tooltip,
-  Backdrop
 } from "@mui/material";
 //
-import HomeIcon from "@mui/icons-material/Home"
 import RefreshIcon from '@mui/icons-material/Refresh';
-import DoneIcon from "@mui/icons-material/Done";
+import SendIcon from '@mui/icons-material/Send';
 import EditIcon from "@mui/icons-material/Edit";
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
-import AspectRatioIcon from '@mui/icons-material/AspectRatio';
-import CloseFullscreenIcon from '@mui/icons-material/CloseFullscreen';
 //
-import { formatResponse } from "./newChat_utility";
-import { LeftBox, RightBox, LeftChatBox, RightChatBox, ChatsHolder, LeftCodeBorder, RightCodeBorder } from "./newChat_styles";
-import { OutlinePaper } from "../../mui/reusable";
-
-function hasScrollbar(input) {
-  return input.scrollHeight > input.clientHeight;
-}
+import { LeftBox, RightBox, LeftChatBox, RightChatBox, ChatField, Middle, Bottom } from "./newChat_styles";
+import TopBar from "./topBar";
+import { FormattedLeftResponse, FormattedRightResponse } from "./chats";
 
 const NewChat = () => {
   const inputRef = useRef();
 
-  const scrollRef = useRef(null);
+  const conversationScrollRef = useRef(null);
 
-  const [scrollCount, setScrollCount] = useState(0);
-  const [autoScroll, setAutoScroll] = useState(false);
+  const [userMessageInput, setUserMessageInput] = useState("");
 
-  const [userPromptInput, setUserPromptInput] = useState("");
-
-  const [modalOpen, setModalOpen] = useState(false);
-  const handleModalOpen = () => setModalOpen(true);
-  const handleModalClose = () => setModalOpen(false);
-
-  const [displayedChats, setDisplayedChats] = useState([]);
-
-  const [newTokenCount, setNewTokenCount] = useState(0)
-
-  const [editMode, setEditMode] = useState(false)
+  const [conversation, setConversation] = useState([]);
 
   const [busyUI, setBusyUI] = useState(false);
 
-  const activeSystemPrompt = useStore.getState().active_system_prompt
+  const [timeStamps, setTimeStamps] = useState([]);
+
+  const [justOnce, setJustOnce] = useState(false);
+
+  const active_system_prompt_ = useStore.getState().active_system_prompt;
+  const color_mode_ = useStore.getState().color_mode;
+
+  const [scrollTime, setScrollTime] = useState(false);
 
   const errorMessage = {
     role: "assistant",
-    content: "t̷h̴i̴s̸ ̷i̷s̷ ̴n̵o̴t̷ ̷a̶i̸. Critical Error, please check your connection, refresh, and try again. If the problem persists, you may need a new API key."
-  }
+    content: error
+  };
 
   const handleUserPromptInput = (event) => {
-    setUserPromptInput(event.target.value);
-
-    const input = inputRef.current;
-    if (hasScrollbar(input)) {
-      setScrollCount(scrollCount + 1)
-    }
-    if (scrollCount > 1 && !autoScroll) {
-      setAutoScroll(true)
-      handleModalOpen()
-    }
+    setUserMessageInput(event.target.value);
   };
 
-  const FormattedLeftResponse = ({ content }) => {
-    const array = formatResponse(content);
-
-    return <>
-      {array.map((chat, key) => {
-        return (
-          <Box key={key}>
-            {
-              chat.type === "code" ? <CopyToClipboard text={chat.text}>
-                <LeftCodeBorder>
-                  <Typography style={{ whiteSpace: 'pre-wrap' }}>{chat.text}</Typography>
-                </LeftCodeBorder>
-              </CopyToClipboard> : <Box>
-                <Typography style={{ whiteSpace: 'pre-wrap' }}>{chat.text}</Typography>
-              </Box>
-            }
-          </Box>
-        )
-      })}
-    </>
-  };
-
-  const FormattedRightResponse = ({ content }) => {
-    const array = formatResponse(content);
-
-    return <>
-      {array.map((chat, key) => {
-        return (
-          <Box key={key}>
-            {
-              chat.type === "code" ? <CopyToClipboard text={chat.text}>
-                <RightCodeBorder>
-                  <Typography style={{ whiteSpace: 'pre-wrap' }}>{chat.text}</Typography>
-                </RightCodeBorder>
-              </CopyToClipboard> : <Box>
-                <Typography style={{ whiteSpace: 'pre-wrap' }}>{chat.text}</Typography>
-              </Box>
-            }
-          </Box>
-        )
-      })}
-    </>
-  };
-
-  const SubmitPrompt = async () => {
-    setBusyUI(true);
-    setEditMode(false);
-    handleModalClose();
-
+  const SubmitPromptAsync = async (sendDateISO) => {
     let upstream = [];
 
-    const displayedChats_ = [...displayedChats];
-    const activeSystemPrompt_ = { role: "system", content: activeSystemPrompt.prompt };
-    const userPrompt_ = { role: "user", content: userPromptInput };
+    const conversation_ = [...conversation];
+    const activeSystemPrompt_ = { role: "system", content: active_system_prompt_.prompt };
+    const userPrompt_ = { role: "user", content: userMessageInput };
 
-    if (activeSystemPrompt.engine === "amnesia") {
-      displayedChats_.push(userPrompt_)
-      upstream = [activeSystemPrompt_, userPrompt_]
-    } else {
-      if (!displayedChats_.length) {
-        displayedChats_.push(activeSystemPrompt_)
-      };
-
-      displayedChats_.push(userPrompt_)
-      upstream = [...displayedChats_]
+    if (!conversation_.length) {
+      conversation_.push(activeSystemPrompt_);
     };
 
-    const response = await fetchChatCompletion(upstream, activeSystemPrompt.model, activeSystemPrompt.params)
+    conversation_.push(userPrompt_);
+
+    if (active_system_prompt_.engine === "amnesia") {
+      upstream = [activeSystemPrompt_, userPrompt_];
+    } else {
+      upstream = [...conversation_];
+    };
+
+    const oldArr = [...timeStamps];
+    oldArr.push(sendDateISO);
+    setTimeStamps(oldArr);
+    setConversation(conversation_);
+    setUserMessageInput(active_system_prompt_.prefil ? active_system_prompt_.prefil : "");
+    setScrollTime(true)
+
+    const response = await fetchChatCompletion(
+      upstream,
+      active_system_prompt_.model,
+      active_system_prompt_.params
+    );
 
     if (response === "error") {
-      displayedChats_.push(errorMessage);
+      conversation_.push(errorMessage);
     } else {
-      setNewTokenCount(response.usage.total_tokens)
-      displayedChats_.push(response.choices[0].message);
+      useStore.setState({ token_count: response.usage.total_tokens });
+      conversation_.push(response.choices[0].message);
+
+      oldArr.push(unixToISO(response.created));
+
+      setTimeStamps(oldArr);
       setBusyUI(false);
     };
 
-    setUserPromptInput("");
-    setDisplayedChats(displayedChats_);
+    setConversation(conversation_);
+    setScrollTime(true);
   };
 
-  const ReSubmitPrompt = async () => {
+  const SubmitPrompt = () => {
+    const sendDate = new Date();
+    const sendDateISO = String(sendDate.toISOString());
+
     setBusyUI(true);
-    setEditMode(false);
-
-    const displayedChats_ = [...displayedChats];
-    let upstream = [];
-
-    displayedChats.pop()
-    displayedChats_.pop()
-
-    if (activeSystemPrompt.engine === "amnesia") {
-      upstream = [{ role: "system", content: activeSystemPrompt.prompt }, displayedChats_[displayedChats_.length - 1]];
-    } else {
-      upstream = displayedChats_;
-    }
-
-    const response = await fetchChatCompletion(upstream, activeSystemPrompt.model, activeSystemPrompt.params)
-
-    if (response === "error") {
-      setUserPromptInput("");
-      displayedChats_.push(errorMessage);
-    } else {
-      setNewTokenCount(response.usage.total_tokens)
-      displayedChats_.push(response.choices[0].message);
-      setBusyUI(false);
-    };
-
-    setDisplayedChats(displayedChats_);
+    SubmitPromptAsync(sendDateISO);
   };
 
   const EditMode = () => {
-    setEditMode(true)
-    const displayedChats_ = [...displayedChats]
-    displayedChats_.pop()
-    setUserPromptInput(displayedChats_[displayedChats_.length - 1].content)
-    displayedChats_.pop()
-    setDisplayedChats(displayedChats_)
+    const conversation_ = [...conversation]
+    conversation_.pop()
+    setUserMessageInput(conversation_[conversation_.length - 1].content)
+    conversation_.pop()
+    setConversation(conversation_)
+
+    let arr = [];
+
+    for (let i = 0; i < timeStamps.length - 2; i++) {
+      arr.push(timeStamps[i]);
+    };
+
+    setTimeStamps(arr)
+    inputRef.current.focus();
+  };
+
+  const ResubmitPromptAsync = async () => {
+    const conversation_ = [...conversation];
+    let upstream = [];
+
+    conversation.pop()
+    conversation_.pop()
+
+    if (active_system_prompt_.engine === "amnesia") {
+      upstream = [{ role: "system", content: active_system_prompt_.prompt }, conversation_[conversation_.length - 1]];
+    } else {
+      upstream = conversation_;
+    }
+
+    const response = await fetchChatCompletion(upstream, active_system_prompt_.model, active_system_prompt_.params)
+
+    if (response === "error") {
+      setUserMessageInput("");
+      conversation_.push(errorMessage);
+    } else {
+      useStore.setState({ token_count: response.usage.total_tokens });
+      conversation_.push(response.choices[0].message);
+      setBusyUI(false);
+      let timeArray = [];
+      for (let i = 0; i < timeStamps.length - 1; i++) {
+        timeArray.push(timeStamps[i])
+      };
+
+      timeArray.push(unixToISO(response.created));
+
+      setTimeStamps(timeArray);
+    };
+
+    setConversation(conversation_);
+  };
+
+  const ReSubmitPrompt = () => {
+    setBusyUI(true);
+    ResubmitPromptAsync();
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+
+      if (userMessageInput !== "") {
+        SubmitPrompt();
+      };
+    };
   };
 
   useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollIntoView({ behaviour: "smooth" });
-    }
-  }, [displayedChats]);
+    if (scrollTime) {
+      setScrollTime(false);
+      conversationScrollRef.current.scrollIntoView({ behaviour: "smooth" });
+    };
+  }, [scrollTime]);
+
+  useEffect(() => {
+    if (!busyUI) {
+      inputRef.current.focus();
+    };
+  }, [busyUI]);
+
+  useEffect(() => {
+    if (!justOnce) {
+      setJustOnce(true)
+      setUserMessageInput(active_system_prompt_.prefil ? active_system_prompt_.prefil : "");
+      useStore.setState({ token_count: 0 })
+    };
+  }, [justOnce]);
 
   return (
     <>
-      <Stack direction="column" spacing={1}>
-        <OutlinePaper>
-          <Stack direction="row" spacing={1}>
-            <Box>
-              <IconButton
-                aria-label="close"
-                onClick={() => { navigate("landing") }}
-              >
-                <HomeIcon />
-              </IconButton>
-            </Box>
-            <Typography variant="h3">
-              New Chat:
-            </Typography>
-            <OutlinePaper>
-              <Typography variant="h4">
-                {activeSystemPrompt.title}
-              </Typography>
-            </OutlinePaper>
-            <Stack direction="column" spacing={1}>
-              <Typography variant="body1">
-                {activeSystemPrompt.model}
-              </Typography>
-              <Typography variant="body1">
-                {activeSystemPrompt.engine}
-              </Typography>
-            </Stack>
-          </Stack>
-        </OutlinePaper>
-        <ChatsHolder>
-          {displayedChats.length > 0 && displayedChats.map((chat, key) => {
-            return (
-              <React.Fragment key={key}>
-                {chat.role !== "system" && <>
-                  {chat.role === "assistant" ? <LeftBox>
-                    <LeftChatBox>
-                      <Stack direction="column" spacing={1}>
-                        <FormattedLeftResponse content={chat.content} />
-                        <Box>
+      <TopBar />
+
+      <Middle>
+        {conversation.length > 0 && conversation.map((chat, key) => {
+          return (
+            <React.Fragment key={key}>
+              {chat.role !== "system" && <>
+                {chat.role === "assistant" ? <LeftBox>
+                  <LeftChatBox>
+                    <Stack direction="column" spacing={0}>
+                      <FormattedLeftResponse content={chat.content} color_mode={color_mode_} />
+                      <Box>
+                        <Stack direction="row" spacing={1}>
                           <CopyToClipboard text={chat.content}>
                             <IconButton size="small">
                               <ContentCopyIcon />
                             </IconButton>
                           </CopyToClipboard>
-                        </Box>
-                      </Stack>
-                    </LeftChatBox>
-                  </LeftBox> : <RightBox>
-                    <RightChatBox>
-                      <Stack direction="column" spacing={1}>
-                        <FormattedRightResponse content={chat.content} />
-                        <Box>
+
+                          {key === conversation.length - 1 && <IconButton onClick={ReSubmitPrompt} size="small">
+                            <RefreshIcon />
+                          </IconButton>}
+
+                          <Typography>{isoToHuman(timeStamps[key - 1])}</Typography>
+                        </Stack>
+                      </Box>
+                    </Stack>
+                  </LeftChatBox>
+                </LeftBox> : <RightBox>
+                  <RightChatBox>
+                    <Stack direction="column" spacing={1}>
+                      <FormattedRightResponse content={chat.content} />
+                      <Box>
+                        <Stack direction="row" spacing={1}>
                           <CopyToClipboard text={chat.content}>
                             <IconButton size="small">
                               <ContentCopyIcon />
                             </IconButton>
                           </CopyToClipboard>
-                        </Box>
-                      </Stack>
-                    </RightChatBox>
-                  </RightBox>}
-                </>}
-              </React.Fragment>
-            )
-          })}
 
-          {displayedChats.length > 0 && <CopyToClipboard text={JSON.stringify(displayedChats)}>
-            <IconButton size="small">
-              <ContentCopyIcon />
-            </IconButton>
-          </CopyToClipboard>}
+                          {key === conversation.length - 2 && <IconButton size="small" onClick={EditMode}>
+                            <EditIcon />
+                          </IconButton>}
 
-          <div ref={scrollRef} />
-        </ChatsHolder>
-      </Stack>
+                          <Typography>{isoToHuman(timeStamps[key - 1])}</Typography>
+                        </Stack>
+                      </Box>
+                    </Stack>
+                  </RightChatBox>
+                </RightBox>}
+              </>}
+            </React.Fragment>
+          )
+        })}
 
-      <Box sx={{ position: "absolute", bottom: 0, width: "100%" }}>
-        <Stack direction="row" spacing={1}>
-          <OutlinePaper>
-            <Stack direction="row" spacing={1}>
-              <Tooltip title="resubmit last message">
-                <span>
-                  <IconButton
-                    onClick={() => { ReSubmitPrompt() }}
-                    size="large"
-                    disabled={busyUI || !displayedChats.length}
-                  >
-                    <RefreshIcon />
-                  </IconButton>
-                </span>
-              </Tooltip>
+        {conversation.length > 0 && <CopyToClipboard text={JSON.stringify(conversation)}>
+          <IconButton size="small">
+            <ContentCopyIcon />
+          </IconButton>
+        </CopyToClipboard>}
 
-              <Tooltip title="adjust last message">
-                <span>
-                  <IconButton
-                    onClick={() => { EditMode() }}
-                    size="large"
-                    disabled={busyUI || !displayedChats.length || editMode}
-                  >
-                    <EditIcon />
-                  </IconButton>
-                </span>
-              </Tooltip>
-            </Stack>
-          </OutlinePaper>
+        <div ref={conversationScrollRef} />
+      </Middle>
 
-          <FormControl fullWidth >
-            <Box sx={{ margin: 1 }}>
-              <TextField
-                id="prompt-zone"
-                label={activeSystemPrompt.userInputLabel}
-                variant="filled"
-                color="secondary"
-                value={userPromptInput}
-                inputRef={inputRef}
-                onChange={handleUserPromptInput}
-                onKeyPress={(ev) => {
-                  if (ev.key === 'Enter' && userPromptInput !== "") {
-                    SubmitPrompt();
-                    ev.preventDefault();
+      <Bottom>
+        <Stack direction="column" spacing={1} alignItems="center">
+          <Box sx={{ width: "82%" }}>
+            <Stack direction="row" spacing={1} alignItems="bottom">
+              <FormControl fullWidth >
+                <ChatField
+                  id="prompt-zone"
+                  label={active_system_prompt_.userInputLabel}
+                  variant="filled"
+                  value={userMessageInput}
+                  inputRef={inputRef}
+                  onChange={handleUserPromptInput}
+                  onKeyDown={handleKeyDown}
+                  required={true}
+                  disabled={busyUI}
+                  fullWidth
+                  multiline={true}
+                  minRows={1}
+                  maxRows={12}
+                />
+              </FormControl>
+              <Box display="flex" flexDirection="column" justifyContent="flex-end">
+                <Box margin={1}>
+                  {!busyUI &&
+                    <IconButton onClick={SubmitPrompt} disabled={!userMessageInput.length}>
+                      <SendIcon />
+                    </IconButton>
                   }
-                }}
-                required={true}
-                disabled={busyUI}
-                fullWidth
-                multiline={true}
-                maxRows={2}
-                focused
-                autoFocus
-              />
-            </Box>
-          </FormControl>
-
-          <Tooltip title="expand typing area">
-            <span>
-              <IconButton
-                onClick={handleModalOpen}
-                size="large"
-                disabled={userPromptInput === "" || busyUI || modalOpen}
-                variant="outlined"
-              >
-                <AspectRatioIcon />
-              </IconButton>
-            </span>
-          </Tooltip>
-
-          <Tooltip title="submit message">
-            <span>
-              <IconButton
-                onClick={() => { SubmitPrompt() }}
-                size="large"
-                disabled={userPromptInput === "" || busyUI}
-                variant="outlined"
-              >
-                <DoneIcon />
-              </IconButton>
-            </span>
-          </Tooltip>
-
-          {busyUI && <CircularProgress color="secondary" />}
-
-          <OutlinePaper>
-            <Stack direction="row" spacing={1}>
-              {activeSystemPrompt.engine === "token limited" && <Typography variant="body1">
-                Total Tokens: {newTokenCount}/{activeSystemPrompt.limit}
-              </Typography>}
-              {activeSystemPrompt.engine === "amnesia" && <Typography variant="body1">
-                Previous Tokens: {newTokenCount}
-              </Typography>}
+                  {busyUI && <CircularProgress size="2rem" color="secondary" />}
+                </Box>
+              </Box>
             </Stack>
-          </OutlinePaper>
-        </Stack>
-      </Box>
-
-      <Backdrop
-        sx={{
-          color: '#fff',
-          backgroundColor: (theme) => theme.palette.primary.outside,
-          zIndex: (theme) => theme.zIndex.drawer + 1
-        }}
-        open={modalOpen}
-      >
-        <FormControl
-          fullWidth
-          sx={{ backgroundColor: (theme) => theme.palette.primary.main }}
-        >
-          <Box sx={{ margin: 1 }}>
-            <TextField
-              id="prompt-zone"
-              label={activeSystemPrompt.userInputLabel}
-              variant="filled"
-              color="secondary"
-              value={userPromptInput}
-              onChange={handleUserPromptInput}
-              onKeyPress={(ev) => {
-                if (ev.key === 'Enter' && userPromptInput !== "") {
-                  SubmitPrompt();
-                  ev.preventDefault();
-                };
-              }}
-
-              required={true}
-              disabled={busyUI}
-              fullWidth
-              multiline={true}
-              rows={30}
-              focused
-              autoFocus
-            />
           </Box>
-          <Stack direction="row" spacing={1}>
-            <Tooltip title="minimize typing area">
-              <span>
-                <IconButton
-                  onClick={handleModalClose}
-                  size="large"
-                  variant="outlined"
-                >
-                  <CloseFullscreenIcon />
-                </IconButton>
-              </span>
-            </Tooltip>
-
-            <Tooltip title="submit message">
-              <span>
-                <IconButton
-                  onClick={() => { SubmitPrompt() }}
-                  size="large"
-                  disabled={userPromptInput === "" || busyUI}
-                  variant="outlined"
-                >
-                  <DoneIcon />
-                </IconButton>
-              </span>
-            </Tooltip>
-          </Stack>
-        </FormControl>
-      </Backdrop>
+        </Stack>
+      </Bottom>
     </>
   );
 };

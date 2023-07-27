@@ -26,9 +26,13 @@ export const useStore = create(() => {
 
     // decrypted OpenAI API Key
     open_ai_api_key: "missing",
+    open_ai_api_keys: [],
 
     // decrypted password
     password: "missing",
+
+    // current conversation tokens
+    token_count: 0,
 
     // true if not a release build
     devMode: false

@@ -4,19 +4,20 @@ import { useStore } from "../../zustand";
 //
 import { encryptPrompts } from "../../utility/encryption";
 //
-import { 
-  Menu, 
-  FormControl, 
-  TextField, 
-  Button, 
-  Grid, 
-  Typography, 
-  MenuItem, 
-  Stack 
+import {
+  Menu,
+  FormControl,
+  TextField,
+  Button,
+  Grid,
+  Typography,
+  MenuItem,
+  Stack
 } from "@mui/material";
 //
 import { BasicBox, OutlinePaper } from "../../mui/reusable";
-
+import { eSet } from "../../utility/electronStore";
+import Title from "../../components/title";
 
 // ----------------------------------------------------------------------
 
@@ -26,6 +27,8 @@ const NewSystemPrompt = () => {
   const [promptInput, setPromptInput] = useState("")
 
   const [userInput, setUserInput] = useState("")
+
+  const [prefilInput, setPrefilInput] = useState('');
 
   const [model, setModel] = useState("gpt-3.5-turbo")
 
@@ -51,6 +54,10 @@ const NewSystemPrompt = () => {
 
   const handleUserInput = (event) => {
     setUserInput(event.target.value);
+  };
+
+  const handlePrefilInput = (event) => {
+    setPrefilInput(event.target.value);
   };
 
   const handleModel = (event) => {
@@ -111,13 +118,14 @@ const NewSystemPrompt = () => {
       userInputLabel: userInput,
       model: model,
       engine: engine,
-      limit: limit
+      limit: limit,
+      prefil: prefilInput
     });
 
     const password_ = useStore.getState().password;
 
     const encPrompts = encryptPrompts(system_prompts_, password_);
-    window.electron.store.set("system_prompts", encPrompts);
+    eSet("system_prompts", encPrompts);
 
     useStore.setState({ page: "system_prompts" })
 
@@ -145,210 +153,208 @@ const NewSystemPrompt = () => {
 
   return (
     <BasicBox>
-      <Grid
-        spacing={1}
-        container
-        sx={{
-          justifyContent: "left",
-          alignItems: "left",
-          textAlign: "left",
-          verticalAlign: "center",
-        }}
-        direction={"row"}
-      >
-        <Grid item sm={12}>
-          <OutlinePaper>
-            <Typography variant="h2">
-              New System Prompt
+      <Stack spacing={1}>
+        <Title value={"System Prompts"} />
+
+        <OutlinePaper>
+          <Grid
+            spacing={1}
+            container
+            sx={{
+              justifyContent: "left",
+              alignItems: "left",
+              textAlign: "left",
+              verticalAlign: "center",
+            }}
+            direction={"row"}
+          >
+            <Grid item sm={6}>
+              <Stack direction="row" spacing={1}>
+                <Typography variant="h4" sx={{ marginTop: 1 }}>
+                  Title:
+                </Typography>
+                <FormControl>
+                  <TextField
+                    id="title-input"
+                    label=""
+                    variant="filled"
+                    color="secondary"
+                    value={titleInput}
+                    onChange={handleTitleInput}
+                    required={true}
+                    autoFocus
+                  />
+                </FormControl>
+              </Stack>
+            </Grid>
+            <Grid item sm={6}>
+              <Stack direction="row" spacing={1}>
+                <Typography variant="h4" sx={{ marginTop: 1 }}>
+                  User Input Label:
+                </Typography>
+
+                <FormControl>
+                  <TextField
+                    id="user-input"
+                    label=""
+                    variant="filled"
+                    color="secondary"
+                    value={userInput}
+                    onChange={handleUserInput}
+                    required={true}
+                  />
+                </FormControl>
+              </Stack>
+            </Grid>
+          </Grid>
+        </OutlinePaper>
+
+        <OutlinePaper>
+          <Stack direction="column" spacing={1}>
+            <Typography variant="h4">
+              Prompt:
             </Typography>
-          </OutlinePaper>
-        </Grid>
 
-        <Grid item sm={12}>
-          <OutlinePaper>
-            <Grid
-              spacing={1}
-              container
-              sx={{
-                justifyContent: "left",
-                alignItems: "left",
-                textAlign: "left",
-                verticalAlign: "center",
-              }}
-              direction={"row"}
-            >
-              <Grid item sm={6}>
-                <Stack direction="row" spacing={1}>
-                  <Typography variant="h4" sx={{ marginTop: 1 }}>
-                    Title:
-                  </Typography>
-                  <FormControl>
-                    <TextField
-                      id="title-input"
-                      label=""
-                      variant="filled"
-                      color="secondary"
-                      value={titleInput}
-                      onChange={handleTitleInput}
-                      required={true}
-                      focused
-                      autoFocus
-                    />
-                  </FormControl>
-                </Stack>
-              </Grid>
-              <Grid item sm={6}>
-                <Stack direction="row" spacing={1}>
-                  <Typography variant="h4" sx={{ marginTop: 1 }}>
-                    User Input Label:
-                  </Typography>
+            <FormControl fullWidth>
+              <TextField
+                id="prompt-input"
+                label=""
+                variant="filled"
+                color="secondary"
+                value={promptInput}
+                onChange={handlePromptInput}
+                required={true}
+                fullWidth
+                multiline
+                minRows={4}
+              />
+            </FormControl>
+          </Stack>
+        </OutlinePaper>
 
-                  <FormControl>
-                    <TextField
-                      id="user-input"
-                      label=""
-                      variant="filled"
-                      color="secondary"
-                      value={userInput}
-                      onChange={handleUserInput}
-                      required={true}
-                    />
-                  </FormControl>
-                </Stack>
-              </Grid>
-            </Grid>
-          </OutlinePaper>
-        </Grid>
+        <OutlinePaper>
+          <Stack direction="column" spacing={1}>
+            <Typography variant="h4">
+              Input Prefil:
+            </Typography>
 
-        <Grid item sm={12}>
-          <OutlinePaper>
-            <Stack direction="column" spacing={1}>
-              <Typography variant="h4">
-                Prompt:
-              </Typography>
+            <FormControl fullWidth>
+              <TextField
+                id="prefil-input"
+                label=""
+                variant="filled"
+                color="secondary"
+                value={prefilInput}
+                onChange={handlePrefilInput}
+                required={true}
+                fullWidth
+                multiline
+                minRows={4}
+              />
+            </FormControl>
+          </Stack>
+        </OutlinePaper>
 
-              <FormControl fullWidth>
-                <TextField
-                  id="prompt-input"
-                  label=""
-                  variant="filled"
+        <OutlinePaper>
+          <Grid
+            spacing={1}
+            container
+            sx={{
+              justifyContent: "left",
+              alignItems: "left",
+              textAlign: "left",
+              verticalAlign: "center",
+            }}
+            direction={"row"}
+          >
+            <Grid item sm={6}>
+              <Stack direction="row" spacing={1}>
+                <Typography variant="h6">
+                  Model: {model}
+                </Typography>
+
+                <Button
+                  id="basic-button"
+                  aria-controls={modelOpen ? 'basic-menu' : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={modelOpen ? 'true' : undefined}
+                  onClick={handleModel}
+                  variant="outlined"
                   color="secondary"
-                  value={promptInput}
-                  onChange={handlePromptInput}
-                  required={true}
-                  fullWidth
-                  multiline
-                  minRows={4}
-                />
-              </FormControl>
-            </Stack>
-          </OutlinePaper>
-        </Grid>
-
-        <Grid item sm={12}>
-          <OutlinePaper>
-            <Grid
-              spacing={1}
-              container
-              sx={{
-                justifyContent: "left",
-                alignItems: "left",
-                textAlign: "left",
-                verticalAlign: "center",
-              }}
-              direction={"row"}
-            >
-              <Grid item sm={6}>
-                <Stack direction="row" spacing={1}>
-                  <Typography variant="h6">
-                    Model: {model}
-                  </Typography>
-
-                  <Button
-                    id="basic-button"
-                    aria-controls={modelOpen ? 'basic-menu' : undefined}
-                    aria-haspopup="true"
-                    aria-expanded={modelOpen ? 'true' : undefined}
-                    onClick={handleModel}
-                    variant="outlined"
-                    color="secondary"
-                  >
-                    Choose Model
-                  </Button>
-                  <Menu
-                    id="basic-menu"
-                    anchorEl={modelAnchor}
-                    open={modelOpen}
-                    onClose={handleCloseModel}
-                    MenuListProps={{
-                      'aria-labelledby': 'basic-button',
-                    }}
-                  >
-                    <MenuItem value={"gpt-3.5-turbo"} onClick={handleChooseModel}>gpt-3.5-turbo</MenuItem>
-                    <MenuItem value={"gpt-4"} onClick={handleChooseModel}>gpt-4</MenuItem>
-                    <MenuItem value={"gpt-4-32k"} onClick={handleChooseModel}>gpt-4-32k</MenuItem>
-                  </Menu>
-                </Stack>
-              </Grid>
-
-              <Grid item sm={6}>
-                <Stack direction="row" spacing={1}>
-                  <Typography variant="h6">
-                    Engine: {engine}
-                  </Typography>
-
-                  <Button
-                    id="basic-button"
-                    aria-controls={engineOpen ? 'basic-menu' : undefined}
-                    aria-haspopup="true"
-                    aria-expanded={engineOpen ? 'true' : undefined}
-                    onClick={handleEngine}
-                    variant="outlined"
-                    color="secondary"
-                  >
-                    Choose Engine
-                  </Button>
-                  <Menu
-                    id="basic-menu"
-                    anchorEl={engineAnchor}
-                    open={engineOpen}
-                    onClose={handleCloseEngine}
-                    MenuListProps={{
-                      'aria-labelledby': 'basic-button',
-                    }}
-                  >
-                    <MenuItem value={"token limited"} onClick={handleChooseEngine}>token limited</MenuItem>
-                    <MenuItem value={"amnesia"} onClick={handleChooseEngine}>amnesia</MenuItem>
-                  </Menu>
-                </Stack>
-              </Grid>
+                >
+                  Choose Model
+                </Button>
+                <Menu
+                  id="basic-menu"
+                  anchorEl={modelAnchor}
+                  open={modelOpen}
+                  onClose={handleCloseModel}
+                  MenuListProps={{
+                    'aria-labelledby': 'basic-button',
+                  }}
+                >
+                  <MenuItem value={"gpt-3.5-turbo"} onClick={handleChooseModel}>gpt-3.5-turbo</MenuItem>
+                  <MenuItem value={"gpt-4"} onClick={handleChooseModel}>gpt-4</MenuItem>
+                  <MenuItem value={"gpt-4-32k"} onClick={handleChooseModel}>gpt-4-32k</MenuItem>
+                </Menu>
+              </Stack>
             </Grid>
-          </OutlinePaper>
-        </Grid>
 
-        <Grid item sm={12}>
-          <OutlinePaper>
-            <Stack direction="row" spacing={1}>
-              <Button
-                variant="outlined"
-                disabled={!ready}
-                onClick={addPrompt}
-                color="secondary"
-              >
-                Save Prompt
-              </Button>
+            <Grid item sm={6}>
+              <Stack direction="row" spacing={1}>
+                <Typography variant="h6">
+                  Engine: {engine}
+                </Typography>
 
-              <Button
-                variant="outlined"
-                onClick={cancel}
-                color="secondary"
-              >
-                Cancel
-              </Button>
-            </Stack>
-          </OutlinePaper>
-        </Grid>
-      </Grid>
+                <Button
+                  id="basic-button"
+                  aria-controls={engineOpen ? 'basic-menu' : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={engineOpen ? 'true' : undefined}
+                  onClick={handleEngine}
+                  variant="outlined"
+                  color="secondary"
+                >
+                  Choose Engine
+                </Button>
+                <Menu
+                  id="basic-menu"
+                  anchorEl={engineAnchor}
+                  open={engineOpen}
+                  onClose={handleCloseEngine}
+                  MenuListProps={{
+                    'aria-labelledby': 'basic-button',
+                  }}
+                >
+                  <MenuItem value={"token limited"} onClick={handleChooseEngine}>token limited</MenuItem>
+                  <MenuItem value={"amnesia"} onClick={handleChooseEngine}>amnesia</MenuItem>
+                </Menu>
+              </Stack>
+            </Grid>
+          </Grid>
+        </OutlinePaper>
+
+        <OutlinePaper>
+          <Stack direction="row" spacing={1}>
+            <Button
+              variant="outlined"
+              disabled={!ready}
+              onClick={addPrompt}
+              color="secondary"
+            >
+              Save Prompt
+            </Button>
+
+            <Button
+              variant="outlined"
+              onClick={cancel}
+              color="secondary"
+            >
+              Cancel
+            </Button>
+          </Stack>
+        </OutlinePaper>
+      </Stack>
     </BasicBox>
   );
 };
