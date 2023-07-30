@@ -13,9 +13,17 @@ const store = new Store({
     },
     '1.1.0': store => {
       store.set('version', '1.1.0')
-      store.set('open_ai_api_keys', [{ key: store.get("open_ai_api_key"), name: "default" }])
+      store.set('open_ai_api_keys',
+        [{
+          key: store.get("open_ai_api_key"),
+          name: "default"
+        }]
+      )
       store.set('open_ai_api_key', 0)
-    }
+    },
+    '1.1.1': store => {
+      store.set('version', '1.1.1')
+    },
   }
 });
 
@@ -41,6 +49,24 @@ const createWindow = () => {
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
   const template = [
+    {
+      label: 'File',
+      submenu: [
+        {
+          role: 'quit'
+        }
+      ]
+    },
+    {
+      label: 'Edit',
+      submenu: [
+        { role: 'cut' },
+        { role: 'copy' },
+        { role: 'paste' },
+        { role: 'delete' },
+        { role: 'selectall' }
+      ]
+    },
     {
       label: 'View',
       submenu: [
