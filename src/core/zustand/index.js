@@ -35,6 +35,6 @@ export const useStore = create(() => {
     token_count: 0,
 
     // true if not a release build
-    devMode: true
+    devMode: false
   };
 });
