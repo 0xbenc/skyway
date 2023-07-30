@@ -42,7 +42,7 @@
   },
   "dependencies": {
     "@emotion/styled": "11.11.0",
-    "@mui/icons-material": "5.14.0",
+    "@mui/icons-material": "5.14.1",
     "@mui/material": "5.14.2",
     "axios": "1.4.0",
     "crypto-js": "4.1.1",
