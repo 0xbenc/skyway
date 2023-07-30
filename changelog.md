@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.1
+
+- Added file and edit sections to native menu bar
+- MacOS can copy / paste now
+
 ## 1.1.0
 
 - UI evolution
