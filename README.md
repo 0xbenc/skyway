@@ -229,3 +229,17 @@ If you wish to write issues or develop features for Skyway, see [here](./CONTRIB
 ## Contributors
 
 - [0xbenc](https://github.com/0xbenc) - maintainer
+
+window.electron.engine.dialog_open_filtered_file(session_folder_location_, [{ name: "Textures", extensions: ['png', 'jpg'] }]).then(result => {
+    if (result !== undefined) {
+      // Add image-specific fields
+      result.channel = channel
+      result.uuid = "NONE"
+
+      useStore.setState({
+        image_file_needs_texture_index: image_file_array_.length,
+        image_file_array: [...image_file_array_, result],
+        image_file_needs_texture: true,
+      });
+    }
+  });

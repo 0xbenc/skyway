@@ -18,6 +18,7 @@ import {
 import { BasicBox, OutlinePaper } from "../../mui/reusable";
 import { eSet } from "../../utility/electronStore";
 import Title from "../../components/title";
+import generateKeyV4 from "../../utility/uuid";
 
 // ----------------------------------------------------------------------
 
@@ -31,7 +32,7 @@ const EditSystemPrompt = () => {
 
   const [userInput, setUserInput] = useState(system_prompts_[system_prompt_to_edit].userInputLabel);
 
-  const [prefilInput, setPrefilInput] = useState(system_prompts_[system_prompt_to_edit].prefil);
+  const [prefilInput, setPrefilInput] = useState(system_prompts_[system_prompt_to_edit].prefill);
 
   const [model, setModel] = useState(system_prompts_[system_prompt_to_edit].model);
 
@@ -119,7 +120,8 @@ const EditSystemPrompt = () => {
     system_prompts_[system_prompt_to_edit].model = model;
     system_prompts_[system_prompt_to_edit].engine = engine;
     system_prompts_[system_prompt_to_edit].limit = limit;
-    system_prompts_[system_prompt_to_edit].prefil = prefilInput;
+    system_prompts_[system_prompt_to_edit].prefill = prefilInput;
+    system_prompts_[system_prompt_to_edit].uuid = generateKeyV4();
 
     const password_ = useStore.getState().password;
 
@@ -232,7 +234,7 @@ const EditSystemPrompt = () => {
         <OutlinePaper>
           <Stack direction="column" spacing={1}>
             <Typography variant="h4">
-              Input Prefil:
+              Input Prefill:
             </Typography>
 
             <FormControl fullWidth>

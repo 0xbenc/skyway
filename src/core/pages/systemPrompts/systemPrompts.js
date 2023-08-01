@@ -26,6 +26,18 @@ const SystemPrompts = () => {
     useStore.setState({ page: "system_prompt", system_prompt_to_edit: index })
   }
 
+  const ExportPrompt = (index) => {
+    const exporter = async (index) => {
+      const dir = await window.electron.engine.dialog_choose_directory();
+      const jsonstr = JSON.stringify(system_prompts[index]);
+      const args = { dir: dir, jsonstr: jsonstr };
+      window.electron.engine.send('save-json', args);
+      return dir;
+    };
+
+    exporter(index);
+  };
+
   return (
     <BasicBox>
       <Stack spacing={1}>
@@ -43,13 +55,16 @@ const SystemPrompts = () => {
             direction={"row"}
           >
             <Grid item sm={12}>
-              <Button
-                variant="outlined"
-                color="secondary"
-                onClick={() => { navigate("new_system_prompt") }}
-              >
-                Create Prompt
-              </Button>
+              <Stack direction={"row"} spacing={1}>
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  onClick={() => { navigate("new_system_prompt") }}
+                >
+                  Create Prompt
+                </Button>
+              </Stack>
+
             </Grid>
 
             {system_prompts.map((prompt, key) => {
@@ -74,7 +89,7 @@ const SystemPrompts = () => {
                         <Chip label={prompt.engine} variant="outlined" sx={{ marginBottom: 1, marginLeft: 1 }} />
                       </Grid>
 
-                      {key > 1 && <Grid item sm={6}>
+                      {key > 1 && <Grid item sm={4}>
                         <Button
                           variant="outlined"
                           color="secondary"
@@ -83,13 +98,23 @@ const SystemPrompts = () => {
                           Edit
                         </Button>
                       </Grid>}
-                      {key > 1 && <Grid item sm={6}>
+                      {key > 1 && <Grid item sm={4}>
                         <Button
                           variant="outlined"
                           color="secondary"
                           onClick={() => { deleteSystemPrompt(key) }}
                         >
                           Delete
+                        </Button>
+                      </Grid>}
+
+                      {key > 1 && <Grid item sm={4}>
+                        <Button
+                          variant="outlined"
+                          color="secondary"
+                          onClick={() => { ExportPrompt(key) }}
+                        >
+                          Export
                         </Button>
                       </Grid>}
                     </Grid>

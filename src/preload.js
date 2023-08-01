@@ -17,7 +17,16 @@ contextBridge.exposeInMainWorld('electron', {
     version: async () => {
       const response = await ipcRenderer.invoke('version-get');
       return response;
-    }
+    },
+    dialog_choose_directory: () => ipcRenderer.invoke(
+      'dialog-choose-directory'
+    ),
+    dialog_open_filtered_file: (directory, filters) => ipcRenderer.invoke(
+      'dialog-open-filtered-file',
+      directory,
+      filters
+    ),
+    send: (channel, data) => ipcRenderer.send(channel, data)
   }
 });
 

@@ -18,6 +18,7 @@ import {
 import { BasicBox, OutlinePaper } from "../../mui/reusable";
 import { eSet } from "../../utility/electronStore";
 import Title from "../../components/title";
+import generateKeyV4 from "../../utility/uuid";
 
 // ----------------------------------------------------------------------
 
@@ -119,7 +120,8 @@ const NewSystemPrompt = () => {
       model: model,
       engine: engine,
       limit: limit,
-      prefil: prefilInput
+      prefill: prefilInput,
+      uuid: generateKeyV4()
     });
 
     const password_ = useStore.getState().password;
@@ -235,7 +237,7 @@ const NewSystemPrompt = () => {
         <OutlinePaper>
           <Stack direction="column" spacing={1}>
             <Typography variant="h4">
-              Input Prefil:
+              Input Prefill:
             </Typography>
 
             <FormControl fullWidth>

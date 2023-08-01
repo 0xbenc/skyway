@@ -77,7 +77,7 @@ const NewChat = () => {
     oldArr.push(sendDateISO);
     setTimeStamps(oldArr);
     setConversation(conversation_);
-    setUserMessageInput(active_system_prompt_.prefil ? active_system_prompt_.prefil : "");
+    setUserMessageInput(active_system_prompt_.prefill ? active_system_prompt_.prefill : "");
     setScrollTime(true)
 
     const response = await fetchChatCompletion(
@@ -193,7 +193,7 @@ const NewChat = () => {
   useEffect(() => {
     if (!justOnce) {
       setJustOnce(true)
-      setUserMessageInput(active_system_prompt_.prefil ? active_system_prompt_.prefil : "");
+      setUserMessageInput(active_system_prompt_.prefill ? active_system_prompt_.prefill : "");
       useStore.setState({ token_count: 0 })
     };
   }, [justOnce]);
