@@ -184,9 +184,7 @@ const createWindow = () => {
   });
 
   ipcMain.on('save-json', (_, args) => {
-    let jsonString = arg.jsonstr;
-    let dir = args.dir;
-    fs.writeFile(`${dir}/data.json`, jsonString, (err) => {
+    fs.writeFile(`${args.dir}/${args.filename}.json`, args.jsonstr, (err) => {
       if (err) throw err;
     });
   });

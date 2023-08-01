@@ -18,6 +18,20 @@ import { deleteSystemPrompt } from "./systemPrompts_utility";
 import Title from "../../components/title";
 // ----------------------------------------------------------------------
 
+const cleanString = (str) => {
+  let cleanedStr = str
+    .trim()
+    .replace(/\s/g, '_')
+    .toLowerCase()
+    .replace(/[^a-z0-9_]/g, '_');
+
+  if (cleanedStr.endsWith('_')) {
+    cleanedStr = cleanedStr.slice(0, -1);
+  };
+
+  return cleanedStr;
+};
+
 const SystemPrompts = () => {
   const system_prompts = useStore(state => state.system_prompts)
 
@@ -30,8 +44,16 @@ const SystemPrompts = () => {
     const exporter = async (index) => {
       const dir = await window.electron.engine.dialog_choose_directory();
       const jsonstr = JSON.stringify(system_prompts[index]);
-      const args = { dir: dir, jsonstr: jsonstr };
+      const title = system_prompts[index].title;
+      const cleanTitle = cleanString(title);
+      const args = {
+        dir: dir,
+        jsonstr: jsonstr,
+        filename: cleanTitle
+      };
+
       window.electron.engine.send('save-json', args);
+
       return dir;
     };
 
