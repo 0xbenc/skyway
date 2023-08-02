@@ -40,6 +40,31 @@ const SystemPrompts = () => {
     useStore.setState({ page: "system_prompt", system_prompt_to_edit: index })
   }
 
+  const ImportPrompt = () => {
+    window.electron.engine.dialog_open_filtered_file(
+      "",
+      [{ name: "Skyway Prompts", extensions: ['json'] }]).then(result => {
+        if (result !== undefined) {
+          let base64Data = result.data.split(",")[1];
+          let potentialPrompt = JSON.parse(atob(base64Data));
+
+          let matches = false;
+
+          for (let i = 0; i < system_prompts.length; i++) {
+            if (potentialPrompt.uuid === system_prompts[i].uuid) {
+              matches = true;
+            }; 
+          };
+
+          if (!matches) {
+            let newPrompts = [...system_prompts];
+            newPrompts.push(potentialPrompt);
+            useStore.setState({system_prompts: newPrompts})
+          }
+        }
+      });
+  };
+
   const ExportPrompt = (index) => {
     const exporter = async (index) => {
       const dir = await window.electron.engine.dialog_choose_directory();
@@ -83,10 +108,16 @@ const SystemPrompts = () => {
                   color="secondary"
                   onClick={() => { navigate("new_system_prompt") }}
                 >
-                  Create Prompt
+                  Create
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  onClick={ImportPrompt}
+                >
+                  Import
                 </Button>
               </Stack>
-
             </Grid>
 
             {system_prompts.map((prompt, key) => {
