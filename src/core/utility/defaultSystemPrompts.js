@@ -7,7 +7,10 @@ const GPT35Turbo = {
   engine: "token limited",
   prefill: "",
   limit: 4096,
-  uuid: "f8459762-a671-4b80-8286-09cc8b6a4d92"
+  uuid: "f8459762-a671-4b80-8286-09cc8b6a4d92",
+  createdDate: "2023-08-02T13:03:43.668Z",
+  importedDate: "2023-08-02T13:03:43.668Z",
+  usedDate: "2023-08-02T13:03:43.668Z"
 };
 
 const GPT4 = {
@@ -19,7 +22,10 @@ const GPT4 = {
   engine: "token limited",
   prefill: "",
   limit: 8192,
-  uuid: "e6d24932-6fe9-4d13-a1a5-dcdeb3aeab56"
+  uuid: "e6d24932-6fe9-4d13-a1a5-dcdeb3aeab56",
+  createdDate: "2023-08-02T13:03:43.668Z",
+  importedDate: "2023-08-02T13:03:43.668Z",
+  usedDate: "2023-08-02T13:03:43.668Z"
 };
 
 const Prompts = [

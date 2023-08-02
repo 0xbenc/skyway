@@ -16,6 +16,9 @@ import {
 import { BasicBox, OutlinePaper } from "../../mui/reusable";
 import { deleteSystemPrompt } from "./systemPrompts_utility";
 import Title from "../../components/title";
+
+import { eSet } from "../../utility/electronStore";
+import { encryptPrompts } from "../../utility/encryption";
 // ----------------------------------------------------------------------
 
 const cleanString = (str) => {
@@ -53,13 +56,26 @@ const SystemPrompts = () => {
           for (let i = 0; i < system_prompts.length; i++) {
             if (potentialPrompt.uuid === system_prompts[i].uuid) {
               matches = true;
-            }; 
+            };
           };
 
           if (!matches) {
+            const importedDate = new Date();
+            const importedDateISO = String(importedDate.toISOString());
+
             let newPrompts = [...system_prompts];
+
+            potentialPrompt.importedDate = importedDateISO;
+            
             newPrompts.push(potentialPrompt);
-            useStore.setState({system_prompts: newPrompts})
+
+            const password_ = useStore.getState().password;
+
+            const encPrompts = encryptPrompts(newPrompts, password_);
+
+            eSet("system_prompts", encPrompts);
+
+            useStore.setState({ system_prompts: newPrompts })
           }
         }
       });

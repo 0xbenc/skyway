@@ -111,7 +111,10 @@ const NewSystemPrompt = () => {
   };
 
   const addPrompt = () => {
-    const system_prompts_ = useStore.getState().system_prompts
+    const system_prompts_ = useStore.getState().system_prompts;
+    const usedDate = new Date();
+    const usedDateISO = String(usedDate.toISOString());
+
     system_prompts_.push({
       title: titleInput,
       prompt: promptInput,
@@ -121,7 +124,10 @@ const NewSystemPrompt = () => {
       engine: engine,
       limit: limit,
       prefill: prefilInput,
-      uuid: generateKeyV4()
+      uuid: generateKeyV4(),
+      createdDate: usedDateISO,
+      importedDate: usedDateISO,
+      usedDate: usedDateISO
     });
 
     const password_ = useStore.getState().password;
