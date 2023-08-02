@@ -125,9 +125,9 @@ const EditSystemPrompt = () => {
     system_prompts_[system_prompt_to_edit].limit = limit;
     system_prompts_[system_prompt_to_edit].prefill = prefilInput;
     system_prompts_[system_prompt_to_edit].uuid = generateKeyV4();
-    system_prompts_[system_prompt_to_edit].importedDate = importedDateISO();
-    system_prompts_[system_prompt_to_edit].createdDate = importedDateISO();
-    system_prompts_[system_prompt_to_edit].usedDate = importedDateISO();
+    system_prompts_[system_prompt_to_edit].importedDate = importedDateISO;
+    system_prompts_[system_prompt_to_edit].createdDate = importedDateISO;
+    system_prompts_[system_prompt_to_edit].usedDate = importedDateISO;
 
     const password_ = useStore.getState().password;
 
