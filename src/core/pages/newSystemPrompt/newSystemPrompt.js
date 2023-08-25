@@ -127,7 +127,8 @@ const NewSystemPrompt = () => {
       uuid: generateKeyV4(),
       createdDate: usedDateISO,
       importedDate: usedDateISO,
-      usedDate: usedDateISO
+      usedDate: usedDateISO,
+      skywayVersion: "1.2.0"
     });
 
     const password_ = useStore.getState().password;

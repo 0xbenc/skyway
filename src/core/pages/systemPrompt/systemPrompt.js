@@ -128,6 +128,7 @@ const EditSystemPrompt = () => {
     system_prompts_[system_prompt_to_edit].importedDate = importedDateISO;
     system_prompts_[system_prompt_to_edit].createdDate = importedDateISO;
     system_prompts_[system_prompt_to_edit].usedDate = importedDateISO;
+    system_prompts_[system_prompt_to_edit].skywayVersion = "1.2.0"
 
     const password_ = useStore.getState().password;
 

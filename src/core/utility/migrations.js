@@ -50,6 +50,8 @@ const migration_1_2_0 = (store) => {
       } else {
         system_prompts_new[i].prefill = "";
       };
+
+      system_prompts_new[i].skywayVersion = '1.2.0';
     };
 
     store.set('system_prompts', system_prompts_new)
