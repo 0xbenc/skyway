@@ -3,7 +3,7 @@ const path = require('path')
 const Store = require('electron-store');
 const axios = require('axios');
 const fs = require('fs');
-const { buildSystemPrompts_1_2_0 } = require('./core/utility/migrations');
+const { migration_1_1_0, migration_1_2_0 } = require('./core/utility/migrations');
 
 //Helpers START
 const getFileName = (filePath) => {
@@ -30,21 +30,13 @@ const store = new Store({
       store.set('version', '1.0.1')
     },
     '1.1.0': store => {
-      store.set('version', '1.1.0')
-      store.set('open_ai_api_keys',
-        [{
-          key: store.get("open_ai_api_key"),
-          name: "default"
-        }]
-      )
-      store.set('open_ai_api_key', 0)
+      migration_1_1_0(store)
     },
     '1.1.1': store => {
       store.set('version', '1.1.1')
     },
     '1.2.0': store => {
-      store.set('version', '1.2.0')
-      store.set('system_prompts', buildSystemPrompts_1_2_0(store.get("system_prompts")))
+      migration_1_2_0(store)
     },
   }
 });
