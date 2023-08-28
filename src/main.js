@@ -67,6 +67,13 @@ const createWindow = () => {
       label: 'File',
       submenu: [
         {
+          label: 'New Chat',
+          accelerator: 'Ctrl+N',
+          click: () => {
+            mainWindow.webContents.send("new chat");
+          }
+        },
+        {
           role: 'quit'
         }
       ]

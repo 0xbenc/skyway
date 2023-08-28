@@ -37,12 +37,13 @@ const Landing = () => {
 
     const encPrompts = encryptPrompts(systems, password_);
 
-    console.log("NAVIGATION: new_chat", system_prompts[event.target.value].title);
+    console.log("NAVIGATION: new_chat", system_prompts[event.target.value].title, event.target.value);
 
-    eSet("system_prompts", encPrompts);
+    eSet('system_prompts', encPrompts);
+    eSet('last_prompt', event.target.value);
 
     useStore.setState({ system_prompts: systems });
-    useStore.setState({ active_system_prompt: system_prompts[event.target.value], page: "new_chat" });
+    useStore.setState({ active_system_prompt: system_prompts[event.target.value], page: "new_chat", last_prompt: event.target.value });
   };
 
   const newChatClose = () => {

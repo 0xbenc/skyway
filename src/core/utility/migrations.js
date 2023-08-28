@@ -57,6 +57,7 @@ const migration_1_2_0 = (store) => {
     store.set('system_prompts', system_prompts_new)
   }
 
+  store.set('last_prompt', 1);
   store.set('version', '1.2.0');
 };
 
