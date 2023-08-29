@@ -45,6 +45,8 @@ const NewChat = () => {
   const active_system_prompt_ = useStore.getState().active_system_prompt;
   const color_mode_ = useStore.getState().color_mode;
 
+
+  // used as a trigger to scroll chat window to the bottom
   const [scrollTime, setScrollTime] = useState(false);
 
   const errorMessage = {
@@ -104,6 +106,7 @@ const NewChat = () => {
     setScrollTime(true);
   };
 
+  // sends the user-chat message as a prompt 
   const SubmitPrompt = () => {
     const sendDate = new Date();
     const sendDateISO = String(sendDate.toISOString());
@@ -112,12 +115,13 @@ const NewChat = () => {
     SubmitPromptAsync(sendDateISO);
   };
 
+  // rewrite user's last message 
   const EditMode = () => {
-    const conversation_ = [...conversation]
-    conversation_.pop()
-    setUserMessageInput(conversation_[conversation_.length - 1].content)
-    conversation_.pop()
-    setConversation(conversation_)
+    const conversation_ = [...conversation];
+    conversation_.pop();
+    setUserMessageInput(conversation_[conversation_.length - 1].content);
+    conversation_.pop();
+    setConversation(conversation_);
 
     let arr = [];
 
@@ -125,24 +129,25 @@ const NewChat = () => {
       arr.push(timeStamps[i]);
     };
 
-    setTimeStamps(arr)
+    setTimeStamps(arr);
     inputRef.current.focus();
   };
 
+  // Sends the last message again to get a different response  
   const ResubmitPromptAsync = async () => {
     const conversation_ = [...conversation];
     let upstream = [];
 
-    conversation.pop()
-    conversation_.pop()
+    conversation.pop();
+    conversation_.pop();
 
     if (active_system_prompt_.engine === "amnesia") {
       upstream = [{ role: "system", content: active_system_prompt_.prompt }, conversation_[conversation_.length - 1]];
     } else {
       upstream = conversation_;
-    }
+    };
 
-    const response = await fetchChatCompletion(upstream, active_system_prompt_.model, active_system_prompt_.params)
+    const response = await fetchChatCompletion(upstream, active_system_prompt_.model, active_system_prompt_.params);
 
     if (response === "error") {
       setUserMessageInput("");
@@ -153,7 +158,7 @@ const NewChat = () => {
       setBusyUI(false);
       let timeArray = [];
       for (let i = 0; i < timeStamps.length - 1; i++) {
-        timeArray.push(timeStamps[i])
+        timeArray.push(timeStamps[i]);
       };
 
       timeArray.push(unixToISO(response.created));
@@ -169,16 +174,16 @@ const NewChat = () => {
     ResubmitPromptAsync();
   };
 
+  // enables pressing 'Enter' to send message 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
 
-      if (userMessageInput !== "") {
-        SubmitPrompt();
-      };
+      if (userMessageInput !== "") SubmitPrompt();
     };
   };
 
+  // Handles autoscroll
   useEffect(() => {
     if (scrollTime) {
       setScrollTime(false);
@@ -186,29 +191,33 @@ const NewChat = () => {
     };
   }, [scrollTime]);
 
+  // Handles autoscroll
   useEffect(() => {
     if (!busyUI) {
       inputRef.current.focus();
     };
   }, [busyUI]);
 
+
+  // Handles initilization
   useEffect(() => {
     if (!justOnce) {
-      setJustOnce(true)
+      setJustOnce(true);
       setUserMessageInput(active_system_prompt_.prefill ? active_system_prompt_.prefill : "");
-      setTimeStamps([])
-      setConversation([])
-      setBusyUI(false)
-      useStore.setState({token_count: 0})
+      setTimeStamps([]);
+      setConversation([]);
+      setBusyUI(false);
+      useStore.setState({ token_count: 0 });
     };
   }, [justOnce]);
-  
+
+  // Handles reset from [File -> New Chat] / [Ctrl + N]
   useEffect(() => {
     if (chat_reset && !busyUI) {
-      setJustOnce(false)
-      useStore.setState({chat_reset: false})
-    }
-  }, [chat_reset, busyUI])
+      useStore.setState({ chat_reset: false });
+      setJustOnce(false);
+    };
+  }, [chat_reset, busyUI]);
 
   return (
     <>
