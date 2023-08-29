@@ -59,6 +59,7 @@ const Login = () => {
       const _system_prompts = eGet("system_prompts")
       const _open_ai_api_key = eGet("open_ai_api_key")
       const _open_ai_api_keys = eGet("open_ai_api_keys")
+      const last_prompt = eGet('last_prompt');
 
       const dencPrompts = decryptPrompts(_system_prompts, passwordInput)
       
@@ -75,7 +76,8 @@ const Login = () => {
         open_ai_api_key: _open_ai_api_key,
         open_ai_api_keys: decryptedKeys,
         page: "landing",
-        password: passwordInput
+        password: passwordInput,
+        last_prompt: last_prompt
       })
 
       console.log("NAVIGATION: landing")

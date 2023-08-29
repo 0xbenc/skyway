@@ -5,8 +5,13 @@ const GPT35Turbo = {
   userInputLabel: "Chat message",
   model: "gpt-3.5-turbo",
   engine: "token limited",
-  prefil: "",
-  limit: 4096
+  prefill: "",
+  limit: 4096,
+  uuid: "f8459762-a671-4b80-8286-09cc8b6a4d92",
+  createdDate: "2023-08-02T13:03:43.668Z",
+  importedDate: "2023-08-02T13:03:43.668Z",
+  usedDate: "2023-08-02T13:03:43.668Z",
+  skywayVersion: "1.2.0"
 };
 
 const GPT4 = {
@@ -16,8 +21,13 @@ const GPT4 = {
   userInputLabel: "Chat message",
   model: "gpt-4",
   engine: "token limited",
-  prefil: "",
-  limit: 8192
+  prefill: "",
+  limit: 8192,
+  uuid: "e6d24932-6fe9-4d13-a1a5-dcdeb3aeab56",
+  createdDate: "2023-08-02T13:03:43.668Z",
+  importedDate: "2023-08-02T13:03:43.668Z",
+  usedDate: "2023-08-02T13:03:43.668Z",
+  skywayVersion: "1.2.0"
 };
 
 const Prompts = [

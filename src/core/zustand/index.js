@@ -34,6 +34,12 @@ export const useStore = create(() => {
     // current conversation tokens
     token_count: 0,
 
+    // Tracks which prompt was used last
+    last_prompt: 1,
+    
+    // resets the chat if you file -> new while already chatting
+    chat_reset: false,
+
     // true if not a release build
     devMode: false
   };

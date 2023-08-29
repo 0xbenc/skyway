@@ -7,3 +7,4 @@
 - system_prompts - local system prompts
 - color_mode - dark or light mode
 - open_ai_api_key - open ai key
+- last_prompt - last prompt used, index

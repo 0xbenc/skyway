@@ -8,11 +8,13 @@ import { MenuItem, Button, Menu, Typography, Stack } from "@mui/material";
 //
 import { BasicBox, OutlinePaper } from "../../mui/reusable";
 import { switchColor } from "../../utility/switchColor";
+import { eSet } from "../../utility/electronStore";
+import { encryptPrompts } from "../../utility/encryption";
 
 // ----------------------------------------------------------------------
 
 const Landing = () => {
-  const system_prompts = useStore.getState().system_prompts;
+  const system_prompts = useStore(state => state.system_prompts);
   const version_ = useStore.getState().version;
   const devMode_ = useStore.getState().devMode
 
@@ -25,8 +27,23 @@ const Landing = () => {
 
   const newChatSelect = (event) => {
     setNewChatAnchor(null);
-    console.log("NAVIGATION: new_chat", system_prompts[event.target.value].title);
-    useStore.setState({ active_system_prompt: system_prompts[event.target.value], page: "new_chat" });
+    const usedDate = new Date();
+    const usedDateISO = String(usedDate.toISOString());
+
+    let systems = [...system_prompts];
+    systems[event.target.value].usedDate = usedDateISO;
+
+    const password_ = useStore.getState().password;
+
+    const encPrompts = encryptPrompts(systems, password_);
+
+    console.log("NAVIGATION: new_chat", system_prompts[event.target.value].title, event.target.value);
+
+    eSet('system_prompts', encPrompts);
+    eSet('last_prompt', event.target.value);
+
+    useStore.setState({ system_prompts: systems });
+    useStore.setState({ active_system_prompt: system_prompts[event.target.value], page: "new_chat", last_prompt: event.target.value });
   };
 
   const newChatClose = () => {

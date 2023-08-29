@@ -40,6 +40,8 @@ const NewChat = () => {
 
   const [justOnce, setJustOnce] = useState(false);
 
+  const chat_reset = useStore(state => state.chat_reset);
+
   const active_system_prompt_ = useStore.getState().active_system_prompt;
   const color_mode_ = useStore.getState().color_mode;
 
@@ -77,7 +79,7 @@ const NewChat = () => {
     oldArr.push(sendDateISO);
     setTimeStamps(oldArr);
     setConversation(conversation_);
-    setUserMessageInput(active_system_prompt_.prefil ? active_system_prompt_.prefil : "");
+    setUserMessageInput(active_system_prompt_.prefill ? active_system_prompt_.prefill : "");
     setScrollTime(true)
 
     const response = await fetchChatCompletion(
@@ -193,10 +195,20 @@ const NewChat = () => {
   useEffect(() => {
     if (!justOnce) {
       setJustOnce(true)
-      setUserMessageInput(active_system_prompt_.prefil ? active_system_prompt_.prefil : "");
-      useStore.setState({ token_count: 0 })
+      setUserMessageInput(active_system_prompt_.prefill ? active_system_prompt_.prefill : "");
+      setTimeStamps([])
+      setConversation([])
+      setBusyUI(false)
+      useStore.setState({token_count: 0})
     };
   }, [justOnce]);
+  
+  useEffect(() => {
+    if (chat_reset && !busyUI) {
+      setJustOnce(false)
+      useStore.setState({chat_reset: false})
+    }
+  }, [chat_reset, busyUI])
 
   return (
     <>
@@ -231,7 +243,7 @@ const NewChat = () => {
                 </LeftBox> : <RightBox>
                   <RightChatBox>
                     <Stack direction="column" spacing={1}>
-                      <FormattedRightResponse content={chat.content} />
+                      <FormattedRightResponse content={chat.content} color_mode={color_mode_} />
                       <Box>
                         <Stack direction="row" spacing={1}>
                           <CopyToClipboard text={chat.content}>
