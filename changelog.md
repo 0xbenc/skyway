@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.0
+
+- Prompts can be imported and exported as JSON files
+- Added Ctrl+N as "new chat" shortcut
+- Added better migrations between versions
+
 ## 1.1.1
 
 - Added file and edit sections to native menu bar
