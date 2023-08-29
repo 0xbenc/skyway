@@ -41,6 +41,6 @@ export const useStore = create(() => {
     chat_reset: false,
 
     // true if not a release build
-    devMode: true
+    devMode: false
   };
 });
