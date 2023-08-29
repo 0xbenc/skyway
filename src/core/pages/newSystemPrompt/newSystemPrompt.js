@@ -18,6 +18,7 @@ import {
 import { BasicBox, OutlinePaper } from "../../mui/reusable";
 import { eSet } from "../../utility/electronStore";
 import Title from "../../components/title";
+import generateKeyV4 from "../../utility/uuid";
 
 // ----------------------------------------------------------------------
 
@@ -110,7 +111,10 @@ const NewSystemPrompt = () => {
   };
 
   const addPrompt = () => {
-    const system_prompts_ = useStore.getState().system_prompts
+    const system_prompts_ = useStore.getState().system_prompts;
+    const usedDate = new Date();
+    const usedDateISO = String(usedDate.toISOString());
+
     system_prompts_.push({
       title: titleInput,
       prompt: promptInput,
@@ -119,7 +123,12 @@ const NewSystemPrompt = () => {
       model: model,
       engine: engine,
       limit: limit,
-      prefil: prefilInput
+      prefill: prefilInput,
+      uuid: generateKeyV4(),
+      createdDate: usedDateISO,
+      importedDate: usedDateISO,
+      usedDate: usedDateISO,
+      skywayVersion: "1.2.0"
     });
 
     const password_ = useStore.getState().password;
@@ -235,7 +244,7 @@ const NewSystemPrompt = () => {
         <OutlinePaper>
           <Stack direction="column" spacing={1}>
             <Typography variant="h4">
-              Input Prefil:
+              Input Prefill:
             </Typography>
 
             <FormControl fullWidth>
