@@ -18,7 +18,7 @@ const chatSync = (chat) => {
     updatedChats.push(chat);
   };
 
-  useStore.setState({ chats: updatedChats });
+  useStore.setState({ chats: updatedChats, current_chat: chat.uuid });
 };
 
 export default chatSync;

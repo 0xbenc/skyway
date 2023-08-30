@@ -39,6 +39,7 @@ const TopBar = () => {
   const chats = useStore(state => state.chats);
 
   const token_count = useStore(state => state.token_count);
+  const current_chat = useStore(state => state.current_chat);
 
   const [drawerOpen, setDrawerOpen] = React.useState(false);
 
@@ -118,8 +119,8 @@ const TopBar = () => {
       <Divider />
       <List>
         {chats.map((text, index) => (
-          <ListItem key={index} disablePadding>
-            <ListItemButton>
+          <ListItem key={index} disablePadding sx={(theme) => ({backgroundColor: text.uuid === current_chat ? theme.palette.primary.outside : theme.palette.primary.inside})}>
+            <ListItemButton disabled={text.uuid === current_chat ? true : false}>
               <ListItemText primary={text.title} secondary={text.prompt.title} />
             </ListItemButton>
           </ListItem>

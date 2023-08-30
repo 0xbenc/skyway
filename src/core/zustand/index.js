@@ -43,6 +43,9 @@ export const useStore = create(() => {
     // placeholder
     chats: [],
 
+    // uuid
+    current_chat: "none",
+
     // true if not a release build
     devMode: true
   };
