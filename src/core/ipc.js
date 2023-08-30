@@ -25,12 +25,15 @@ const HandleIPC = () => {
 
           const encPrompts = encryptPrompts(systems, password_);
 
-          console.log("NAVIGATION: new_chat", system_prompts[last_prompt].title);
+          // console.log("NAVIGATION: new_chat", system_prompts[last_prompt].title);
 
           eSet("system_prompts", encPrompts);
 
-          useStore.setState({ system_prompts: systems });
-          useStore.setState({ active_system_prompt: system_prompts[last_prompt], page: "new_chat" });
+          useStore.setState({
+            system_prompts: systems,
+            active_system_prompt: system_prompts[last_prompt],
+            page: "new_chat"
+          });
         }
       }
     });

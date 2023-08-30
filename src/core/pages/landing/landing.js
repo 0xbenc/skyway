@@ -8,50 +8,37 @@ import { MenuItem, Button, Menu, Typography, Stack } from "@mui/material";
 //
 import { BasicBox, OutlinePaper } from "../../mui/reusable";
 import { switchColor } from "../../utility/switchColor";
-import { eSet } from "../../utility/electronStore";
-import { encryptPrompts } from "../../utility/encryption";
+import newChatSelect from "./landing_utility";
 
 // ----------------------------------------------------------------------
 
 const Landing = () => {
-  const system_prompts = useStore(state => state.system_prompts);
+  const system_prompts_ = useStore.getState().system_prompts;
   const version_ = useStore.getState().version;
   const devMode_ = useStore.getState().devMode
 
-  const [newChatAnchor, setNewChatAnchor] = React.useState(null);
-  const open = Boolean(newChatAnchor);
+  // Anchor for New Chat select
+  const [anc, setAnc] = React.useState(null);
+  const open = Boolean(anc);
 
   const newChatClick = (event) => {
-    setNewChatAnchor(event.currentTarget);
-  };
-
-  const newChatSelect = (event) => {
-    setNewChatAnchor(null);
-    const usedDate = new Date();
-    const usedDateISO = String(usedDate.toISOString());
-
-    let systems = [...system_prompts];
-    systems[event.target.value].usedDate = usedDateISO;
-
-    const password_ = useStore.getState().password;
-
-    const encPrompts = encryptPrompts(systems, password_);
-
-    console.log("NAVIGATION: new_chat", system_prompts[event.target.value].title, event.target.value);
-
-    eSet('system_prompts', encPrompts);
-    eSet('last_prompt', event.target.value);
-
-    useStore.setState({ system_prompts: systems });
-    useStore.setState({ active_system_prompt: system_prompts[event.target.value], page: "new_chat", last_prompt: event.target.value });
+    setAnc(event.currentTarget);
   };
 
   const newChatClose = () => {
-    setNewChatAnchor(null);
+    setAnc(null);
   };
+
+  const newChatOpen = (e) => {
+    newChatSelect(e, setAnc, system_prompts_)
+  }
 
   const apiKey = () => {
     navigate("change_api_key")
+  };
+
+  const systemPrompts = () => {
+    navigate("system_prompts")
   };
 
   return (
@@ -77,7 +64,7 @@ const Landing = () => {
               onClick={newChatClick}
               variant="outlined"
               color="secondary"
-              disabled={!system_prompts.length}
+              disabled={!system_prompts_.length}
             >
               New Chat
             </Button>
@@ -86,7 +73,7 @@ const Landing = () => {
               <Button
                 variant="outlined"
                 color="secondary"
-                onClick={() => { navigate("system_prompts") }}
+                onClick={systemPrompts}
               >
                 Prompt Editor
               </Button>
@@ -109,16 +96,22 @@ const Landing = () => {
 
               <Menu
                 id="basic-menu"
-                anchorEl={newChatAnchor}
+                anchorEl={anc}
                 open={open}
                 onClose={newChatClose}
                 MenuListProps={{
                   'aria-labelledby': 'basic-button',
                 }}
               >
-                {system_prompts.map((prompt, key) => {
+                {system_prompts_.map((prompt, key) => {
                   return (
-                    <MenuItem key={key} value={key} onClick={newChatSelect}>{prompt.title}</MenuItem>
+                    <MenuItem
+                      key={key}
+                      value={key}
+                      onClick={newChatOpen}
+                    >
+                      {prompt.title}
+                    </MenuItem>
                   )
                 })}
               </Menu>
