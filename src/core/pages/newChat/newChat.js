@@ -26,7 +26,8 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 //
 import { LeftBox, RightBox, LeftChatBox, RightChatBox, ChatField, Middle, Bottom } from "./newChat_styles";
 import TopBar from "./topBar";
-import { FormattedLeftResponse, FormattedRightResponse } from "./chats";
+import { FormattedLeftResponse, FormattedRightResponse } from "./newChat_components";
+import chatSync from "./newChat_utility";
 
 const NewChat = () => {
   const inputRef = useRef();
@@ -50,22 +51,6 @@ const NewChat = () => {
 
   const active_system_prompt_ = useStore.getState().active_system_prompt;
   const color_mode_ = useStore.getState().color_mode;
-
-  const helper = (chat) => {
-    const chats_ = useStore.getState().chats;
-    let matched = false
-
-    for (let i = 0; i < chats_.length; i++) {
-      if (chats_[i].uuid === chat.uuid) {
-        chats_[i] = chat;
-        matched = true;
-      };
-    };
-
-    if (!matched) chats_.push(chat)
-    useStore.setState({ chats: chats_ })
-  };
-
 
   // used as a trigger to scroll chat window to the bottom
   const [scrollTime, setScrollTime] = useState(false);
@@ -133,7 +118,7 @@ const NewChat = () => {
       prompt: active_system_prompt_
     };
 
-    helper(chat)
+    chatSync(chat);
 
     setConversation(conversation_);
     setScrollTime(true);
