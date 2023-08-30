@@ -2,7 +2,7 @@ import React from "react";
 //
 import { useStore } from "../../zustand";
 //
-import { navigate } from "../../utility/navigatePage";
+// import { navigate } from "../../utility/navigatePage";
 //
 import {
   IconButton,
@@ -10,8 +10,20 @@ import {
   Box,
   Stack,
 } from "@mui/material";
+
+import Drawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import MenuIcon from '@mui/icons-material/Menu';
+import Divider from "@mui/material/Divider";
 //
-import ArrowBackIcon from "@mui/icons-material/ArrowBack"
+import KeyIcon from '@mui/icons-material/Key';
+import HttpsIcon from '@mui/icons-material/Https';
+import ChatIcon from '@mui/icons-material/Chat';
+import RateReviewIcon from '@mui/icons-material/RateReview';
 //
 import { Top } from "./newChat_styles";
 import { OutlinePaper } from "../../mui/reusable";
@@ -21,7 +33,78 @@ const TopBar = () => {
   const open_ai_api_keys_ = useStore.getState().open_ai_api_keys;
   const open_ai_api_key_ = useStore.getState().open_ai_api_key;
 
+  const chats = useStore(state => state.chats);
+
   const token_count = useStore(state => state.token_count);
+
+  const [state, setState] = React.useState({
+    top: false,
+    left: false,
+    bottom: false,
+    right: false,
+  });
+
+  const toggleDrawer = (anchor, open) => (event) => {
+    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+      return;
+    }
+
+    setState({ ...state, [anchor]: open });
+  };
+
+  const list = (anchor) => (
+    <Box
+      sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250 }}
+      role="presentation"
+      onClick={toggleDrawer(anchor, false)}
+      onKeyDown={toggleDrawer(anchor, false)}
+    >
+      <List>
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemIcon>
+              <ChatIcon />
+            </ListItemIcon>
+            <ListItemText primary={"Switch Prompt"} />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemIcon>
+              <RateReviewIcon />
+            </ListItemIcon>
+            <ListItemText primary={"Prompt Editor"} />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemIcon>
+              <KeyIcon />
+            </ListItemIcon>
+            <ListItemText primary={"Switch API Key"} />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemIcon>
+              <HttpsIcon />
+            </ListItemIcon>
+            <ListItemText primary={"Edit API Keys"} />
+          </ListItemButton>
+        </ListItem>
+      </List>
+      <Divider />
+      <List>
+        {chats.map((text, index) => (
+          <ListItem key={index} disablePadding>
+            <ListItemButton>
+              <ListItemText primary={text.title} secondary={text.prompt.title} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+    </Box>
+  );
 
   return (
     <Top>
@@ -31,10 +114,10 @@ const TopBar = () => {
             <Box>
               <IconButton
                 aria-label="close"
-                onClick={() => { navigate("landing") }}
+                onClick={toggleDrawer('left', true)}
                 size="large"
               >
-                <ArrowBackIcon fontSize="inheret" />
+                <MenuIcon fontSize="inheret" />
               </IconButton>
             </Box>
             <OutlinePaper>
@@ -96,6 +179,13 @@ const TopBar = () => {
           </OutlinePaper>
         </Stack>
       </OutlinePaper>
+      <Drawer
+        anchor={'left'}
+        open={state['left']}
+        onClose={toggleDrawer('left', false)}
+      >
+        {list('left')}
+      </Drawer>
     </Top>
   );
 };
