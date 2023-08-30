@@ -2,7 +2,7 @@ import React from "react";
 //
 import { useStore } from "../../zustand";
 //
-// import { navigate } from "../../utility/navigatePage";
+import { navigate } from "../../utility/navigatePage";
 //
 import {
   IconButton,
@@ -19,19 +19,22 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import MenuIcon from '@mui/icons-material/Menu';
 import Divider from "@mui/material/Divider";
+import { MenuItem, Menu } from "@mui/material";
 //
-import KeyIcon from '@mui/icons-material/Key';
+// import KeyIcon from '@mui/icons-material/Key';
 import HttpsIcon from '@mui/icons-material/Https';
 import ChatIcon from '@mui/icons-material/Chat';
 import RateReviewIcon from '@mui/icons-material/RateReview';
 //
 import { Top } from "./newChat_styles";
 import { OutlinePaper } from "../../mui/reusable";
+import chatSelect from "./chatSelect";
 
 const TopBar = () => {
   const active_system_prompt_ = useStore.getState().active_system_prompt;
   const open_ai_api_keys_ = useStore.getState().open_ai_api_keys;
   const open_ai_api_key_ = useStore.getState().open_ai_api_key;
+  const system_prompts_ = useStore.getState().system_prompts;
 
   const chats = useStore(state => state.chats);
 
@@ -45,6 +48,31 @@ const TopBar = () => {
     setDrawerOpen(open);
   };
 
+  const apiKey = () => {
+    navigate("change_api_key")
+  };
+
+  const systemPrompts = () => {
+    navigate("system_prompts")
+  };
+
+  // Anchor for New Chat select
+  const [anc, setAnc] = React.useState(null);
+  const open = Boolean(anc);
+
+  const newChatClick = (event) => {
+    event.stopPropagation();
+    setAnc(event.currentTarget);
+  };
+
+  const newChatClose = () => {
+    setAnc(null);
+  };
+
+  const newChatOpen = (e) => {
+    chatSelect(e, setAnc, system_prompts_, setDrawerOpen)
+  };
+
   const DrawerContents = () => (
     <Box
       sx={{ width: 250 }}
@@ -54,7 +82,8 @@ const TopBar = () => {
     >
       <List>
         <ListItem disablePadding>
-          <ListItemButton>
+
+          <ListItemButton onClick={newChatClick}>
             <ListItemIcon>
               <ChatIcon />
             </ListItemIcon>
@@ -62,23 +91,23 @@ const TopBar = () => {
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
-          <ListItemButton>
+          <ListItemButton onClick={systemPrompts}>
             <ListItemIcon>
               <RateReviewIcon />
             </ListItemIcon>
             <ListItemText primary={"Prompt Editor"} />
           </ListItemButton>
         </ListItem>
-        <ListItem disablePadding>
+        {/* <ListItem disablePadding>
           <ListItemButton>
             <ListItemIcon>
               <KeyIcon />
             </ListItemIcon>
             <ListItemText primary={"Switch API Key"} />
           </ListItemButton>
-        </ListItem>
+        </ListItem> */}
         <ListItem disablePadding>
-          <ListItemButton>
+          <ListItemButton onClick={apiKey}>
             <ListItemIcon>
               <HttpsIcon />
             </ListItemIcon>
@@ -179,6 +208,27 @@ const TopBar = () => {
       >
         <DrawerContents />
       </Drawer>
+      <Menu
+        id="basic-menu"
+        anchorEl={anc}
+        open={open}
+        onClose={newChatClose}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button',
+        }}
+      >
+        {system_prompts_.map((prompt, key) => {
+          return (
+            <MenuItem
+              key={prompt.uuid}
+              value={key}
+              onClick={newChatOpen}
+            >
+              {prompt.title}
+            </MenuItem>
+          )
+        })}
+      </Menu>
     </Top>
   );
 };

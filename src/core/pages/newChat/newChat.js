@@ -235,6 +235,7 @@ const NewChat = () => {
       setChatUUID(u)
       setChatTitle(u)
       useStore.setState({ token_count: 0 });
+      inputRef.current.focus();
     };
   }, [justOnce]);
 
