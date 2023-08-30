@@ -6,6 +6,7 @@ import { useStore } from "../../zustand";
 import { fetchChatCompletion } from "../../utility/fetchData";
 import { isoToHuman, unixToISO } from "../../utility/time";
 import error from "../../utility/error";
+import generateKeyV4 from "../../utility/uuid";
 //
 import {
   FormControl,
@@ -14,11 +15,13 @@ import {
   CircularProgress,
   Box,
   Stack,
+  Divider,
 } from "@mui/material";
 //
 import RefreshIcon from '@mui/icons-material/Refresh';
 import SendIcon from '@mui/icons-material/Send';
 import EditIcon from "@mui/icons-material/Edit";
+import InfoIcon from '@mui/icons-material/Info';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 //
 import { LeftBox, RightBox, LeftChatBox, RightChatBox, ChatField, Middle, Bottom } from "./newChat_styles";
@@ -42,8 +45,26 @@ const NewChat = () => {
 
   const chat_reset = useStore(state => state.chat_reset);
 
+  const [chatUUID, setChatUUID] = useState("");
+  const [chatTitle, setChatTitle] = useState("");
+
   const active_system_prompt_ = useStore.getState().active_system_prompt;
   const color_mode_ = useStore.getState().color_mode;
+
+  const helper = (chat) => {
+    const chats_ = useStore.getState().chats;
+    let matched = false
+
+    for (let i = 0; i < chats_.length; i++) {
+      if (chats_[i].uuid === chat.uuid) {
+        chats_[i] = chat;
+        matched = true;
+      };
+    };
+
+    if (!matched) chats_.push(chat)
+    useStore.setState({ chats: chats_ })
+  };
 
 
   // used as a trigger to scroll chat window to the bottom
@@ -65,8 +86,12 @@ const NewChat = () => {
     const activeSystemPrompt_ = { role: "system", content: active_system_prompt_.prompt };
     const userPrompt_ = { role: "user", content: userMessageInput };
 
+    const newTimeStamps = [...timeStamps];
+    newTimeStamps.push(sendDateISO);
+
     if (!conversation_.length) {
       conversation_.push(activeSystemPrompt_);
+      newTimeStamps.push(sendDateISO);
     };
 
     conversation_.push(userPrompt_);
@@ -77,9 +102,7 @@ const NewChat = () => {
       upstream = [...conversation_];
     };
 
-    const oldArr = [...timeStamps];
-    oldArr.push(sendDateISO);
-    setTimeStamps(oldArr);
+    setTimeStamps(newTimeStamps);
     setConversation(conversation_);
     setUserMessageInput(active_system_prompt_.prefill ? active_system_prompt_.prefill : "");
     setScrollTime(true)
@@ -96,11 +119,21 @@ const NewChat = () => {
       useStore.setState({ token_count: response.usage.total_tokens });
       conversation_.push(response.choices[0].message);
 
-      oldArr.push(unixToISO(response.created));
+      newTimeStamps.push(unixToISO(response.created));
 
-      setTimeStamps(oldArr);
+      setTimeStamps(newTimeStamps);
       setBusyUI(false);
     };
+
+    const chat = {
+      conversation: conversation_,
+      timeStamps: newTimeStamps,
+      uuid: chatUUID,
+      title: chatTitle,
+      prompt: active_system_prompt_
+    };
+
+    helper(chat)
 
     setConversation(conversation_);
     setScrollTime(true);
@@ -174,6 +207,12 @@ const NewChat = () => {
     ResubmitPromptAsync();
   };
 
+  const InfoReport = () => {
+    console.log("conversation", conversation)
+    console.log("timestamps", timeStamps)
+    console.log("chats", useStore.getState().chats)
+  };
+
   // enables pressing 'Enter' to send message 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter' && !event.shiftKey) {
@@ -207,6 +246,9 @@ const NewChat = () => {
       setTimeStamps([]);
       setConversation([]);
       setBusyUI(false);
+      const u = generateKeyV4();
+      setChatUUID(u)
+      setChatTitle(u)
       useStore.setState({ token_count: 0 });
     };
   }, [justOnce]);
@@ -230,44 +272,38 @@ const NewChat = () => {
               {chat.role !== "system" && <>
                 {chat.role === "assistant" ? <LeftBox>
                   <LeftChatBox>
-                    <Stack direction="column" spacing={0}>
-                      <FormattedLeftResponse content={chat.content} color_mode={color_mode_} />
-                      <Box>
-                        <Stack direction="row" spacing={1}>
-                          <CopyToClipboard text={chat.content}>
-                            <IconButton size="small">
-                              <ContentCopyIcon />
-                            </IconButton>
-                          </CopyToClipboard>
+                    <FormattedLeftResponse content={chat.content} color_mode={color_mode_} />
+                    <Divider />
+                    <Stack direction="row" spacing={1} alignItems="center">
+                      <Typography>{isoToHuman(timeStamps[key])}</Typography>
 
-                          {key === conversation.length - 1 && <IconButton onClick={ReSubmitPrompt} size="small">
-                            <RefreshIcon />
-                          </IconButton>}
+                      <CopyToClipboard text={chat.content}>
+                        <IconButton size="small">
+                          <ContentCopyIcon />
+                        </IconButton>
+                      </CopyToClipboard>
 
-                          <Typography>{isoToHuman(timeStamps[key - 1])}</Typography>
-                        </Stack>
-                      </Box>
+                      {key === conversation.length - 1 && <IconButton onClick={ReSubmitPrompt} size="small">
+                        <RefreshIcon />
+                      </IconButton>}
                     </Stack>
                   </LeftChatBox>
                 </LeftBox> : <RightBox>
                   <RightChatBox>
-                    <Stack direction="column" spacing={1}>
-                      <FormattedRightResponse content={chat.content} color_mode={color_mode_} />
-                      <Box>
-                        <Stack direction="row" spacing={1}>
-                          <CopyToClipboard text={chat.content}>
-                            <IconButton size="small">
-                              <ContentCopyIcon />
-                            </IconButton>
-                          </CopyToClipboard>
+                    <FormattedRightResponse content={chat.content} color_mode={color_mode_} />
+                    <Divider />
+                    <Stack direction="row" spacing={1} alignItems="center">
+                      <Typography>{isoToHuman(timeStamps[key])}</Typography>
 
-                          {key === conversation.length - 2 && <IconButton size="small" onClick={EditMode}>
-                            <EditIcon />
-                          </IconButton>}
+                      <CopyToClipboard text={chat.content}>
+                        <IconButton size="small">
+                          <ContentCopyIcon />
+                        </IconButton>
+                      </CopyToClipboard>
 
-                          <Typography>{isoToHuman(timeStamps[key - 1])}</Typography>
-                        </Stack>
-                      </Box>
+                      {key === conversation.length - 2 && <IconButton size="small" onClick={EditMode}>
+                        <EditIcon />
+                      </IconButton>}
                     </Stack>
                   </RightChatBox>
                 </RightBox>}
@@ -275,12 +311,6 @@ const NewChat = () => {
             </React.Fragment>
           )
         })}
-
-        {conversation.length > 0 && <CopyToClipboard text={JSON.stringify(conversation)}>
-          <IconButton size="small">
-            <ContentCopyIcon />
-          </IconButton>
-        </CopyToClipboard>}
 
         <div ref={conversationScrollRef} />
       </Middle>
@@ -314,6 +344,15 @@ const NewChat = () => {
                     </IconButton>
                   }
                   {busyUI && <CircularProgress size="2rem" color="secondary" />}
+                </Box>
+              </Box>
+              <Box display="flex" flexDirection="column" justifyContent="flex-end">
+                <Box margin={1}>
+                  {!busyUI &&
+                    <IconButton onClick={InfoReport}>
+                      <InfoIcon />
+                    </IconButton>
+                  }
                 </Box>
               </Box>
             </Stack>

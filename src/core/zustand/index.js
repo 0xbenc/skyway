@@ -40,7 +40,10 @@ export const useStore = create(() => {
     // resets the chat if you file -> new while already chatting
     chat_reset: false,
 
+    // placeholder
+    chats: [],
+
     // true if not a release build
-    devMode: false
+    devMode: true
   };
 });
