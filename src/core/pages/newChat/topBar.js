@@ -37,27 +37,20 @@ const TopBar = () => {
 
   const token_count = useStore(state => state.token_count);
 
-  const [state, setState] = React.useState({
-    top: false,
-    left: false,
-    bottom: false,
-    right: false,
-  });
+  const [drawerOpen, setDrawerOpen] = React.useState(false);
 
-  const toggleDrawer = (anchor, open) => (event) => {
-    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
-      return;
-    }
+  const toggleDrawer = (open) => (event) => {
+    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) return;
 
-    setState({ ...state, [anchor]: open });
+    setDrawerOpen(open);
   };
 
-  const list = (anchor) => (
+  const DrawerContents = () => (
     <Box
-      sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250 }}
+      sx={{ width: 250 }}
       role="presentation"
-      onClick={toggleDrawer(anchor, false)}
-      onKeyDown={toggleDrawer(anchor, false)}
+      onClick={toggleDrawer(false)}
+      onKeyDown={toggleDrawer(false)}
     >
       <List>
         <ListItem disablePadding>
@@ -114,7 +107,7 @@ const TopBar = () => {
             <Box>
               <IconButton
                 aria-label="close"
-                onClick={toggleDrawer('left', true)}
+                onClick={toggleDrawer(true)}
                 size="large"
               >
                 <MenuIcon fontSize="inheret" />
@@ -181,10 +174,10 @@ const TopBar = () => {
       </OutlinePaper>
       <Drawer
         anchor={'left'}
-        open={state['left']}
-        onClose={toggleDrawer('left', false)}
+        open={drawerOpen}
+        onClose={toggleDrawer(false)}
       >
-        {list('left')}
+        <DrawerContents />
       </Drawer>
     </Top>
   );
