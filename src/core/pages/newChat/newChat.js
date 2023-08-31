@@ -51,8 +51,9 @@ const NewChat = () => {
   const [scrollTime, setScrollTime] = useState(false);
 
   const chat_reset = useStore(state => state.chat_reset);
+  const chat_open = useStore(state => state.chat_open);
+  const active_system_prompt_ = useStore(state => state.active_system_prompt);
 
-  const active_system_prompt_ = useStore.getState().active_system_prompt;
   const color_mode_ = useStore.getState().color_mode;
 
   const errorMessage = {
@@ -258,6 +259,28 @@ const NewChat = () => {
       setJustOnce(false);
     };
   }, [chat_reset, busyUI]);
+
+  // Placeholder
+  useEffect(() => {
+    if (chat_open && !busyUI) {
+      useStore.setState({ chat_open: false });
+      const current_chat_ = useStore.getState().current_chat;
+      const chats_ = useStore.getState().chats;
+
+      for (let i = 0; i < chats_.length; i++) {
+        if (chats_[i].uuid === current_chat_) {
+          setUserMessageInput(active_system_prompt_.prefill ? active_system_prompt_.prefill : "");
+          setTimeStamps(chats_[i].timeStamps);
+          setConversation(chats_[i].conversation);
+          setBusyUI(false);
+          setChatUUID(chats_[i].uuid)
+          setChatTitle(chats_[i].title)
+          useStore.setState({ token_count: 0 });
+          inputRef.current.focus();
+        }
+      }
+    };
+  }, [chat_open, busyUI, active_system_prompt_]);
 
   return (
     <>

@@ -41,6 +41,9 @@ export const useStore = create(() => {
     chat_reset: false,
 
     // placeholder
+    chat_open: false,
+
+    // placeholder
     chats: [],
 
     // uuid

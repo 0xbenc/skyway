@@ -116,7 +116,7 @@ const TopBar = () => {
       <List>
         {chats.map((text, index) => (
           <ListItem key={index} disablePadding sx={(theme) => ({ backgroundColor: text.uuid === current_chat ? theme.palette.primary.outside : theme.palette.primary.inside })}>
-            <ListItemButton disabled={text.uuid === current_chat ? true : false}>
+            <ListItemButton disabled={text.uuid === current_chat ? true : false} onClick={() => { useStore.setState({ current_chat: text.uuid, active_system_prompt: text.prompt, chat_open: true }) }}>
               <ListItemText primary={text.title} secondary={text.prompt.title} />
             </ListItemButton>
           </ListItem>
