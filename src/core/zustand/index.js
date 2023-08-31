@@ -47,6 +47,6 @@ export const useStore = create(() => {
     current_chat: "none",
 
     // true if not a release build
-    devMode: true
+    dev_mode: true
   };
 });

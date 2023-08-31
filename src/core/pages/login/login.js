@@ -18,7 +18,7 @@ import { eGet, eSet } from "../../utility/electronStore";
 const Login = () => {
   // Zustand
   const version = useStore(state => state.version);
-  const devMode_ = useStore.getState().devMode
+  const dev_mode_ = useStore.getState().dev_mode
 
   // UI Triggers
   const [storePasswordCheck, setStorePasswordCheck] = useState(false);
@@ -178,7 +178,7 @@ const Login = () => {
             Skyway
           </Typography>
           <Typography variant="body1">
-            v{version} {devMode_ ? "pre-release" : ""}
+            v{version} {dev_mode_ ? "pre-release" : ""}
           </Typography>
         </OutlinePaper>
 

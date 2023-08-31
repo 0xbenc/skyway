@@ -21,7 +21,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Divider from "@mui/material/Divider";
 import { MenuItem, Menu } from "@mui/material";
 //
-// import KeyIcon from '@mui/icons-material/Key';
 import HttpsIcon from '@mui/icons-material/Https';
 import ChatIcon from '@mui/icons-material/Chat';
 import RateReviewIcon from '@mui/icons-material/RateReview';
@@ -35,6 +34,8 @@ const TopBar = () => {
   const open_ai_api_keys_ = useStore.getState().open_ai_api_keys;
   const open_ai_api_key_ = useStore.getState().open_ai_api_key;
   const system_prompts_ = useStore.getState().system_prompts;
+  const version_ = useStore.getState().version;
+  const dev_mode_ = useStore.getState().dev_mode;
 
   const chats = useStore(state => state.chats);
 
@@ -82,8 +83,11 @@ const TopBar = () => {
       onKeyDown={toggleDrawer(false)}
     >
       <List>
+        <ListItem>
+          <ListItemText primary={`Skyway v${version_} ${dev_mode_ ? "pre-release" : ""}`} />
+        </ListItem>
+        <Divider />
         <ListItem disablePadding>
-
           <ListItemButton onClick={newChatClick}>
             <ListItemIcon>
               <ChatIcon />
@@ -99,14 +103,6 @@ const TopBar = () => {
             <ListItemText primary={"Prompt Editor"} />
           </ListItemButton>
         </ListItem>
-        {/* <ListItem disablePadding>
-          <ListItemButton>
-            <ListItemIcon>
-              <KeyIcon />
-            </ListItemIcon>
-            <ListItemText primary={"Switch API Key"} />
-          </ListItemButton>
-        </ListItem> */}
         <ListItem disablePadding>
           <ListItemButton onClick={apiKey}>
             <ListItemIcon>
@@ -119,7 +115,7 @@ const TopBar = () => {
       <Divider />
       <List>
         {chats.map((text, index) => (
-          <ListItem key={index} disablePadding sx={(theme) => ({backgroundColor: text.uuid === current_chat ? theme.palette.primary.outside : theme.palette.primary.inside})}>
+          <ListItem key={index} disablePadding sx={(theme) => ({ backgroundColor: text.uuid === current_chat ? theme.palette.primary.outside : theme.palette.primary.inside })}>
             <ListItemButton disabled={text.uuid === current_chat ? true : false}>
               <ListItemText primary={text.title} secondary={text.prompt.title} />
             </ListItemButton>
