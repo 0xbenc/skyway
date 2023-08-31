@@ -3,7 +3,7 @@ const path = require('path')
 const Store = require('electron-store');
 const axios = require('axios');
 const fs = require('fs');
-const { migration_1_1_0, migration_1_2_0 } = require('./core/utility/migrations');
+const { migration_1_1_0, migration_1_2_0, migration_1_3_0 } = require('./core/utility/migrations');
 
 //Helpers START
 const getFileName = (filePath) => {
@@ -18,7 +18,6 @@ const getFolderPath = (filePath) => {
   const lastSlashIndex = Math.max(filePath.lastIndexOf('/'), filePath.lastIndexOf('\\'));
   return filePath.substring(0, lastSlashIndex);
 };
-
 //Helpers END
 
 const store = new Store({
@@ -38,12 +37,15 @@ const store = new Store({
     '1.2.0': store => {
       migration_1_2_0(store)
     },
+    '1.3.0': store => {
+      migration_1_3_0(store)
+    },
   }
 });
 
 if (require('electron-squirrel-startup')) {
   app.quit();
-}
+};
 
 const createWindow = () => {
   const mainWindow = new BrowserWindow({

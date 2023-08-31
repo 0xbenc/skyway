@@ -62,11 +62,11 @@ const Login = () => {
       const last_prompt = eGet('last_prompt');
 
       const dencPrompts = decryptPrompts(_system_prompts, passwordInput)
-      
+
       let decryptedKeys = [];
 
       for (let i = 0; i < _open_ai_api_keys.length; i++) {
-        decryptedKeys.push({key: decrypt(_open_ai_api_keys[i].key, passwordInput), name: _open_ai_api_keys[i].name})
+        decryptedKeys.push({ key: decrypt(_open_ai_api_keys[i].key, passwordInput), name: _open_ai_api_keys[i].name })
       };
 
       setBadPassword(false)
@@ -75,9 +75,10 @@ const Login = () => {
         system_prompts: dencPrompts,
         open_ai_api_key: _open_ai_api_key,
         open_ai_api_keys: decryptedKeys,
-        page: "landing",
         password: passwordInput,
-        last_prompt: last_prompt
+        last_prompt: last_prompt,
+        active_system_prompt: dencPrompts[last_prompt],
+        page: "new_chat",
       })
 
       console.log("NAVIGATION: landing")
@@ -117,21 +118,21 @@ const Login = () => {
     const encPrompts = encryptPrompts(Prompts, passwordInput)
     const encPass = encrypt(passwordInput, seedKey).toString();
 
-    eSet("recovery", encPass)
-    eSet('password_set', true);
-    eSet("integrity_check", ciphertext)
-    eSet("system_prompts", encPrompts)
-    eSet("color_mode", "light")
-    eSet('open_ai_api_keys', [{key: cipherAPI, name: "default"}])
-    eSet('open_ai_api_key', 0)
+    eSet("recovery", encPass); //
+    eSet('password_set', true); //
+    eSet("integrity_check", ciphertext) //
+    eSet("system_prompts", encPrompts) //
+    eSet('open_ai_api_keys', [{ key: cipherAPI, name: "default" }]) //
 
     useStore.setState({
       password: passwordInput,
       system_prompts: Prompts,
       color_mode: "light",
-      page: "landing",
-      open_ai_api_keys: [{key: apiInput, name: "default"}],
-      open_ai_api_key: 0
+      open_ai_api_keys: [{ key: apiInput, name: "default" }],
+      open_ai_api_key: 0,
+      active_system_prompt: Prompts[0],
+      last_prompt: 0,
+      page: "new_chat",
     });
   };
 
