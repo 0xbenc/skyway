@@ -186,7 +186,7 @@ const TopBar = () => {
                 Total Tokens
               </Typography>}
               {active_system_prompt_.engine === "token limited" && <Typography variant="body1">
-                <b>{token_count}/{active_system_prompt_.limit}</b>
+                <b>{String(token_count)}/{active_system_prompt_.limit}</b>
               </Typography>}
               {active_system_prompt_.engine === "amnesia" && <Typography variant="body1">
                 Previous Tokens

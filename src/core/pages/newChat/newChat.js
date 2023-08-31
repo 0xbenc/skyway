@@ -116,7 +116,8 @@ const NewChat = () => {
       timeStamps: newTimeStamps,
       uuid: chatUUID,
       title: chatTitle,
-      prompt: active_system_prompt_
+      prompt: active_system_prompt_,
+      total_tokens: response.usage.total_tokens
     };
 
     chatSync(chat);
@@ -191,7 +192,8 @@ const NewChat = () => {
       timeStamps: timeArray,
       uuid: chatUUID,
       title: chatTitle,
-      prompt: active_system_prompt_
+      prompt: active_system_prompt_,
+      total_tokens: response.usage.total_tokens
     };
 
     chatSync(chat);
@@ -275,7 +277,7 @@ const NewChat = () => {
           setBusyUI(false);
           setChatUUID(chats_[i].uuid)
           setChatTitle(chats_[i].title)
-          useStore.setState({ token_count: 0 });
+          useStore.setState({ token_count: chats_[i].total_tokens });
           inputRef.current.focus();
         }
       }
