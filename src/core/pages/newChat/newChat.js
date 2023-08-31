@@ -44,16 +44,16 @@ const NewChat = () => {
 
   const [justOnce, setJustOnce] = useState(false);
 
-  const chat_reset = useStore(state => state.chat_reset);
-
   const [chatUUID, setChatUUID] = useState("");
   const [chatTitle, setChatTitle] = useState("");
 
-  const active_system_prompt_ = useStore.getState().active_system_prompt;
-  const color_mode_ = useStore.getState().color_mode;
-
   // used as a trigger to scroll chat window to the bottom
   const [scrollTime, setScrollTime] = useState(false);
+
+  const chat_reset = useStore(state => state.chat_reset);
+
+  const active_system_prompt_ = useStore.getState().active_system_prompt;
+  const color_mode_ = useStore.getState().color_mode;
 
   const errorMessage = {
     role: "assistant",
@@ -167,6 +167,8 @@ const NewChat = () => {
 
     const response = await fetchChatCompletion(upstream, active_system_prompt_.model, active_system_prompt_.params);
 
+    let timeArray = [];
+
     if (response === "error") {
       setUserMessageInput("");
       conversation_.push(errorMessage);
@@ -174,7 +176,6 @@ const NewChat = () => {
       useStore.setState({ token_count: response.usage.total_tokens });
       conversation_.push(response.choices[0].message);
       setBusyUI(false);
-      let timeArray = [];
       for (let i = 0; i < timeStamps.length - 1; i++) {
         timeArray.push(timeStamps[i]);
       };
@@ -184,7 +185,18 @@ const NewChat = () => {
       setTimeStamps(timeArray);
     };
 
+    const chat = {
+      conversation: conversation_,
+      timeStamps: timeArray,
+      uuid: chatUUID,
+      title: chatTitle,
+      prompt: active_system_prompt_
+    };
+
+    chatSync(chat);
+
     setConversation(conversation_);
+    setScrollTime(true);
   };
 
   const ReSubmitPrompt = () => {
