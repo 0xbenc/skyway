@@ -271,13 +271,22 @@ const NewChat = () => {
 
       for (let i = 0; i < chats_.length; i++) {
         if (chats_[i].uuid === current_chat_) {
+          const system_prompts_ = useStore.getState().system_prompts;
+          let activeChatInLibrary = false;
+
+          for (let e = 0; e < system_prompts_.length; e++) {
+            if (system_prompts_[e].uuid === active_system_prompt_.uuid) {
+              activeChatInLibrary = true;
+            }
+          }
+
           setUserMessageInput(active_system_prompt_.prefill ? active_system_prompt_.prefill : "");
           setTimeStamps(chats_[i].timeStamps);
           setConversation(chats_[i].conversation);
           setBusyUI(false);
           setChatUUID(chats_[i].uuid)
           setChatTitle(chats_[i].title)
-          useStore.setState({ token_count: chats_[i].total_tokens });
+          useStore.setState({ token_count: chats_[i].total_tokens, prompt_save_status: activeChatInLibrary });
           inputRef.current.focus();
         }
       }

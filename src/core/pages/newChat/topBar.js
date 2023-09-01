@@ -19,11 +19,13 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import MenuIcon from '@mui/icons-material/Menu';
 import Divider from "@mui/material/Divider";
-import { MenuItem, Menu } from "@mui/material";
+import { MenuItem, Menu, Tooltip } from "@mui/material";
 //
 import HttpsIcon from '@mui/icons-material/Https';
 import ChatIcon from '@mui/icons-material/Chat';
 import RateReviewIcon from '@mui/icons-material/RateReview';
+import SaveIcon from '@mui/icons-material/Save';
+import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 //
 import { Top } from "./newChat_styles";
 import { OutlinePaper } from "../../mui/reusable";
@@ -41,8 +43,10 @@ const TopBar = () => {
 
   const token_count = useStore(state => state.token_count);
   const current_chat = useStore(state => state.current_chat);
+  const prompt_save_status = useStore(state => state.prompt_save_status);
 
   const [drawerOpen, setDrawerOpen] = React.useState(false);
+  // const [promptSaveStatus, setPromptSaveStatus] = React.useState(false);
 
   const toggleDrawer = (open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) return;
@@ -144,9 +148,17 @@ const TopBar = () => {
                 <Typography variant="body1">
                   System Prompt
                 </Typography>
-                <Typography variant="body1">
-                  <b>{active_system_prompt_.title}</b>
-                </Typography>
+                <Stack direction="row" spacing={1}>
+                  <Typography variant="body1">
+                    <b>{active_system_prompt_.title}</b>
+                  </Typography>
+                  {prompt_save_status && <Tooltip title={"Prompt is in your library"}>
+                    <SaveIcon size="small" />
+                  </Tooltip>}
+                  {!prompt_save_status && <Tooltip title={"Click to add prompt to your library"}>
+                    <LibraryAddIcon size="small" onClick={() => { useStore.setState({prompt_save_status: true}) }} />
+                  </Tooltip>}
+                </Stack>
               </Stack>
             </OutlinePaper>
             <OutlinePaper>
