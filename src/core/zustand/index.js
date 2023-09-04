@@ -4,7 +4,7 @@ export const useStore = create(() => {
   return {
     /* pages:
       login, landing, system_prompts, 
-      system_prompt, new_system_prompt, new_chat, 
+      system_prompt, new_system_prompt, chatbot, 
       recovery, change_api_key
     */
     page: "login",
@@ -12,7 +12,7 @@ export const useStore = create(() => {
     // system prompts object from electron-store
     system_prompts: [],
 
-    // used by new_chat page to send API requests
+    // used by chatbot page to send API requests
     active_system_prompt: {},
 
     // stores the index of the system prompt the user is editing

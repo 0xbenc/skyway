@@ -1,9 +1,27 @@
-import { useStore } from "../../zustand";
-//
+import { useStore } from '../../zustand';
 import { eSet } from "../../utility/electronStore";
 import { encryptPrompts } from "../../utility/encryption";
 
-// ----------------------------------------------------------------------
+/**
+ * Updates an existing chat or appends a new one to the array of chats
+ * 
+ * @param {Object} chat - The chat item to be synched. 
+ * @property {string} chat.uuid - identifies unique chats
+ */
+const chatSync = (chat) => {
+  const { chats } = useStore.getState();
+
+  const index = chats.findIndex((item) => item.uuid === chat.uuid);
+  let updatedChats = chats;
+
+  if (index !== -1) {
+    updatedChats = chats.map((item, i) => i === index ? chat : item);
+  } else {
+    updatedChats.push(chat);
+  };
+
+  useStore.setState({ chats: updatedChats, current_chat: chat.uuid });
+};
 
 const chatSelect = (event, setAnc, system_prompts, setDrawerOpen) => {
   setAnc(null);
@@ -17,7 +35,7 @@ const chatSelect = (event, setAnc, system_prompts, setDrawerOpen) => {
 
   const encPrompts = encryptPrompts(systems, password_);
 
-  console.log("NAVIGATION: new_chat", system_prompts[event.target.value].title, event.target.value);
+  console.log("NAVIGATION: chatbot", system_prompts[event.target.value].title, event.target.value);
 
   eSet('system_prompts', encPrompts);
   eSet('last_prompt', event.target.value);
@@ -27,10 +45,11 @@ const chatSelect = (event, setAnc, system_prompts, setDrawerOpen) => {
   useStore.setState({
     system_prompts: systems,
     active_system_prompt: system_prompts[event.target.value],
-    // page: "new_chat",
+    // page: "chatbot",
     last_prompt: event.target.value,
     chat_reset: true
   });
 };
 
-export default chatSelect;
+
+export {chatSync, chatSelect};

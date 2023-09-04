@@ -78,7 +78,7 @@ const Login = () => {
         password: passwordInput,
         last_prompt: last_prompt,
         active_system_prompt: dencPrompts[last_prompt],
-        page: "new_chat",
+        page: "chatbot",
       })
     } else {
       console.log("LOGIN: ERROR: password decryption unsuccessful");
@@ -130,7 +130,7 @@ const Login = () => {
       open_ai_api_key: 0,
       active_system_prompt: Prompts[0],
       last_prompt: 0,
-      page: "new_chat",
+      page: "chatbot",
     });
   };
 

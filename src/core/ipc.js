@@ -15,7 +15,7 @@ const HandleIPC = () => {
 
 
       if (system_prompts.length) {
-        if (page === "new_chat") {
+        if (page === "chatbot") {
           useStore.setState({ chat_reset: true });
         } else {
           const last_prompt = useStore.getState().last_prompt
@@ -28,14 +28,14 @@ const HandleIPC = () => {
 
           const encPrompts = encryptPrompts(systems, password_);
 
-          // console.log("NAVIGATION: new_chat", system_prompts[last_prompt].title);
+          // console.log("NAVIGATION: chatbot", system_prompts[last_prompt].title);
 
           eSet("system_prompts", encPrompts);
 
           useStore.setState({
             system_prompts: systems,
             active_system_prompt: system_prompts[last_prompt],
-            page: "new_chat"
+            page: "chatbot"
           });
         }
       }

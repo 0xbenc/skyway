@@ -28,9 +28,9 @@ import SaveIcon from '@mui/icons-material/Save';
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 //
-import { Top } from "./newChat_styles";
+import { Top } from "./chatbot_styles";
 import { OutlinePaper } from "../../mui/reusable";
-import chatSelect from "./chatSelect";
+import { chatSelect } from "./chatbot_utility";
 import { isoToHuman } from "../../utility/time";
 
 const TopBar = () => {
@@ -122,7 +122,7 @@ const TopBar = () => {
             <ListItemIcon>
               <RateReviewIcon />
             </ListItemIcon>
-            <ListItemText primary={"Prompt Editor"} />
+            <ListItemText primary={"Prompt Library"} />
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>

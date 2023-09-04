@@ -1,9 +1,9 @@
 import React from "react";
 //
-import NewChat from "./newChat";
+import Chatbot from "./chatbot";
 
-const NewChatPage = () => {
-  return <NewChat />
+const ChatbotPage = () => {
+  return <Chatbot />
 };
 
-export default NewChatPage;
+export default ChatbotPage;

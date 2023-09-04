@@ -23,12 +23,12 @@ import SendIcon from '@mui/icons-material/Send';
 import EditIcon from "@mui/icons-material/Edit";
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 //
-import { LeftBox, RightBox, LeftChatBox, RightChatBox, ChatField, Middle, Bottom } from "./newChat_styles";
-import TopBar from "./topBar";
-import { FormattedLeftResponse, FormattedRightResponse } from "./newChat_components";
-import chatSync from "./newChat_utility";
+import { LeftBox, RightBox, LeftChatBox, RightChatBox, ChatField, Middle, Bottom } from "./chatbot_styles";
+import TopBar from "./chatbot_top_bar";
+import { FormattedLeftResponse, FormattedRightResponse } from "./chatbot_components";
+import { chatSync } from "./chatbot_utility";
 
-const NewChat = () => {
+const Chatbot = () => {
   const inputRef = useRef();
 
   const conversationScrollRef = useRef(null);
@@ -390,4 +390,4 @@ const NewChat = () => {
   );
 };
 
-export default NewChat;
+export default Chatbot;

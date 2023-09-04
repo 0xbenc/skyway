@@ -19,7 +19,7 @@ const HandlePages = () => {
       {page === "system_prompts" && <SystemPrompts />}
       {page === "system_prompt" && <SystemPrompt />}
       {page === "new_system_prompt" && <NewSystemPrompt />}
-      {page === "new_chat" && <NewChat />}
+      {page === "chatbot" && <NewChat />}
       {page === "recovery" && <Recovery />}
       {page === "change_api_key" && <ChangeAPIKey />}
     </>
