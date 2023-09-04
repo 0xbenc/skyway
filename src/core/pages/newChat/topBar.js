@@ -40,42 +40,40 @@ const TopBar = () => {
   const dev_mode_ = useStore.getState().dev_mode;
 
   const chats = useStore(state => state.chats);
-
   const token_count = useStore(state => state.token_count);
   const current_chat = useStore(state => state.current_chat);
   const prompt_save_status = useStore(state => state.prompt_save_status);
 
   const [drawerOpen, setDrawerOpen] = React.useState(false);
-  // const [promptSaveStatus, setPromptSaveStatus] = React.useState(false);
 
-  const toggleDrawer = (open) => (event) => {
+  const toggleChatDrawer = (tf) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) return;
 
-    setDrawerOpen(open);
+    setDrawerOpen(tf);
   };
 
-  const apiKey = () => {
+  const navAPIKey = () => {
     navigate("change_api_key")
   };
 
-  const systemPrompts = () => {
+  const navSystemPrompts = () => {
     navigate("system_prompts")
   };
 
   // Anchor for New Chat select
   const [anc, setAnc] = React.useState(null);
-  const open = Boolean(anc);
+  const chatSelectMenuOpen = Boolean(anc);
 
-  const newChatClick = (event) => {
+  const switchPromptOpen = (event) => {
     event.stopPropagation();
     setAnc(event.currentTarget);
   };
 
-  const newChatClose = () => {
+  const switchPromptClose = () => {
     setAnc(null);
   };
 
-  const newChatOpen = (e) => {
+  const switchPromptSelect = (e) => {
     chatSelect(e, setAnc, system_prompts_, setDrawerOpen)
   };
 
@@ -83,8 +81,8 @@ const TopBar = () => {
     <Box
       sx={{ width: 250 }}
       role="presentation"
-      onClick={toggleDrawer(false)}
-      onKeyDown={toggleDrawer(false)}
+      onClick={toggleChatDrawer(false)}
+      onKeyDown={toggleChatDrawer(false)}
     >
       <List>
         <ListItem>
@@ -92,7 +90,7 @@ const TopBar = () => {
         </ListItem>
         <Divider />
         <ListItem disablePadding>
-          <ListItemButton onClick={newChatClick}>
+          <ListItemButton onClick={switchPromptOpen}>
             <ListItemIcon>
               <ChatIcon />
             </ListItemIcon>
@@ -100,7 +98,7 @@ const TopBar = () => {
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
-          <ListItemButton onClick={systemPrompts}>
+          <ListItemButton onClick={navSystemPrompts}>
             <ListItemIcon>
               <RateReviewIcon />
             </ListItemIcon>
@@ -108,7 +106,7 @@ const TopBar = () => {
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
-          <ListItemButton onClick={apiKey}>
+          <ListItemButton onClick={navAPIKey}>
             <ListItemIcon>
               <HttpsIcon />
             </ListItemIcon>
@@ -137,7 +135,7 @@ const TopBar = () => {
             <Box>
               <IconButton
                 aria-label="close"
-                onClick={toggleDrawer(true)}
+                onClick={toggleChatDrawer(true)}
                 size="large"
               >
                 <MenuIcon fontSize="inheret" />
@@ -213,15 +211,15 @@ const TopBar = () => {
       <Drawer
         anchor={'left'}
         open={drawerOpen}
-        onClose={toggleDrawer(false)}
+        onClose={toggleChatDrawer(false)}
       >
         <DrawerContents />
       </Drawer>
       <Menu
         id="basic-menu"
         anchorEl={anc}
-        open={open}
-        onClose={newChatClose}
+        open={chatSelectMenuOpen}
+        onClose={switchPromptClose}
         MenuListProps={{
           'aria-labelledby': 'basic-button',
         }}
@@ -231,7 +229,7 @@ const TopBar = () => {
             <MenuItem
               key={prompt.uuid}
               value={key}
-              onClick={newChatOpen}
+              onClick={switchPromptSelect}
             >
               {prompt.title}
             </MenuItem>
