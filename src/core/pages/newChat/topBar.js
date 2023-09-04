@@ -31,6 +31,7 @@ import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import { Top } from "./newChat_styles";
 import { OutlinePaper } from "../../mui/reusable";
 import chatSelect from "./chatSelect";
+import { isoToHuman } from "../../utility/time";
 
 const TopBar = () => {
   const active_system_prompt_ = useStore.getState().active_system_prompt;
@@ -144,7 +145,7 @@ const TopBar = () => {
           {chats.slice().reverse().map((text, index) => (
             <ListItem key={index} disablePadding sx={(theme) => ({ backgroundColor: text.uuid === current_chat ? theme.palette.primary.outside : theme.palette.primary.inside })}>
               <ListItemButton disabled={text.uuid === current_chat ? true : false} onClick={() => { useStore.setState({ current_chat: text.uuid, active_system_prompt: text.prompt, chat_open: true }) }}>
-                <ListItemText primary={text.title} secondary={text.prompt.title} />
+                <ListItemText primary={text.title} secondary={`${isoToHuman(text.lastActive)}`} />
               </ListItemButton>
             </ListItem>
           ))}

@@ -121,7 +121,8 @@ const NewChat = () => {
       uuid: chatUUID,
       title: chatTitle === "none" ? shortChatTitle : chatTitle,
       prompt: active_system_prompt_,
-      total_tokens: response.usage.total_tokens
+      total_tokens: response.usage.total_tokens,
+      lastActive: newTimeStamps[newTimeStamps.length -1]
     };
 
     chatSync(chat);
@@ -201,7 +202,8 @@ const NewChat = () => {
       uuid: chatUUID,
       title: chatTitle,
       prompt: active_system_prompt_,
-      total_tokens: response.usage.total_tokens
+      total_tokens: response.usage.total_tokens,
+      lastActive: timeArray[timeArray.length -1]
     };
 
     chatSync(chat);
