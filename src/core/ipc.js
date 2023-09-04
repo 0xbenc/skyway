@@ -5,12 +5,15 @@ import { eSet } from "./utility/electronStore";
 import { encryptPrompts } from "./utility/encryption";
 
 const HandleIPC = () => {
-  const system_prompts = useStore(state => state.system_prompts);
-  const page = useStore(state => state.page);
-  const password_ = useStore.getState().password;
 
   useEffect(() => {
     window.ipc.on("new chat", () => {
+      console.log("inside new chat")
+      const system_prompts = useStore.getState().system_prompts;
+      const page = useStore.getState().page;
+      const password_ = useStore.getState().password_;
+
+
       if (system_prompts.length) {
         if (page === "new_chat") {
           useStore.setState({ chat_reset: true });
@@ -37,7 +40,7 @@ const HandleIPC = () => {
         }
       }
     });
-  }, [system_prompts, page, password_]);
+  }, []);
 
   useEffect(() => {
     window.ipc.on("toggle color", () => {
