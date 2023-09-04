@@ -72,6 +72,12 @@ const NewChat = () => {
     const activeSystemPrompt_ = { role: "system", content: active_system_prompt_.prompt };
     const userPrompt_ = { role: "user", content: userMessageInput };
 
+    const shortChatTitle = userMessageInput.length > 22 ? `${String(userMessageInput).substring(0, 22)}...` : String(userMessageInput).substring(0, 22);
+
+    if (chatTitle === "none") {
+      setChatTitle(shortChatTitle);
+    };
+
     const newTimeStamps = [...timeStamps];
     newTimeStamps.push(sendDateISO);
 
@@ -108,14 +114,13 @@ const NewChat = () => {
       newTimeStamps.push(unixToISO(response.created));
 
       setTimeStamps(newTimeStamps);
-      setBusyUI(false);
     };
 
     const chat = {
       conversation: conversation_,
       timeStamps: newTimeStamps,
       uuid: chatUUID,
-      title: chatTitle,
+      title: chatTitle === "none" ? shortChatTitle : chatTitle,
       prompt: active_system_prompt_,
       total_tokens: response.usage.total_tokens
     };
@@ -123,6 +128,7 @@ const NewChat = () => {
     chatSync(chat);
 
     setConversation(conversation_);
+    setBusyUI(false);
     setScrollTime(true);
   };
 
@@ -237,7 +243,6 @@ const NewChat = () => {
     };
   }, [busyUI]);
 
-
   // Handles initilization
   useEffect(() => {
     if (!justOnce) {
@@ -247,8 +252,8 @@ const NewChat = () => {
       setConversation([]);
       setBusyUI(false);
       const u = generateKeyV4();
-      setChatUUID(u)
-      setChatTitle(u)
+      setChatUUID(u);
+      setChatTitle("none");
       useStore.setState({ token_count: 0, current_chat: "none" });
       inputRef.current.focus();
     };
