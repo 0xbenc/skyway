@@ -26,6 +26,7 @@ import ChatIcon from '@mui/icons-material/Chat';
 import RateReviewIcon from '@mui/icons-material/RateReview';
 import SaveIcon from '@mui/icons-material/Save';
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
+import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 //
 import { Top } from "./newChat_styles";
 import { OutlinePaper } from "../../mui/reusable";
@@ -60,6 +61,10 @@ const TopBar = () => {
     navigate("system_prompts")
   };
 
+  const newChat = () => {
+    useStore.setState({ chat_reset: true })
+  }
+
   // Anchor for New Chat select
   const [anc, setAnc] = React.useState(null);
   const chatSelectMenuOpen = Boolean(anc);
@@ -79,7 +84,12 @@ const TopBar = () => {
 
   const DrawerContents = () => (
     <Box
-      sx={{ width: 250 }}
+      sx={{
+        width: 250,
+        display: 'flex', // Added: Using Flex container
+        flexDirection: 'column', // Added: Flex direction set to column
+        overflow: "hidden"
+      }}
       role="presentation"
       onClick={toggleChatDrawer(false)}
       onKeyDown={toggleChatDrawer(false)}
@@ -90,9 +100,17 @@ const TopBar = () => {
         </ListItem>
         <Divider />
         <ListItem disablePadding>
-          <ListItemButton onClick={switchPromptOpen}>
+          <ListItemButton onClick={newChat}>
             <ListItemIcon>
               <ChatIcon />
+            </ListItemIcon>
+            <ListItemText primary={"New Chat"} />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton onClick={switchPromptOpen}>
+            <ListItemIcon>
+              <SwapHorizIcon />
             </ListItemIcon>
             <ListItemText primary={"Switch Prompt"} />
           </ListItemButton>
@@ -115,15 +133,22 @@ const TopBar = () => {
         </ListItem>
       </List>
       <Divider />
-      <List>
-        {chats.map((text, index) => (
-          <ListItem key={index} disablePadding sx={(theme) => ({ backgroundColor: text.uuid === current_chat ? theme.palette.primary.outside : theme.palette.primary.inside })}>
-            <ListItemButton disabled={text.uuid === current_chat ? true : false} onClick={() => { useStore.setState({ current_chat: text.uuid, active_system_prompt: text.prompt, chat_open: true }) }}>
-              <ListItemText primary={text.title} secondary={text.prompt.title} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
+      <Box
+        sx={{
+          flexGrow: 1,
+          overflow: 'auto'
+        }}
+      >
+        <List>
+          {chats.map((text, index) => (
+            <ListItem key={index} disablePadding sx={(theme) => ({ backgroundColor: text.uuid === current_chat ? theme.palette.primary.outside : theme.palette.primary.inside })}>
+              <ListItemButton disabled={text.uuid === current_chat ? true : false} onClick={() => { useStore.setState({ current_chat: text.uuid, active_system_prompt: text.prompt, chat_open: true }) }}>
+                <ListItemText primary={text.title} secondary={text.prompt.title} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+      </Box>
     </Box>
   );
 
@@ -154,7 +179,7 @@ const TopBar = () => {
                     <SaveIcon size="small" />
                   </Tooltip>}
                   {!prompt_save_status && <Tooltip title={"Click to add prompt to your library"}>
-                    <LibraryAddIcon size="small" onClick={() => { useStore.setState({prompt_save_status: true}) }} />
+                    <LibraryAddIcon size="small" onClick={() => { useStore.setState({ prompt_save_status: true }) }} />
                   </Tooltip>}
                 </Stack>
               </Stack>
