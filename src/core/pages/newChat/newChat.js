@@ -21,7 +21,6 @@ import {
 import RefreshIcon from '@mui/icons-material/Refresh';
 import SendIcon from '@mui/icons-material/Send';
 import EditIcon from "@mui/icons-material/Edit";
-import InfoIcon from '@mui/icons-material/Info';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 //
 import { LeftBox, RightBox, LeftChatBox, RightChatBox, ChatField, Middle, Bottom } from "./newChat_styles";
@@ -130,6 +129,7 @@ const NewChat = () => {
     setConversation(conversation_);
     setBusyUI(false);
     setScrollTime(true);
+    useStore.setState({ busy_ui: false })
   };
 
   // sends the user-chat message as a prompt 
@@ -138,6 +138,7 @@ const NewChat = () => {
     const sendDateISO = String(sendDate.toISOString());
 
     setBusyUI(true);
+    useStore.setState({ busy_ui: true })
     SubmitPromptAsync(sendDateISO);
   };
 
@@ -184,6 +185,7 @@ const NewChat = () => {
       useStore.setState({ token_count: response.usage.total_tokens });
       conversation_.push(response.choices[0].message);
       setBusyUI(false);
+      useStore.setState({ busy_ui: false })
       for (let i = 0; i < timeStamps.length - 1; i++) {
         timeArray.push(timeStamps[i]);
       };
@@ -210,13 +212,8 @@ const NewChat = () => {
 
   const ReSubmitPrompt = () => {
     setBusyUI(true);
+    useStore.setState({ busy_ui: true })
     ResubmitPromptAsync();
-  };
-
-  const InfoReport = () => {
-    console.log("conversation", conversation)
-    console.log("timestamps", timeStamps)
-    console.log("chats", useStore.getState().chats)
   };
 
   // enables pressing 'Enter' to send message 
@@ -254,7 +251,7 @@ const NewChat = () => {
       const u = generateKeyV4();
       setChatUUID(u);
       setChatTitle("none");
-      useStore.setState({ token_count: 0, current_chat: "none" });
+      useStore.setState({ token_count: 0, current_chat: "none", busy_ui: false });
       inputRef.current.focus();
     };
   }, [justOnce]);
@@ -291,7 +288,7 @@ const NewChat = () => {
           setBusyUI(false);
           setChatUUID(chats_[i].uuid)
           setChatTitle(chats_[i].title)
-          useStore.setState({ token_count: chats_[i].total_tokens, prompt_save_status: activeChatInLibrary });
+          useStore.setState({ token_count: chats_[i].total_tokens, prompt_save_status: activeChatInLibrary, busy_ui: false });
           inputRef.current.focus();
         }
       }
@@ -381,15 +378,6 @@ const NewChat = () => {
                     </IconButton>
                   }
                   {busyUI && <CircularProgress size="2rem" color="secondary" />}
-                </Box>
-              </Box>
-              <Box display="flex" flexDirection="column" justifyContent="flex-end">
-                <Box margin={1}>
-                  {!busyUI &&
-                    <IconButton onClick={InfoReport}>
-                      <InfoIcon />
-                    </IconButton>
-                  }
                 </Box>
               </Box>
             </Stack>

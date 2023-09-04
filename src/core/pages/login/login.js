@@ -80,8 +80,6 @@ const Login = () => {
         active_system_prompt: dencPrompts[last_prompt],
         page: "new_chat",
       })
-
-      console.log("NAVIGATION: landing")
     } else {
       console.log("LOGIN: ERROR: password decryption unsuccessful");
       setBadPassword(true)

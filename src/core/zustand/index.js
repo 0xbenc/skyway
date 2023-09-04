@@ -52,6 +52,9 @@ export const useStore = create(() => {
     //placeholder
     prompt_save_status: true,
 
+    //used outside newchat
+    busy_ui: false,
+
     // true if not a release build
     dev_mode: true
   };

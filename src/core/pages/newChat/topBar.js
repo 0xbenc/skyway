@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 //
 import { useStore } from "../../zustand";
 //
@@ -44,6 +44,7 @@ const TopBar = () => {
   const token_count = useStore(state => state.token_count);
   const current_chat = useStore(state => state.current_chat);
   const prompt_save_status = useStore(state => state.prompt_save_status);
+  const busy_ui = useStore(state => state.busy_ui);
 
   const [drawerOpen, setDrawerOpen] = React.useState(false);
 
@@ -152,6 +153,12 @@ const TopBar = () => {
     </Box>
   );
 
+  useEffect(() => {
+    if (busy_ui) {
+      setDrawerOpen(false);
+    };
+  }, [busy_ui])
+
   return (
     <Top>
       <OutlinePaper>
@@ -162,6 +169,7 @@ const TopBar = () => {
                 aria-label="close"
                 onClick={toggleChatDrawer(true)}
                 size="large"
+                disabled={busy_ui}
               >
                 <MenuIcon fontSize="inheret" />
               </IconButton>
@@ -179,7 +187,13 @@ const TopBar = () => {
                     <SaveIcon size="small" />
                   </Tooltip>}
                   {!prompt_save_status && <Tooltip title={"Click to add prompt to your library"}>
-                    <LibraryAddIcon size="small" onClick={() => { useStore.setState({ prompt_save_status: true }) }} />
+                    <span>
+                      <LibraryAddIcon
+                        size="small"
+                        onClick={() => { useStore.setState({ prompt_save_status: true }) }}
+                        disabled={busy_ui}
+                      />
+                    </span>
                   </Tooltip>}
                 </Stack>
               </Stack>
