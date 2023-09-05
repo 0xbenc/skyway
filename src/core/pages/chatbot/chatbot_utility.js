@@ -1,6 +1,6 @@
 import { useStore } from '../../zustand';
 import { eSet } from "../../utility/electronStore";
-import { encryptPrompts } from "../../utility/encryption";
+import { encrypt, encryptPrompts } from "../../utility/encryption";
 // ----------------------------------------------------------------------
 
 /**
@@ -10,7 +10,8 @@ import { encryptPrompts } from "../../utility/encryption";
  * @property {string} chat.uuid - identifies unique chats
  */
 const chatSync = (chat) => {
-  const { chats } = useStore.getState();
+  console.log("here")
+  const { chats, password } = useStore.getState();
 
   const index = chats.findIndex((item) => item.uuid === chat.uuid);
   let updatedChats = chats;
@@ -21,7 +22,11 @@ const chatSync = (chat) => {
     updatedChats.push(chat);
   };
 
+  const copy = JSON.stringify([...updatedChats]);
+  const encCopy = encrypt(copy, password)
+  
   useStore.setState({ chats: updatedChats, current_chat: chat.uuid });
+  eSet('chats', encCopy);
 };
 
 const chatSelect = (event, setAnc, system_prompts, setDrawerOpen) => {
@@ -38,7 +43,7 @@ const chatSelect = (event, setAnc, system_prompts, setDrawerOpen) => {
 
   console.log("NAVIGATION: chatbot", system_prompts[event.target.value].title, event.target.value);
 
-  eSet('system_prompts', encPrompts);
+  eSet('system_prompts', encPrompts); // TODO verify this step is logically needed
   eSet('last_prompt', event.target.value);
 
   setDrawerOpen(false)

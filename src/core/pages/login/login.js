@@ -58,6 +58,8 @@ const Login = () => {
       const _open_ai_api_key = eGet("open_ai_api_key")
       const _open_ai_api_keys = eGet("open_ai_api_keys")
       const last_prompt = eGet('last_prompt');
+      const chats = eGet('chats');
+      const dencChats = JSON.parse(decrypt(chats, passwordInput))
 
       const dencPrompts = decryptPrompts(_system_prompts, passwordInput)
 
@@ -77,6 +79,7 @@ const Login = () => {
         last_prompt: last_prompt,
         active_system_prompt: dencPrompts[last_prompt],
         page: "chatbot",
+        chats: dencChats ? dencChats : []
       })
     } else {
       console.log("LOGIN: ERROR: password decryption unsuccessful");
