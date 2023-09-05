@@ -1,6 +1,7 @@
 import { useStore } from '../../zustand';
 import { eSet } from "../../utility/electronStore";
 import { encryptPrompts } from "../../utility/encryption";
+// ----------------------------------------------------------------------
 
 /**
  * Updates an existing chat or appends a new one to the array of chats

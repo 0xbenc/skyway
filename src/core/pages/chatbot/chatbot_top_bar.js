@@ -3,6 +3,10 @@ import React, { useEffect } from "react";
 import { useStore } from "../../zustand";
 //
 import { navigate } from "../../utility/navigatePage";
+import { Top } from "./chatbot_styles";
+import { OutlinePaper } from "../../mui/reusable";
+import { chatSelect } from "./chatbot_utility";
+import { isoToHuman } from "../../utility/time";
 //
 import {
   IconButton,
@@ -10,7 +14,6 @@ import {
   Box,
   Stack,
 } from "@mui/material";
-
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -27,11 +30,7 @@ import RateReviewIcon from '@mui/icons-material/RateReview';
 import SaveIcon from '@mui/icons-material/Save';
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
-//
-import { Top } from "./chatbot_styles";
-import { OutlinePaper } from "../../mui/reusable";
-import { chatSelect } from "./chatbot_utility";
-import { isoToHuman } from "../../utility/time";
+// ----------------------------------------------------------------------
 
 const TopBar = () => {
   const active_system_prompt_ = useStore.getState().active_system_prompt;

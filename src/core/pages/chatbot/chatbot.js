@@ -7,6 +7,10 @@ import { fetchChatCompletion } from "../../utility/fetchData";
 import { isoToHuman, unixToISO } from "../../utility/time";
 import error from "../../utility/error";
 import generateKeyV4 from "../../utility/uuid";
+import { LeftBox, RightBox, LeftChatBox, RightChatBox, ChatField, Middle, Bottom } from "./chatbot_styles";
+import TopBar from "./chatbot_top_bar";
+import { FormattedLeftResponse, FormattedRightResponse } from "./chatbot_components";
+import { chatSync } from "./chatbot_utility";
 //
 import {
   FormControl,
@@ -22,11 +26,7 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import SendIcon from '@mui/icons-material/Send';
 import EditIcon from "@mui/icons-material/Edit";
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
-//
-import { LeftBox, RightBox, LeftChatBox, RightChatBox, ChatField, Middle, Bottom } from "./chatbot_styles";
-import TopBar from "./chatbot_top_bar";
-import { FormattedLeftResponse, FormattedRightResponse } from "./chatbot_components";
-import { chatSync } from "./chatbot_utility";
+// ----------------------------------------------------------------------
 
 const Chatbot = () => {
   const inputRef = useRef();

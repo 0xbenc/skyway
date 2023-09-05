@@ -1,14 +1,14 @@
 import React from "react";
 //
-import {
-  Typography,
-  Box,
-} from "@mui/material";
-//
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { materialDark, materialLight } from 'react-syntax-highlighter/dist/esm/styles/prism'
+//
+import {
+  Box,
+} from "@mui/material";
+// ----------------------------------------------------------------------
 
 const FormattedLeftResponse = ({ content, color_mode }) => {
   return <Box sx={{ wordWrap: 'break-word', overflowX: "auto", marginY: -1 }}>
