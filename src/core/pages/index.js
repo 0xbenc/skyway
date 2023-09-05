@@ -6,7 +6,7 @@ import Login from "./login";
 import SystemPrompts from "./systemPrompts";
 import SystemPrompt from "./systemPrompt";
 import NewSystemPrompt from "./newSystemPrompt";
-import NewChat from "./newChat";
+import Chatbot from "./chatbot";
 import Recovery from "./recovery";
 import ChangeAPIKey from "./changeAPIKey";
 
@@ -16,12 +16,12 @@ const HandlePages = () => {
   return (
     <>
       {page === "login" && <Login />}
-      {page === "system_prompts" && <SystemPrompts />}
-      {page === "system_prompt" && <SystemPrompt />}
-      {page === "new_system_prompt" && <NewSystemPrompt />}
-      {page === "chatbot" && <NewChat />}
       {page === "recovery" && <Recovery />}
+      {page === "chatbot" && <Chatbot />}
       {page === "change_api_key" && <ChangeAPIKey />}
+      {page === "system_prompts" && <SystemPrompts />}
+      {page === "new_system_prompt" && <NewSystemPrompt />}
+      {page === "system_prompt" && <SystemPrompt />}
     </>
   );
 };
