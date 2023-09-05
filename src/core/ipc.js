@@ -1,11 +1,13 @@
 import { useEffect } from "react";
-import { switchColor } from "./utility/switchColor";
+//
 import { useStore } from "./zustand";
+//
+import { switchColor } from "./utility/switchColor";
 import { eSet } from "./utility/electronStore";
 import { encryptPrompts } from "./utility/encryption";
+// ----------------------------------------------------------------------
 
 const HandleIPC = () => {
-
   useEffect(() => {
     window.ipc.on("new chat", () => {
       console.log("inside new chat")

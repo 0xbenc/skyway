@@ -1,6 +1,7 @@
 import React from "react";
 //
 import { navigate } from "../utility/navigatePage";
+import { OutlinePaper } from "../mui/reusable";
 //
 import {
   Typography,
@@ -10,9 +11,6 @@ import {
 } from "@mui/material";
 //
 import ArrowBackIcon from "@mui/icons-material/ArrowBack"
-//
-import { OutlinePaper } from "../mui/reusable";
-
 // ----------------------------------------------------------------------
 
 const Title = ({ value }) => {
