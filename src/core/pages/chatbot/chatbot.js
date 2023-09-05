@@ -71,7 +71,7 @@ const Chatbot = () => {
     const activeSystemPrompt_ = { role: "system", content: active_system_prompt_.prompt };
     const userPrompt_ = { role: "user", content: userMessageInput };
 
-    const shortChatTitle = userMessageInput.length > 22 ? `${String(userMessageInput).substring(0, 22)}...` : String(userMessageInput).substring(0, 22);
+    const shortChatTitle = userMessageInput.length > 31 ? `${String(userMessageInput).substring(0, 31)}...` : String(userMessageInput).substring(0, 31);
 
     if (chatTitle === "none") {
       setChatTitle(shortChatTitle);

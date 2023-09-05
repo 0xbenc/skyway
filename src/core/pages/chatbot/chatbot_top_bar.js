@@ -22,7 +22,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import MenuIcon from '@mui/icons-material/Menu';
 import Divider from "@mui/material/Divider";
-import { MenuItem, Menu, Tooltip } from "@mui/material";
+import { MenuItem, Menu, Tooltip, Grid } from "@mui/material";
 //
 import HttpsIcon from '@mui/icons-material/Https';
 import ChatIcon from '@mui/icons-material/Chat';
@@ -30,6 +30,8 @@ import RateReviewIcon from '@mui/icons-material/RateReview';
 import SaveIcon from '@mui/icons-material/Save';
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 // ----------------------------------------------------------------------
 
 const TopBar = () => {
@@ -86,7 +88,7 @@ const TopBar = () => {
   const DrawerContents = () => (
     <Box
       sx={{
-        width: 250,
+        width: "25vw",
         display: 'flex', // Added: Using Flex container
         flexDirection: 'column', // Added: Flex direction set to column
         overflow: "hidden"
@@ -140,12 +142,30 @@ const TopBar = () => {
           overflow: 'auto'
         }}
       >
-        <List>
-          {chats.slice().reverse().map((text, index) => (
-            <ListItem key={index} disablePadding sx={(theme) => ({ backgroundColor: text.uuid === current_chat ? theme.palette.primary.outside : theme.palette.primary.inside })}>
-              <ListItemButton disabled={text.uuid === current_chat ? true : false} onClick={() => { useStore.setState({ current_chat: text.uuid, active_system_prompt: text.prompt, chat_open: true }) }}>
-                <ListItemText primary={text.title} secondary={`${isoToHuman(text.lastActive)}`} />
-              </ListItemButton>
+        <List sx={{ overflowX: "hidden" }}>
+          {chats.slice().reverse().map((chat, index) => (
+            <ListItem key={index} disablePadding sx={(theme) => ({ backgroundColor: chat.uuid === current_chat ? theme.palette.primary.outside : theme.palette.primary.inside })}>
+              <Grid container>
+                <Grid item xs={10}>
+                  <ListItemButton disabled={chat.uuid === current_chat ? true : false} onClick={() => { useStore.setState({ current_chat: chat.uuid, active_system_prompt: chat.prompt, chat_open: true }) }}>
+                    <ListItemText primary={chat.title} secondary={`${isoToHuman(chat.lastActive)}`} />
+                  </ListItemButton>
+                </Grid>
+                <Grid item xs={1} container alignItems="center">
+                  <Tooltip title="Rename Chat">
+                    <ListItemIcon>
+                      <EditIcon />
+                    </ListItemIcon>
+                  </Tooltip>
+                </Grid>
+                <Grid item xs={1} container alignItems="center">
+                  <Tooltip title="Delete Chat">
+                    <ListItemIcon>
+                      <DeleteIcon />
+                    </ListItemIcon>
+                  </Tooltip>
+                </Grid>
+              </Grid>
             </ListItem>
           ))}
         </List>
