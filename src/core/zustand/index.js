@@ -4,7 +4,7 @@ import { create } from 'zustand';
 export const useStore = create(() => {
   return {
     /* pages:
-      login, landing, system_prompts, 
+      login, system_prompts, 
       system_prompt, new_system_prompt, chatbot, 
       recovery, change_api_key
     */
@@ -25,35 +25,38 @@ export const useStore = create(() => {
     // MUI 5 theme color mode
     color_mode: "light",
 
-    // decrypted OpenAI API Key
+    // decrypted OpenAI API Key active
     open_ai_api_key: "missing",
+    
+    // decrypted OpenAI API Key list 
     open_ai_api_keys: [],
 
     // decrypted password
     password: "missing",
 
-    // current conversation tokens
+    // current conversation token count
     token_count: 0,
 
-    // Tracks which prompt was used last
+    // tracks which prompt was used last
     last_prompt: 1,
     
     // resets the chat if you file -> new while already chatting
     chat_reset: false,
 
-    // placeholder
+    // this trigger turns to true when the user choose to re-open a previous conversation
     chat_open: false,
 
-    // placeholder
+    // stores all conversations, includes the system prompt that was used per chat
+    // conversation, timeStamps, uuid, title, prompt, total_tokens, lastActive
     chats: [],
 
     // uuid
     current_chat: "none",
 
-    //placeholder
+    // true if the prompt of the current conversation is saved in the library
     prompt_save_status: true,
 
-    //used outside newchat
+    //used outside newchat to disable UI elements
     busy_ui: false,
 
     // true if not a release build

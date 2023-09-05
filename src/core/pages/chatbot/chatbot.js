@@ -266,7 +266,7 @@ const Chatbot = () => {
     };
   }, [chat_reset, busyUI]);
 
-  // Placeholder
+  // Handles the selection of a previous chat
   useEffect(() => {
     if (chat_open && !busyUI) {
       useStore.setState({ chat_open: false });
