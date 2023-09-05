@@ -4,6 +4,11 @@ import { useStore } from "../../zustand";
 //
 import { previewText } from "../../utility/string";
 import { navigate } from "../../utility/navigatePage";
+import { BasicBox, OutlinePaper } from "../../mui/reusable";
+import { deleteSystemPrompt } from "./systemPrompts_utility";
+import Title from "../../components/title";
+import { eSet } from "../../utility/electronStore";
+import { encryptPrompts } from "../../utility/encryption";
 //
 import {
   Grid,
@@ -12,13 +17,6 @@ import {
   Chip,
   Stack,
 } from "@mui/material";
-//
-import { BasicBox, OutlinePaper } from "../../mui/reusable";
-import { deleteSystemPrompt } from "./systemPrompts_utility";
-import Title from "../../components/title";
-
-import { eSet } from "../../utility/electronStore";
-import { encryptPrompts } from "../../utility/encryption";
 // ----------------------------------------------------------------------
 
 const cleanString = (str) => {

@@ -1,7 +1,6 @@
 import React from "react"
 //
 import SystemPrompts from "./systemPrompts";
-
 // ----------------------------------------------------------------------
 
 const SystemPromptsPage = () => {

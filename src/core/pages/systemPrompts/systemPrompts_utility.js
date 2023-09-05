@@ -2,7 +2,6 @@ import { useStore } from "../../zustand";
 //
 import { encryptPrompts } from "../../utility/encryption";
 import { eSet } from "../../utility/electronStore";
-
 // ----------------------------------------------------------------------
 
 const deleteSystemPrompt = (index) => {
