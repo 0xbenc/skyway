@@ -8,7 +8,7 @@ import SystemPrompt from "./systemPrompt";
 import NewSystemPrompt from "./newSystemPrompt";
 import Chatbot from "./chatbot";
 import Recovery from "./recovery";
-import ChangeAPIKey from "./changeAPIKey";
+import ChangeAPIKey from "./change_api_key";
 
 const HandlePages = () => {
   const page = useStore(state => state.page);
@@ -18,7 +18,7 @@ const HandlePages = () => {
       {page === "login" && <Login />}
       {page === "recovery" && <Recovery />}
       {page === "chatbot" && <Chatbot />}
-      {page === "change_api_key" && <ChangeAPIKey />}
+      {page === "change api key" && <ChangeAPIKey />}
       {page === "system_prompts" && <SystemPrompts />}
       {page === "new_system_prompt" && <NewSystemPrompt />}
       {page === "system_prompt" && <SystemPrompt />}

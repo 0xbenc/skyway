@@ -56,7 +56,7 @@ const TopBar = () => {
   };
 
   const navAPIKey = () => {
-    navigate("change_api_key")
+    navigate("change api key")
   };
 
   const navSystemPrompts = () => {
