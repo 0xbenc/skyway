@@ -1,5 +1,6 @@
 const { default: generateKeyV4 } = require('./uuid');
 // Uses require because the function is called by src/main.js
+// ----------------------------------------------------------------------
 
 const migration_1_1_0 = (store) => {
   const system_prompts = store.get("system_prompts");

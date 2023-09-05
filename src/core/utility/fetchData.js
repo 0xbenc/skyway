@@ -1,4 +1,5 @@
 import { useStore } from "../zustand";
+// ----------------------------------------------------------------------
 
 const fetchChatCompletion = async (messages, model, params) => {
   const data = {

@@ -4,6 +4,7 @@ const Store = require('electron-store');
 const axios = require('axios');
 const fs = require('fs');
 const { migration_1_1_0, migration_1_2_0, migration_1_3_0 } = require('./core/utility/migrations');
+// ----------------------------------------------------------------------
 
 //Helpers START
 const getFileName = (filePath) => {

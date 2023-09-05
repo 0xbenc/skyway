@@ -2,7 +2,6 @@ import { useStore } from "../../zustand";
 //
 import { eSet } from "../../utility/electronStore";
 import { encryptPrompts } from "../../utility/encryption";
-
 // ----------------------------------------------------------------------
 
 const newChatSelect = (event, setAnc, system_prompts) => {

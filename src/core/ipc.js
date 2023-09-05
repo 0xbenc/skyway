@@ -15,7 +15,6 @@ const HandleIPC = () => {
       const page = useStore.getState().page;
       const password_ = useStore.getState().password_;
 
-
       if (system_prompts.length) {
         if (page === "chatbot") {
           useStore.setState({ chat_reset: true });
@@ -29,8 +28,6 @@ const HandleIPC = () => {
           systems[last_prompt].usedDate = usedDateISO;
 
           const encPrompts = encryptPrompts(systems, password_);
-
-          // console.log("NAVIGATION: chatbot", system_prompts[last_prompt].title);
 
           eSet("system_prompts", encPrompts);
 

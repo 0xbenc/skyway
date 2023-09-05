@@ -1,4 +1,5 @@
 import CryptoJS from "crypto-js";
+// ----------------------------------------------------------------------
 
 const decrypt = (str, password) => {
   try {
