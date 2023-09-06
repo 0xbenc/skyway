@@ -10,10 +10,9 @@ import { encryptPrompts } from "./utility/encryption";
 const HandleIPC = () => {
   useEffect(() => {
     window.ipc.on("new chat", () => {
-      console.log("inside new chat")
       const system_prompts = useStore.getState().system_prompts;
       const page = useStore.getState().page;
-      const password_ = useStore.getState().password_;
+      const password_ = useStore.getState().password;
 
       if (system_prompts.length) {
         if (page === "chatbot") {

@@ -10,7 +10,6 @@ import { encrypt, encryptPrompts } from "../../utility/encryption";
  * @property {string} chat.uuid - identifies unique chats
  */
 const chatSync = (chat) => {
-  console.log("here")
   const { chats, password } = useStore.getState();
 
   const index = chats.findIndex((item) => item.uuid === chat.uuid);
@@ -26,6 +25,23 @@ const chatSync = (chat) => {
   const encCopy = encrypt(copy, password)
   
   useStore.setState({ chats: updatedChats, current_chat: chat.uuid });
+  eSet('chats', encCopy);
+};
+
+const chatDelete = (uuid) => {
+  const { chats, password } = useStore.getState();
+
+  const index = chats.findIndex((item) => item.uuid === uuid);
+  let updatedChats = [...chats];
+
+  if (index !== -1) {
+    updatedChats.splice(index, 1);
+  };
+
+  const copy = JSON.stringify([...updatedChats]);
+  const encCopy = encrypt(copy, password);
+  
+  useStore.setState({ chats: updatedChats });
   eSet('chats', encCopy);
 };
 
@@ -58,4 +74,4 @@ const chatSelect = (event, setAnc, system_prompts, setDrawerOpen) => {
 };
 
 
-export {chatSync, chatSelect};
+export {chatSync, chatSelect, chatDelete};

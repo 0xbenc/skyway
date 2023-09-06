@@ -5,7 +5,7 @@ import { useStore } from "../../zustand";
 import { navigate } from "../../utility/navigatePage";
 import { Top } from "./chatbot_styles";
 import { OutlinePaper } from "../../mui/reusable";
-import { chatSelect } from "./chatbot_utility";
+import { chatDelete, chatSelect } from "./chatbot_utility";
 import { isoToHuman } from "../../utility/time";
 //
 import {
@@ -115,7 +115,7 @@ const TopBar = () => {
             <ListItemIcon>
               <SwapHorizIcon />
             </ListItemIcon>
-            <ListItemText primary={"Switch Prompt"} />
+            <ListItemText primary={"Change Prompt"} />
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
@@ -162,7 +162,7 @@ const TopBar = () => {
                   <Grid item xs={1} container alignItems="center">
                     <Tooltip title="Delete Chat">
                       <span>
-                        <IconButton disabled={chat.uuid === current_chat ? true : false}>
+                        <IconButton disabled={chat.uuid === current_chat ? true : false} onClick={(event) => {event.stopPropagation(); chatDelete(chat.uuid)}}>
                           <DeleteIcon />
                         </IconButton>
                       </span>
