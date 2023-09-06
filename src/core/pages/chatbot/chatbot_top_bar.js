@@ -145,27 +145,31 @@ const TopBar = () => {
         <List sx={{ overflowX: "hidden" }}>
           {chats.slice().reverse().map((chat, index) => (
             <ListItem key={index} disablePadding sx={(theme) => ({ backgroundColor: chat.uuid === current_chat ? theme.palette.primary.outside : theme.palette.primary.inside })}>
-              <Grid container>
-                <Grid item xs={10}>
-                  <ListItemButton disabled={chat.uuid === current_chat ? true : false} onClick={() => { useStore.setState({ current_chat: chat.uuid, active_system_prompt: chat.prompt, chat_open: true }) }}>
-                    <ListItemText primary={chat.title} secondary={`${isoToHuman(chat.lastActive)}`} />
-                  </ListItemButton>
+              <Box sx={{ width: "100%" }} marginRight={1}>
+                <Grid container>
+                  <Grid item xs={10}>
+                    <ListItemButton disabled={chat.uuid === current_chat ? true : false} onClick={() => { useStore.setState({ current_chat: chat.uuid, active_system_prompt: chat.prompt, chat_open: true }) }}>
+                      <ListItemText primary={chat.title} secondary={`${isoToHuman(chat.lastActive)} | ${chat.prompt.model}`} />
+                    </ListItemButton>
+                  </Grid>
+                  <Grid item xs={1} container alignItems="center">
+                    <Tooltip title="Rename Chat">
+                      <IconButton>
+                        <EditIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </Grid>
+                  <Grid item xs={1} container alignItems="center">
+                    <Tooltip title="Delete Chat">
+                      <span>
+                        <IconButton disabled={chat.uuid === current_chat ? true : false}>
+                          <DeleteIcon />
+                        </IconButton>
+                      </span>
+                    </Tooltip>
+                  </Grid>
                 </Grid>
-                <Grid item xs={1} container alignItems="center">
-                  <Tooltip title="Rename Chat">
-                    <ListItemIcon>
-                      <EditIcon />
-                    </ListItemIcon>
-                  </Tooltip>
-                </Grid>
-                <Grid item xs={1} container alignItems="center">
-                  <Tooltip title="Delete Chat">
-                    <ListItemIcon>
-                      <DeleteIcon />
-                    </ListItemIcon>
-                  </Tooltip>
-                </Grid>
-              </Grid>
+              </Box>
             </ListItem>
           ))}
         </List>
