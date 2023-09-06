@@ -145,11 +145,11 @@ const TopBar = () => {
         <List sx={{ overflowX: "hidden" }}>
           {chats.slice().reverse().map((chat, index) => (
             <ListItem key={index} disablePadding sx={(theme) => ({ backgroundColor: chat.uuid === current_chat ? theme.palette.primary.outside : theme.palette.primary.inside })}>
-              <Box sx={{ width: "100%" }} marginRight={1}>
+              <Box sx={{ width: "100%" }} marginRight={1.5}>
                 <Grid container>
                   <Grid item xs={10}>
                     <ListItemButton disabled={chat.uuid === current_chat ? true : false} onClick={() => { useStore.setState({ current_chat: chat.uuid, active_system_prompt: chat.prompt, chat_open: true }) }}>
-                      <ListItemText primary={chat.title} secondary={`${isoToHuman(chat.lastActive)} | ${chat.prompt.model}`} />
+                      <ListItemText primary={chat.title} secondary={`${isoToHuman(chat.lastActive)} | ${chat.prompt.title}`} />
                     </ListItemButton>
                   </Grid>
                   <Grid item xs={1} container alignItems="center">
