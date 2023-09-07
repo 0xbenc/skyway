@@ -5,7 +5,7 @@ import { useStore } from "../../zustand";
 import { navigate } from "../../utility/navigatePage";
 import { Top } from "./chatbot_styles";
 import { OutlinePaper } from "../../mui/reusable";
-import { chatDelete, chatSelect } from "./chatbot_utility";
+import { chatDelete, chatSelect, chatSync } from "./chatbot_utility";
 import { isoToHuman } from "../../utility/time";
 //
 import {
@@ -13,6 +13,7 @@ import {
   Typography,
   Box,
   Stack,
+  Button,
 } from "@mui/material";
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -22,7 +23,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import MenuIcon from '@mui/icons-material/Menu';
 import Divider from "@mui/material/Divider";
-import { MenuItem, Menu, Tooltip, Grid } from "@mui/material";
+import { MenuItem, Menu, Tooltip, Grid, Dialog, DialogTitle, FormControl, TextField, DialogContent, DialogActions } from "@mui/material";
 //
 import HttpsIcon from '@mui/icons-material/Https';
 import ChatIcon from '@mui/icons-material/Chat';
@@ -49,6 +50,34 @@ const TopBar = () => {
   const busy_ui = useStore(state => state.busy_ui);
 
   const [drawerOpen, setDrawerOpen] = React.useState(false);
+  const [renameDialogOpen, setRenameDialogOpen] = React.useState(false);
+  const [renameDialogInput, setRenameDialogInput] = React.useState("");
+  const [renameDialogIndex, setRenameDialogIndex] = React.useState(-1);
+
+  const handleRenameDialogOpen = (e, index) => {
+    console.log(index, chats[chats.length - index - 1].title)
+    
+    e.stopPropagation();
+    setRenameDialogIndex(chats.length - index - 1)
+    setRenameDialogOpen(true);
+    setRenameDialogInput(chats[chats.length - index - 1].title);
+  };
+
+  const handleRenameDialogCloseOut = () => {
+    setRenameDialogInput("");
+    setRenameDialogOpen(false);
+  };
+
+  const handleRenameDialogSave = () => {
+    let newChats = [...chats];
+    newChats[renameDialogIndex].title = renameDialogInput;
+    chatSync(newChats[renameDialogIndex])
+    setRenameDialogOpen(false);
+  };
+
+  const handleRenameDialogInput = (e) => {
+    setRenameDialogInput(e.target.value)
+  };
 
   const toggleChatDrawer = (tf) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) return;
@@ -154,7 +183,7 @@ const TopBar = () => {
                   </Grid>
                   <Grid item xs={1} container alignItems="center">
                     <Tooltip title="Rename Chat">
-                      <IconButton>
+                      <IconButton onClick={(e) => { handleRenameDialogOpen(e, index) }}>
                         <EditIcon />
                       </IconButton>
                     </Tooltip>
@@ -162,7 +191,7 @@ const TopBar = () => {
                   <Grid item xs={1} container alignItems="center">
                     <Tooltip title="Delete Chat">
                       <span>
-                        <IconButton disabled={chat.uuid === current_chat ? true : false} onClick={(event) => {event.stopPropagation(); chatDelete(chat.uuid)}}>
+                        <IconButton disabled={chat.uuid === current_chat ? true : false} onClick={(event) => { event.stopPropagation(); chatDelete(chat.uuid) }}>
                           <DeleteIcon />
                         </IconButton>
                       </span>
@@ -299,6 +328,40 @@ const TopBar = () => {
           )
         })}
       </Menu>
+
+      <Dialog fullWidth onClose={handleRenameDialogCloseOut} open={renameDialogOpen}>
+        <DialogTitle>Rename your chat</DialogTitle>
+        <DialogContent>
+          <FormControl fullWidth>
+            <TextField
+              id="rename-zone"
+              label="Chat Title"
+              variant="filled"
+              value={renameDialogInput}
+              onChange={handleRenameDialogInput}
+              required={true}
+              fullWidth
+            >
+            </TextField>
+          </FormControl>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="text"
+            color="secondary"
+            onClick={handleRenameDialogCloseOut}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="outlined"
+            color="secondary"
+            onClick={handleRenameDialogSave}
+          >
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Top>
   );
 };
