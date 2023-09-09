@@ -33,6 +33,8 @@ import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import IosShareIcon from '@mui/icons-material/IosShare';
+import FileOpenIcon from '@mui/icons-material/FileOpen';
 // ----------------------------------------------------------------------
 
 const TopBar = () => {
@@ -117,7 +119,7 @@ const TopBar = () => {
   const DrawerContents = () => (
     <Box
       sx={{
-        width: "25vw",
+        width: "33vw",
         display: 'flex', // Added: Using Flex container
         flexDirection: 'column', // Added: Flex direction set to column
         overflow: "hidden"
@@ -137,6 +139,14 @@ const TopBar = () => {
               <ChatIcon />
             </ListItemIcon>
             <ListItemText primary={"New Chat"} />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton onClick={newChat}>
+            <ListItemIcon>
+              <FileOpenIcon />
+            </ListItemIcon>
+            <ListItemText primary={"Import Chat"} />
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
@@ -176,7 +186,7 @@ const TopBar = () => {
             <ListItem key={index} disablePadding sx={(theme) => ({ backgroundColor: chat.uuid === current_chat ? theme.palette.primary.outside : theme.palette.primary.inside })}>
               <Box sx={{ width: "100%" }} marginRight={1.5}>
                 <Grid container>
-                  <Grid item xs={10}>
+                  <Grid item xs={9}>
                     <ListItemButton disabled={chat.uuid === current_chat ? true : false} onClick={() => { useStore.setState({ current_chat: chat.uuid, active_system_prompt: chat.prompt, chat_open: true }) }}>
                       <ListItemText primary={chat.title} secondary={`${isoToHuman(chat.lastActive)} | ${chat.prompt.title}`} />
                     </ListItemButton>
@@ -185,6 +195,13 @@ const TopBar = () => {
                     <Tooltip title="Rename Chat">
                       <IconButton onClick={(e) => { handleRenameDialogOpen(e, index) }}>
                         <EditIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </Grid>
+                  <Grid item xs={1} container alignItems="center">
+                    <Tooltip title="Export Chat">
+                      <IconButton onClick={(e) => { console.log(e, "layout") }}>
+                        <IosShareIcon />
                       </IconButton>
                     </Tooltip>
                   </Grid>
