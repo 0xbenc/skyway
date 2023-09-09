@@ -186,9 +186,11 @@ const createWindow = () => {
   });
 
   ipcMain.on('save-json', (_, args) => {
-    fs.writeFile(`${args.dir}/${args.filename}.json`, args.jsonstr, (err) => {
-      if (err) throw err;
-    });
+    if (args.dir) {  // Only proceed if dir is not undefined
+      fs.writeFile(`${args.dir}/${args.filename}.json`, args.jsonstr, (err) => {
+        if (err) throw err;
+      });
+    }
   });
 };
 

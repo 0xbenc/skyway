@@ -64,7 +64,7 @@ const SystemPrompts = () => {
             let newPrompts = [...system_prompts];
 
             potentialPrompt.importedDate = importedDateISO;
-            
+
             newPrompts.push(potentialPrompt);
 
             const password_ = useStore.getState().password;
@@ -82,6 +82,9 @@ const SystemPrompts = () => {
   const ExportPrompt = (index) => {
     const exporter = async (index) => {
       const dir = await window.electron.engine.dialog_choose_directory();
+      if (!dir) {
+        return;  // Cancelled directory choice, exit exporter function
+      }
       const jsonstr = JSON.stringify(system_prompts[index]);
       const title = system_prompts[index].title;
       const cleanTitle = cleanString(title);
@@ -92,8 +95,6 @@ const SystemPrompts = () => {
       };
 
       window.electron.engine.send('save-json', args);
-
-      return dir;
     };
 
     exporter(index);
