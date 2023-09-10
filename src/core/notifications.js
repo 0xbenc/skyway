@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
+//
 import { SnackbarProvider, useSnackbar } from 'notistack';
 import { useStore } from './zustand';
 
-function MyApp() {
+const Notify = () => {
   const { enqueueSnackbar } = useSnackbar();
 
   const notification_alarm = useStore(state => state.notification_alarm);
@@ -16,12 +17,14 @@ function MyApp() {
   }, [notification_message, notification_alarm])
 
   return null;
-}
+};
 
-export default function IntegrationNotistack() {
+const HandleNotifications = () => {
   return (
     <SnackbarProvider maxSnack={5}>
-      <MyApp />
+      <Notify />
     </SnackbarProvider>
   );
-}
+};
+
+export default HandleNotifications;

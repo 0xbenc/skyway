@@ -193,10 +193,12 @@ const ChangeAPIKey = () => {
       setNetStatus(true);
       setNetKey(key);
       console.log("API KEY: key is valid")
+      useStore.getState().addNotification("API Key Successfully Connected")
     } else {
       setNetStatus(false);
       setNetKey(key);
       console.log("API KEY: ERROR: key is not valid")
+      useStore.getState().addNotification("API Key Connection Failure")
     };
   };
 
