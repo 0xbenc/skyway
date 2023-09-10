@@ -5,15 +5,15 @@ import { useStore } from './zustand';
 function MyApp() {
   const { enqueueSnackbar } = useSnackbar();
 
-  const alarm = useStore(state => state.alarm);
-  const message = useStore(state => state.message);
+  const notification_alarm = useStore(state => state.notification_alarm);
+  const notification_message = useStore(state => state.notification_message);
 
   useEffect(() => {
-    if (alarm) {
-      enqueueSnackbar(message);
-      useStore.setState({ alarm: false, message: "" })
+    if (notification_alarm) {
+      enqueueSnackbar(notification_message);
+      useStore.setState({ notification_alarm: false, notification_message: "" })
     }
-  }, [message, alarm])
+  }, [notification_message, notification_alarm])
 
   return null;
 }

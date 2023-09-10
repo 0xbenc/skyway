@@ -59,9 +59,15 @@ const Login = () => {
       const _open_ai_api_keys = eGet("open_ai_api_keys")
       const last_prompt = eGet('last_prompt');
       const chats = eGet('chats');
-      const dencChats = JSON.parse(decrypt(chats, passwordInput))
+      let dencChats;
 
-      const dencPrompts = decryptPrompts(_system_prompts, passwordInput)
+      if (chats.length === 0) {
+        dencChats = [];
+      } else {
+        dencChats = JSON.parse(decrypt(chats, passwordInput));
+      };
+
+      const dencPrompts = decryptPrompts(_system_prompts, passwordInput);
 
       let decryptedKeys = [];
 
@@ -83,8 +89,8 @@ const Login = () => {
       })
     } else {
       console.log("LOGIN: ERROR: password decryption unsuccessful");
-      setBadPassword(true)
-      useStore.setState({ message: "Bad Login", alarm: true });
+      setBadPassword(true);
+      useStore.getState().addNotification("Incorrect Password");
     };
   };
 
@@ -122,6 +128,7 @@ const Login = () => {
     eSet('password_set', true); //
     eSet("integrity_check", ciphertext) //
     eSet("system_prompts", encPrompts) //
+    eSet("chats", []);
     eSet('open_ai_api_keys', [{ key: cipherAPI, name: "default" }]) //
 
     useStore.setState({
@@ -188,9 +195,6 @@ const Login = () => {
               <Typography variant="h4">
                 Enter Password:
               </Typography>
-              {badPassword && <Typography variant="h6">
-                Incorrect Password, Try Again:
-              </Typography>}
               <Stack direction="row" spacing={1}>
                 <TextField
                   id="user-input"

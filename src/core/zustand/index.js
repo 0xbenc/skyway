@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 // ----------------------------------------------------------------------
 
-export const useStore = create(() => {
+export const useStore = create((set) => {
   return {
     /* pages:
       login, system_prompts, 
@@ -59,8 +59,10 @@ export const useStore = create(() => {
     //used outside newchat to disable UI elements
     busy_ui: false,
 
-    alarm: false,
-    message: "",
+    // powers notistack
+    notification_alarm: false,
+    notification_message: "",
+    addNotification: (messageText) => set({ notification_message: messageText, notification_alarm: true }),
 
     // true if not a release build
     dev_mode: true
