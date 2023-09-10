@@ -9,6 +9,7 @@ import { deleteSystemPrompt } from "./systemPrompts_utility";
 import Title from "../../components/title";
 import { eSet } from "../../utility/electronStore";
 import { encryptPrompts } from "../../utility/encryption";
+import { cleanFileTitle } from "../../utility/string";
 //
 import {
   Grid,
@@ -18,20 +19,6 @@ import {
   Stack,
 } from "@mui/material";
 // ----------------------------------------------------------------------
-
-const cleanString = (str) => {
-  let cleanedStr = str
-    .trim()
-    .replace(/\s/g, '_')
-    .toLowerCase()
-    .replace(/[^a-z0-9_]/g, '_');
-
-  if (cleanedStr.endsWith('_')) {
-    cleanedStr = cleanedStr.slice(0, -1);
-  };
-
-  return cleanedStr;
-};
 
 const SystemPrompts = () => {
   const system_prompts = useStore(state => state.system_prompts)
@@ -87,7 +74,7 @@ const SystemPrompts = () => {
       }
       const jsonstr = JSON.stringify(system_prompts[index]);
       const title = system_prompts[index].title;
-      const cleanTitle = cleanString(title);
+      const cleanTitle = cleanFileTitle(title);
       const args = {
         dir: dir,
         jsonstr: jsonstr,

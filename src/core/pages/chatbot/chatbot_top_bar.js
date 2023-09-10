@@ -6,6 +6,7 @@ import { navigate } from "../../utility/navigatePage";
 import { Top } from "./chatbot_styles";
 import { OutlinePaper } from "../../mui/reusable";
 import { chatDelete, chatSelect, chatSync } from "./chatbot_utility";
+import { cleanFileTitle } from "../../utility/string";
 import { isoToHuman } from "../../utility/time";
 //
 import {
@@ -58,7 +59,7 @@ const TopBar = () => {
 
   const handleRenameDialogOpen = (e, index) => {
     console.log(index, chats[chats.length - index - 1].title)
-    
+
     e.stopPropagation();
     setRenameDialogIndex(chats.length - index - 1)
     setRenameDialogOpen(true);
@@ -114,6 +115,39 @@ const TopBar = () => {
 
   const switchPromptSelect = (e) => {
     chatSelect(e, setAnc, system_prompts_, setDrawerOpen)
+  };
+
+  const ExportChat = (uuid) => {
+    const exporter = async (uuid) => {
+      const dir = await window.electron.engine.dialog_choose_directory();
+      if (!dir) {
+        return;  // Cancelled directory choice, exit exporter function
+      }
+
+      let indexMatch = -1;
+
+      for (let i = 0; i < chats.length; i++) {
+        if (uuid === chats[i].uuid) {
+          indexMatch = i
+        };
+      };
+
+      if (indexMatch > -1) {
+        const chatCopy = [...chats];
+        const jsonstr = JSON.stringify(chatCopy[indexMatch]);
+        const title = chatCopy[indexMatch].title;
+        const cleanTitle = cleanFileTitle(title);
+        const args = {
+          dir: dir,
+          jsonstr: jsonstr,
+          filename: cleanTitle
+        };
+
+        window.electron.engine.send('save-json', args);
+      };
+    };
+
+    exporter(uuid);
   };
 
   const DrawerContents = () => (
@@ -200,7 +234,7 @@ const TopBar = () => {
                   </Grid>
                   <Grid item xs={1} container alignItems="center">
                     <Tooltip title="Export Chat">
-                      <IconButton onClick={(e) => { console.log(e, "layout") }}>
+                      <IconButton onClick={() => { ExportChat(chat.uuid) }}>
                         <IosShareIcon />
                       </IconButton>
                     </Tooltip>
