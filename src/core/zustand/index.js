@@ -59,6 +59,9 @@ export const useStore = create(() => {
     //used outside newchat to disable UI elements
     busy_ui: false,
 
+    alarm: false,
+    message: "",
+
     // true if not a release build
     dev_mode: true
   };

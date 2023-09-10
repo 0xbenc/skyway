@@ -5,6 +5,7 @@ import { useStore } from './zustand';
 import { light, dark } from "./mui/theme";
 import HandlePages from './pages';
 import HandleIPC from './ipc';
+import IntegrationNotistack from './notifications';
 //
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
@@ -24,6 +25,7 @@ const App = () => {
       <CssBaseline />
       <HandlePages />
       <HandleIPC />
+      <IntegrationNotistack />
     </ThemeProvider>
   );
 }

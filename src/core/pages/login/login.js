@@ -84,6 +84,7 @@ const Login = () => {
     } else {
       console.log("LOGIN: ERROR: password decryption unsuccessful");
       setBadPassword(true)
+      useStore.setState({ message: "Bad Login", alarm: true });
     };
   };
 
