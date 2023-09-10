@@ -55,6 +55,8 @@ const Chatbot = () => {
 
   const color_mode_ = useStore.getState().color_mode;
 
+  const version_ = useStore.getState().version
+
   const errorMessage = {
     role: "assistant",
     content: error
@@ -122,7 +124,8 @@ const Chatbot = () => {
       title: chatTitle === "none" ? shortChatTitle : chatTitle,
       prompt: active_system_prompt_,
       total_tokens: response.usage.total_tokens,
-      lastActive: newTimeStamps[newTimeStamps.length -1]
+      lastActive: newTimeStamps[newTimeStamps.length - 1],
+      skywayVersion: version_
     };
 
     chatSync(chat);
@@ -203,7 +206,8 @@ const Chatbot = () => {
       title: chatTitle,
       prompt: active_system_prompt_,
       total_tokens: response.usage.total_tokens,
-      lastActive: timeArray[timeArray.length -1]
+      lastActive: timeArray[timeArray.length - 1],
+      skywayVersion: version_
     };
 
     chatSync(chat);
