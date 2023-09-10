@@ -60,7 +60,10 @@ const SystemPrompts = () => {
 
             eSet("system_prompts", encPrompts);
 
-            useStore.setState({ system_prompts: newPrompts })
+            useStore.setState({ system_prompts: newPrompts });
+            useStore.getState().addNotification("System Prompt added to Library");
+          } else {
+            useStore.getState().addNotification("System Prompt already in Library");
           }
         }
       });
