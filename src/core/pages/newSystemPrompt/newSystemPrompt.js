@@ -112,6 +112,7 @@ const NewSystemPrompt = () => {
     const system_prompts_ = useStore.getState().system_prompts;
     const usedDate = new Date();
     const usedDateISO = String(usedDate.toISOString());
+    const version_ = useStore.getState().version;
 
     system_prompts_.push({
       title: titleInput,
@@ -126,7 +127,7 @@ const NewSystemPrompt = () => {
       createdDate: usedDateISO,
       importedDate: usedDateISO,
       usedDate: usedDateISO,
-      skywayVersion: "1.2.0"
+      skywayVersion: version_
     });
 
     const password_ = useStore.getState().password;

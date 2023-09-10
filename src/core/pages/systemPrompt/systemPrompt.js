@@ -23,6 +23,7 @@ import {
 const EditSystemPrompt = () => {
   const system_prompts_ = useStore.getState().system_prompts;
   const system_prompt_to_edit = useStore.getState().system_prompt_to_edit;
+  const version_ = useStore.getState().version;
 
   const [titleInput, setTitleInput] = useState(system_prompts_[system_prompt_to_edit].title);
 
@@ -126,7 +127,7 @@ const EditSystemPrompt = () => {
     system_prompts_[system_prompt_to_edit].importedDate = importedDateISO;
     system_prompts_[system_prompt_to_edit].createdDate = importedDateISO;
     system_prompts_[system_prompt_to_edit].usedDate = importedDateISO;
-    system_prompts_[system_prompt_to_edit].skywayVersion = "1.2.0"
+    system_prompts_[system_prompt_to_edit].skywayVersion = version_
 
     const password_ = useStore.getState().password;
 
