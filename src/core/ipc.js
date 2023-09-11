@@ -2,7 +2,7 @@ import { useEffect } from "react";
 //
 import { useStore } from "./zustand";
 //
-import { switchColor } from "./utility/switchColor";
+import { switchColorMode } from "./utility/colorMode";
 import { eSet } from "./utility/electronStore";
 import { encryptPrompts } from "./utility/encryption";
 // ----------------------------------------------------------------------
@@ -42,7 +42,7 @@ const HandleIPC = () => {
 
   useEffect(() => {
     window.ipc.on("toggle color", () => {
-      switchColor();
+      switchColorMode();
     });
   }, [])
 

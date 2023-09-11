@@ -3,7 +3,11 @@ import { useStore } from "../zustand";
 import { eSet } from "./electronStore";
 // ----------------------------------------------------------------------
 
-const switchColor = () => {
+/**
+ * Switches the color mode of the application between 'dark' and 'light'.
+ * Affects both real-time state and persistent disk storage.
+ */
+const switchColorMode = () => {
   const color_mode_ = useStore.getState().color_mode;
   if (color_mode_ === "dark") {
     console.log("THEME: light mode selected")
@@ -16,4 +20,4 @@ const switchColor = () => {
   };
 };
 
-export {switchColor};
+export { switchColorMode };
