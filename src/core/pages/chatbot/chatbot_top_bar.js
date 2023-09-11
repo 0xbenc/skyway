@@ -5,7 +5,7 @@ import { useStore } from "../../zustand";
 import { navigate } from "../../utility/navigatePage";
 import { Top } from "./chatbot_styles";
 import { OutlinePaper } from "../../mui/reusable";
-import { chatDelete, chatSelect, chatSync } from "./chatbot_utility";
+import { ImportChat, chatDelete, chatSelect, chatSync } from "./chatbot_utility";
 import { cleanFileTitle } from "../../utility/string";
 import { isoToHuman } from "../../utility/time";
 //
@@ -176,7 +176,7 @@ const TopBar = () => {
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
-          <ListItemButton onClick={newChat}>
+          <ListItemButton onClick={ImportChat}>
             <ListItemIcon>
               <FileOpenIcon />
             </ListItemIcon>
