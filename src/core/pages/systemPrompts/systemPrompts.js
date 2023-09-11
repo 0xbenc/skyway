@@ -16,7 +16,13 @@ import {
   Button,
   Chip,
   Stack,
+  Tooltip,
+  IconButton
 } from "@mui/material";
+//
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import IosShareIcon from '@mui/icons-material/IosShare';
 // ----------------------------------------------------------------------
 
 const SystemPrompts = () => {
@@ -71,14 +77,14 @@ const SystemPrompts = () => {
                   color="secondary"
                   onClick={() => { navigate("new_system_prompt") }}
                 >
-                  Create
+                  <b>Create</b>
                 </Button>
                 <Button
                   variant="outlined"
                   color="secondary"
                   onClick={ImportPrompt}
                 >
-                  Import
+                  <b>Import</b>
                 </Button>
               </Stack>
             </Grid>
@@ -95,9 +101,11 @@ const SystemPrompts = () => {
                       </Grid>
 
                       <Grid item sm={12}>
-                        <Typography variant="body1">
-                          {previewText(prompt.prompt, 150)}
-                        </Typography>
+                        <Tooltip title={prompt.prompt}>
+                          <Typography variant="body1">
+                            {previewText(prompt.prompt, 150)}
+                          </Typography>
+                        </Tooltip>
                       </Grid>
 
                       <Grid item sm={12}>
@@ -105,34 +113,25 @@ const SystemPrompts = () => {
                         <Chip label={prompt.engine} variant="outlined" sx={{ marginBottom: 1, marginLeft: 1 }} />
                       </Grid>
 
-                      {key > 1 && <Grid item sm={4}>
-                        <Button
-                          variant="outlined"
-                          color="secondary"
-                          onClick={() => { goSystemPromptPage(key) }}
-                        >
-                          Edit
-                        </Button>
-                      </Grid>}
-                      {key > 1 && <Grid item sm={4}>
-                        <Button
-                          variant="outlined"
-                          color="secondary"
-                          onClick={() => { deleteSystemPrompt(key) }}
-                        >
-                          Delete
-                        </Button>
-                      </Grid>}
-
-                      {key > 1 && <Grid item sm={4}>
-                        <Button
-                          variant="outlined"
-                          color="secondary"
-                          onClick={() => { ExportPrompt(key) }}
-                        >
-                          Export
-                        </Button>
-                      </Grid>}
+                      <Grid item sm={12}>
+                        <Stack direction="row">
+                          <Tooltip title="Edit System Prompt">
+                            <IconButton onClick={() => { goSystemPromptPage(key) }}>
+                              <EditIcon />
+                            </IconButton>
+                          </Tooltip>
+                          <Tooltip title="Export System Prompt">
+                            <IconButton onClick={() => { ExportPrompt(key) }}>
+                              <IosShareIcon />
+                            </IconButton>
+                          </Tooltip>
+                          <Tooltip title="Delete System Prompt">
+                            <IconButton onClick={() => { deleteSystemPrompt(key) }}>
+                              <DeleteIcon />
+                            </IconButton>
+                          </Tooltip>
+                        </Stack>
+                      </Grid>
                     </Grid>
                   </OutlinePaper>
                 </Grid>
