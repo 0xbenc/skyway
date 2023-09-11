@@ -1,5 +1,7 @@
 import React from "react";
 //
+import { useStore } from "../zustand";
+//
 import { navigate } from "../utility/navigatePage";
 import { OutlinePaper } from "../mui/reusable";
 //
@@ -20,7 +22,7 @@ const Title = ({ value }) => {
         <Box display="flex" alignItems="center">
           <IconButton
             aria-label="close"
-            onClick={() => { navigate("chatbot") }}
+            onClick={() => { useStore.setState({chat_reset: true}); navigate("chatbot") }}
             size="large"
           >
             <ArrowBackIcon fontSize="inheret"/>

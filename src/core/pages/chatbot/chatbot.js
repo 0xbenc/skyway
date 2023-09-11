@@ -239,7 +239,7 @@ const Chatbot = () => {
     };
   }, [scrollTime]);
 
-  // Handles autoscroll
+  // Handles autofocus cursor
   useEffect(() => {
     if (!busyUI) {
       inputRef.current.focus();
