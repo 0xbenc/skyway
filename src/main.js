@@ -1,9 +1,8 @@
 const { app, BrowserWindow, ipcMain, Menu, dialog } = require('electron');
 const path = require('path')
-const Store = require('electron-store');
+const store = require('./store');
 const axios = require('axios');
 const fs = require('fs');
-const { migration_1_1_0, migration_1_2_0, migration_1_3_0 } = require('./core/utility/migrations');
 // ----------------------------------------------------------------------
 
 //Helpers START
@@ -20,29 +19,6 @@ const getFolderPath = (filePath) => {
   return filePath.substring(0, lastSlashIndex);
 };
 //Helpers END
-
-const store = new Store({
-  migrations: {
-    '<1.0.1': store => {
-      store.set('version', '1.0.0')
-    },
-    '1.0.1': store => {
-      store.set('version', '1.0.1')
-    },
-    '1.1.0': store => {
-      migration_1_1_0(store)
-    },
-    '1.1.1': store => {
-      store.set('version', '1.1.1')
-    },
-    '1.2.0': store => {
-      migration_1_2_0(store)
-    },
-    '1.3.0': store => {
-      migration_1_3_0(store)
-    },
-  }
-});
 
 if (require('electron-squirrel-startup')) {
   app.quit();
@@ -71,7 +47,7 @@ const createWindow = () => {
       submenu: [
         {
           label: 'New Chat',
-          accelerator: 'Ctrl+N',
+          accelerator: process.platform === 'darwin' ? 'Cmd+N' : 'Ctrl+N',
           click: () => {
             mainWindow.webContents.send("new chat");
           }
@@ -105,7 +81,7 @@ const createWindow = () => {
         { role: 'togglefullscreen' },
         {
           label: 'Toggle Color Mode',
-          accelerator: 'Ctrl+Shift+C',
+          accelerator: process.platform === 'darwin' ? 'Cmd+Shift+C' : 'Ctrl+Shift+C',
           click: () => {
             mainWindow.webContents.send("toggle color");
           }
