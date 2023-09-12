@@ -265,8 +265,8 @@ const Chatbot = () => {
   // Handles reset from [File -> New Chat] / [Ctrl + N]
   useEffect(() => {
     if (chat_reset && !busyUI) {
-      useStore.setState({ chat_reset: false });
       setJustOnce(false);
+      useStore.setState({ chat_reset: false });
     };
   }, [chat_reset, busyUI]);
 

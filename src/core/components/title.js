@@ -22,7 +22,7 @@ const Title = ({ value }) => {
         <Box display="flex" alignItems="center">
           <IconButton
             aria-label="close"
-            onClick={() => { useStore.setState({chat_reset: true}); navigate("chatbot") }}
+            onClick={() => { navigate("chatbot") }}
             size="large"
           >
             <ArrowBackIcon fontSize="inheret"/>

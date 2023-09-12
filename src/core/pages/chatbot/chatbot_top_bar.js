@@ -29,13 +29,15 @@ import { MenuItem, Menu, Tooltip, Grid, Dialog, DialogTitle, FormControl, TextFi
 import HttpsIcon from '@mui/icons-material/Https';
 import ChatIcon from '@mui/icons-material/Chat';
 import RateReviewIcon from '@mui/icons-material/RateReview';
-import SaveIcon from '@mui/icons-material/Save';
-import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import IosShareIcon from '@mui/icons-material/IosShare';
 import FileOpenIcon from '@mui/icons-material/FileOpen';
+import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
+import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
+import { encryptPrompts } from "../../utility/encryption";
+import { eSet } from "../../utility/electronStore";
 // ----------------------------------------------------------------------
 
 const TopBar = () => {
@@ -288,13 +290,32 @@ const TopBar = () => {
                     <b>{active_system_prompt_.title}</b>
                   </Typography>
                   {prompt_save_status && <Tooltip title={"Prompt is in your library"}>
-                    <SaveIcon size="small" />
+                    <BookmarkAddedIcon size="small" />
                   </Tooltip>}
                   {!prompt_save_status && <Tooltip title={"Click to add prompt to your library"}>
                     <span>
-                      <LibraryAddIcon
+                      <BookmarkAddIcon
                         size="small"
-                        onClick={() => { useStore.setState({ prompt_save_status: true }) }}
+                        onClick={() => {
+                          const importedDate = new Date();
+                          const importedDateISO = String(importedDate.toISOString());
+
+                          let newPrompts = [...system_prompts_];
+
+                          let potentialPrompt = active_system_prompt_;
+
+                          potentialPrompt.importedDate = importedDateISO;
+
+                          newPrompts.push(potentialPrompt);
+
+                          const password_ = useStore.getState().password;
+                          const encPrompts = encryptPrompts(newPrompts, password_);
+
+                          eSet("system_prompts", encPrompts);
+
+                          useStore.getState().addNotification("System Prompt added to Library");
+                          useStore.setState({ system_prompts: newPrompts, prompt_save_status: true });
+                        }} //
                         disabled={busy_ui}
                       />
                     </span>
