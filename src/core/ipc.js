@@ -9,16 +9,13 @@ import { encryptPrompts } from "./utility/encryption";
 
 const HandleIPC = () => {
   useEffect(() => {
-    window.ipc.on("new chat", () => {
-      const system_prompts = useStore.getState().system_prompts;
-      const page = useStore.getState().page;
-      const password_ = useStore.getState().password;
+    const newChatListener = () => {
+      const { system_prompts, page, password, last_prompt } = useStore.getState();
 
       if (system_prompts.length) {
         if (page === "chatbot") {
           useStore.setState({ chat_reset: true });
         } else {
-          const last_prompt = useStore.getState().last_prompt
           const usedDate = new Date();
           const usedDateISO = String(usedDate.toISOString());
 
@@ -26,7 +23,7 @@ const HandleIPC = () => {
 
           systems[last_prompt].usedDate = usedDateISO;
 
-          const encPrompts = encryptPrompts(systems, password_);
+          const encPrompts = encryptPrompts(systems, password);
 
           eSet("system_prompts", encPrompts);
 
@@ -37,16 +34,28 @@ const HandleIPC = () => {
           });
         }
       }
-    });
+    };
+
+    window.ipc.on("new chat", newChatListener);
+
+    return () => {
+      window.ipc.off("new chat", newChatListener);
+    };
   }, []);
 
   useEffect(() => {
-    window.ipc.on("toggle color", () => {
+    const toggleColorListener = () => {
       switchColorMode();
-    });
-  }, [])
+    };
 
-  return null
+    window.ipc.on("toggle color", toggleColorListener);
+
+    return () => {
+      window.ipc.off("toggle color", toggleColorListener);
+    };
+  }, []);
+
+  return null;
 };
 
 export default HandleIPC;
