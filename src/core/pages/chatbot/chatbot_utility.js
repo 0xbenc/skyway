@@ -9,21 +9,23 @@ import { encrypt, encryptPrompts } from "../../utility/encryption";
  * @param {Object} chat - The chat item to be synched. 
  * @property {string} chat.uuid - identifies unique chats
  */
-const chatSync = (chat) => {
+const chatSync = (chat, oldUUID) => {
   const { chats, password } = useStore.getState();
+  let updatedChats = [...chats];
 
-  const index = chats.findIndex((item) => item.uuid === chat.uuid);
-  let updatedChats = chats;
-
-  if (index !== -1) {
-    updatedChats = chats.map((item, i) => i === index ? chat : item);
-  } else {
+  if (oldUUID === "none") {
     updatedChats.push(chat);
+  } else {
+    const index = chats.findIndex((item) => item.uuid === oldUUID);
+
+    if (index !== -1) {
+      updatedChats = chats.map((item, i) => i === index ? chat : item);
+    };
   };
 
   const copy = JSON.stringify([...updatedChats]);
   const encCopy = encrypt(copy, password)
-  
+
   useStore.setState({ chats: updatedChats, current_chat: chat.uuid });
   eSet('chats', encCopy);
 };
@@ -40,7 +42,7 @@ const chatDelete = (uuid) => {
 
   const copy = JSON.stringify([...updatedChats]);
   const encCopy = encrypt(copy, password);
-  
+
   useStore.setState({ chats: updatedChats });
   eSet('chats', encCopy);
 };
@@ -91,8 +93,8 @@ const ImportChat = () => {
         };
 
         if (!matches) {
-          chatSync(potentialChat);
-          useStore.setState({chat_reset: true})
+          chatSync(potentialChat, "none");
+          useStore.setState({ chat_reset: true })
           useStore.getState().addNotification("Chat added to Library");
         } else {
           useStore.getState().addNotification("Chat already in Library");
@@ -101,4 +103,4 @@ const ImportChat = () => {
     });
 };
 
-export {chatSync, chatSelect, chatDelete, ImportChat};
+export { chatSync, chatSelect, chatDelete, ImportChat };

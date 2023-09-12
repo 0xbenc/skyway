@@ -43,7 +43,7 @@ const Chatbot = () => {
 
   const [justOnce, setJustOnce] = useState(false);
 
-  const [chatUUID, setChatUUID] = useState("");
+  const [prevUUID, setPrevUUID] = useState("none");
   const [chatTitle, setChatTitle] = useState("");
 
   // used as a trigger to scroll chat window to the bottom
@@ -117,10 +117,12 @@ const Chatbot = () => {
       setTimeStamps(newTimeStamps);
     };
 
+    const newKey = generateKeyV4() 
+
     const chat = {
       conversation: conversation_,
       timeStamps: newTimeStamps,
-      uuid: chatUUID,
+      uuid: newKey,
       title: chatTitle === "none" ? shortChatTitle : chatTitle,
       prompt: active_system_prompt_,
       total_tokens: response.usage.total_tokens,
@@ -128,8 +130,9 @@ const Chatbot = () => {
       skywayVersion: version_
     };
 
-    chatSync(chat);
+    chatSync(chat, prevUUID);
 
+    setPrevUUID(newKey);
     setConversation(conversation_);
     setBusyUI(false);
     setScrollTime(true);
@@ -199,10 +202,12 @@ const Chatbot = () => {
       setTimeStamps(timeArray);
     };
 
+    const newKey = generateKeyV4() 
+
     const chat = {
       conversation: conversation_,
       timeStamps: timeArray,
-      uuid: chatUUID,
+      uuid: newKey,
       title: chatTitle,
       prompt: active_system_prompt_,
       total_tokens: response.usage.total_tokens,
@@ -210,8 +215,9 @@ const Chatbot = () => {
       skywayVersion: version_
     };
 
-    chatSync(chat);
+    chatSync(chat, prevUUID);
 
+    setPrevUUID(newKey);
     setConversation(conversation_);
     setScrollTime(true);
   };
@@ -254,8 +260,7 @@ const Chatbot = () => {
       setTimeStamps([]);
       setConversation([]);
       setBusyUI(false);
-      const u = generateKeyV4();
-      setChatUUID(u);
+      setPrevUUID("none")
       setChatTitle("none");
       useStore.setState({ token_count: 0, current_chat: "none", busy_ui: false });
       inputRef.current.focus();
@@ -292,7 +297,7 @@ const Chatbot = () => {
           setTimeStamps(chats_[i].timeStamps);
           setConversation(chats_[i].conversation);
           setBusyUI(false);
-          setChatUUID(chats_[i].uuid)
+          setPrevUUID(chats_[i].uuid);
           setChatTitle(chats_[i].title)
           useStore.setState({ token_count: chats_[i].total_tokens, prompt_save_status: activeChatInLibrary, busy_ui: false });
           inputRef.current.focus();

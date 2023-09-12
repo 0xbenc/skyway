@@ -57,7 +57,7 @@ const setUpMainInteractions = mainWindow => {
     return canceled ? null : filePaths[0];
   });
 
-  ipcMain.handle('dialog-open-filtered-file', openFilteredFile);
+  ipcMain.handle('dialog-open-filtered-file', (event, directory, filters) => openFilteredFile(mainWindow, event, directory, filters));
   ipcMain.handle('openai-api', callOpenAI);
   ipcMain.handle('version-get', () => app.getVersion());
   ipcMain.on('store-get', (event, val) => { event.returnValue = store.get(val); });
@@ -65,7 +65,7 @@ const setUpMainInteractions = mainWindow => {
   ipcMain.on('save-json', saveJson);
 };
 
-const openFilteredFile = async (_, directory, filters) => {
+const openFilteredFile = async (mainWindow, _, directory, filters) => {
   const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, {
     filters: filters,
     properties: ['openFile'],
@@ -76,7 +76,8 @@ const openFilteredFile = async (_, directory, filters) => {
     return;
   } else {
     const filePath = filePaths[0];
-    const fileBuffer = fs.readFileSync(filePath);
+    // Use readFile and asynchronously handle the promise
+    const fileBuffer = await fs.readFile(filePath);
     const encodedFile = `data:application/octet-stream;base64,${fileBuffer.toString('base64')}`;
     const fileName = getFileName(filePath);
     const fileExtension = getFileExtension(filePath);
@@ -87,8 +88,7 @@ const openFilteredFile = async (_, directory, filters) => {
       "fileExtension": fileExtension,
       "fileName": fileName,
       "filePath": filePaths[0],
-      "folderPath": folderPath,
-      "origin": "local" // local vs session (session is in RAM / temp, not in plastic folder)
+      "folderPath": folderPath
     };
     return file;
   };
