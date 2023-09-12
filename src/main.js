@@ -1,8 +1,10 @@
-const { app, BrowserWindow, ipcMain, Menu, dialog } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, Menu } = require('electron');
 const path = require('path')
-const store = require('./store');
-const axios = require('axios');
 const fs = require('fs');
+const axios = require('axios');
+//
+const store = require('./store');
+const createMenuTemplate = require('./menu');
 // ----------------------------------------------------------------------
 
 //Helpers START
@@ -41,57 +43,8 @@ const createWindow = () => {
 
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
-  const template = [
-    {
-      label: 'File',
-      submenu: [
-        {
-          label: 'New Chat',
-          accelerator: process.platform === 'darwin' ? 'Cmd+N' : 'Ctrl+N',
-          click: () => {
-            mainWindow.webContents.send("new chat");
-          }
-        },
-        {
-          role: 'quit'
-        }
-      ]
-    },
-    {
-      label: 'Edit',
-      submenu: [
-        { role: 'cut' },
-        { role: 'copy' },
-        { role: 'paste' },
-        { role: 'delete' },
-        { role: 'selectall' }
-      ]
-    },
-    {
-      label: 'View',
-      submenu: [
-        { role: 'reload' },
-        { role: 'forcereload' },
-        { role: 'toggledevtools' },
-        { type: 'separator' },
-        { role: 'resetzoom' },
-        { role: 'zoomin' },
-        { role: 'zoomout' },
-        { type: 'separator' },
-        { role: 'togglefullscreen' },
-        {
-          label: 'Toggle Color Mode',
-          accelerator: process.platform === 'darwin' ? 'Cmd+Shift+C' : 'Ctrl+Shift+C',
-          click: () => {
-            mainWindow.webContents.send("toggle color");
-          }
-        }
-      ]
-    },
-  ];
-
-  const menu = Menu.buildFromTemplate(template)
-
+  const menu = Menu.buildFromTemplate(createMenuTemplate(mainWindow));
+  
   Menu.setApplicationMenu(menu)
 
   ipcMain.handle('dialog-choose-directory', async () => {
