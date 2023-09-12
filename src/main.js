@@ -2,7 +2,7 @@ const { app, BrowserWindow, ipcMain, dialog, Menu } = require('electron');
 const path = require('path');
 const fs = require('fs').promises;
 const axios = require('axios');
-const store = require('./tools/forge/store');
+const store = require('./tools/electron/store');
 const createMenuTemplate = require('./tools/electron/menu');
 
 const WINDOW_WIDTH = 1600;
