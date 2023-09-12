@@ -2,8 +2,8 @@ const { app, BrowserWindow, ipcMain, dialog, Menu } = require('electron');
 const path = require('path');
 const fs = require('fs').promises;
 const axios = require('axios');
-const store = require('./store');
-const createMenuTemplate = require('./menu');
+const store = require('./tools/forge/store');
+const createMenuTemplate = require('./tools/electron/menu');
 
 const WINDOW_WIDTH = 1600;
 const WINDOW_HEIGHT = 900;
@@ -12,10 +12,12 @@ const getFileName = (filePath) => {
   const lastSlashIndex = Math.max(filePath.lastIndexOf('/'), filePath.lastIndexOf('\\'));
   return filePath.substring(lastSlashIndex + 1);
 };
+
 const getFileExtension = (filePath) => {
   const lastPeriodIndex = filePath.lastIndexOf(".");
   return filePath.substring(lastPeriodIndex + 1);
 };
+
 const getFolderPath = (filePath) => {
   const lastSlashIndex = Math.max(filePath.lastIndexOf('/'), filePath.lastIndexOf('\\'));
   return filePath.substring(0, lastSlashIndex);
@@ -39,6 +41,7 @@ const createWindow = () => {
       sandbox: true
     },
   });
+
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
   Menu.setApplicationMenu(Menu.buildFromTemplate(createMenuTemplate(mainWindow)));
@@ -67,7 +70,8 @@ const openFilteredFile = async (_, directory, filters) => {
     filters: filters,
     properties: ['openFile'],
     defaultPath: directory,
-  })
+  });
+
   if (canceled) {
     return;
   } else {
@@ -86,7 +90,7 @@ const openFilteredFile = async (_, directory, filters) => {
       "folderPath": folderPath,
       "origin": "local" // local vs session (session is in RAM / temp, not in plastic folder)
     };
-    return file
+    return file;
   };
 };
 
@@ -111,15 +115,13 @@ const saveJson = (_, args) => {
     fs.writeFile(`${args.dir}/${args.filename}.json`, args.jsonstr, (err) => {
       if (err) throw err;
     });
-  }
+  };
 };
 
 app.whenReady().then(createWindow);
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
+  if (process.platform !== 'darwin') app.quit();
 });
 
 app.on('activate', () => {
