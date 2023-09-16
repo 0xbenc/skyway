@@ -47,29 +47,29 @@ const chatDelete = (uuid) => {
   eSet('chats', encCopy);
 };
 
-const chatSelect = (event, setAnc, system_prompts, setDrawerOpen) => {
-  setAnc(null);
+const chatSelect = (index, system_prompts, setDrawerOpen, setSwitchPromptDialogOpen) => {
   const usedDate = new Date();
   const usedDateISO = String(usedDate.toISOString());
 
   let systems = [...system_prompts];
-  systems[event.target.value].usedDate = usedDateISO;
+  systems[index].usedDate = usedDateISO;
 
   const password_ = useStore.getState().password;
 
   const encPrompts = encryptPrompts(systems, password_);
 
-  console.log("NAVIGATION: chatbot", system_prompts[event.target.value].title, event.target.value);
+  console.log("NAVIGATION: chatbot", system_prompts[index].title, index);
 
   eSet('system_prompts', encPrompts); // TODO verify this step is logically needed
-  eSet('last_prompt', event.target.value);
+  eSet('last_prompt', index);
 
   setDrawerOpen(false)
+  setSwitchPromptDialogOpen(false)
 
   useStore.setState({
     system_prompts: systems,
-    active_system_prompt: system_prompts[event.target.value],
-    last_prompt: event.target.value,
+    active_system_prompt: system_prompts[index],
+    last_prompt: index,
     chat_reset: true
   });
 };

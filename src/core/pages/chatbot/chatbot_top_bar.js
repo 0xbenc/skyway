@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 //
 import { useStore } from "../../zustand";
 //
@@ -24,7 +24,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import MenuIcon from '@mui/icons-material/Menu';
 import Divider from "@mui/material/Divider";
-import { MenuItem, Menu, Tooltip, Grid, Dialog, DialogTitle, FormControl, TextField, DialogContent, DialogActions } from "@mui/material";
+import { Tooltip, Grid, Dialog, DialogTitle, FormControl, TextField, DialogContent, DialogActions } from "@mui/material";
 //
 import HttpsIcon from '@mui/icons-material/Https';
 import ChatIcon from '@mui/icons-material/Chat';
@@ -54,10 +54,11 @@ const TopBar = () => {
   const prompt_save_status = useStore(state => state.prompt_save_status);
   const busy_ui = useStore(state => state.busy_ui);
 
-  const [drawerOpen, setDrawerOpen] = React.useState(false);
-  const [renameDialogOpen, setRenameDialogOpen] = React.useState(false);
-  const [renameDialogInput, setRenameDialogInput] = React.useState("");
-  const [renameDialogIndex, setRenameDialogIndex] = React.useState(-1);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [renameDialogOpen, setRenameDialogOpen] = useState(false);
+  const [renameDialogInput, setRenameDialogInput] = useState("");
+  const [renameDialogIndex, setRenameDialogIndex] = useState(-1);
+  const [switchPropmtDialogOpen, setSwitchPromptDialogOpen] = useState(false);
 
   const handleRenameDialogOpen = (e, index) => {
     console.log(index, chats[chats.length - index - 1].title)
@@ -102,21 +103,13 @@ const TopBar = () => {
     useStore.setState({ chat_reset: true })
   }
 
-  // Anchor for New Chat select
-  const [anc, setAnc] = React.useState(null);
-  const chatSelectMenuOpen = Boolean(anc);
-
   const switchPromptOpen = (event) => {
     event.stopPropagation();
-    setAnc(event.currentTarget);
+    setSwitchPromptDialogOpen(true)
   };
 
   const switchPromptClose = () => {
-    setAnc(null);
-  };
-
-  const switchPromptSelect = (e) => {
-    chatSelect(e, setAnc, system_prompts_, setDrawerOpen)
+    setSwitchPromptDialogOpen(false)
   };
 
   const ExportChat = (uuid) => {
@@ -379,27 +372,34 @@ const TopBar = () => {
       >
         <DrawerContents />
       </Drawer>
-      <Menu
-        id="basic-menu"
-        anchorEl={anc}
-        open={chatSelectMenuOpen}
-        onClose={switchPromptClose}
-        MenuListProps={{
-          'aria-labelledby': 'basic-button',
-        }}
-      >
-        {system_prompts_.map((prompt, key) => {
-          return (
-            <MenuItem
-              key={prompt.uuid}
-              value={key}
-              onClick={switchPromptSelect}
-            >
-              {prompt.title}
-            </MenuItem>
-          )
-        })}
-      </Menu>
+
+      <Dialog fullWidth onClose={switchPromptClose} open={switchPropmtDialogOpen}>
+        <DialogTitle>Choose another prompt</DialogTitle>
+        <DialogContent>
+          <Stack direction="row" spacing={1}>
+            {system_prompts_.map((prompt, key) => {
+              return (
+                <OutlinePaper onClick={() => {chatSelect(key, system_prompts_, setDrawerOpen, setSwitchPromptDialogOpen)}}>
+                  <Typography variant="h6">{prompt.title}</Typography>
+                  <Stack direction="row" spacing={1}>
+                    <Typography variant="body2">{prompt.model} |</Typography>
+                    <Typography variant="body2">{prompt.engine}</Typography>
+                  </Stack>
+                </OutlinePaper>
+              )
+            })}
+          </Stack>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="text"
+            color="secondary"
+            onClick={switchPromptClose}
+          >
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       <Dialog fullWidth onClose={handleRenameDialogCloseOut} open={renameDialogOpen}>
         <DialogTitle>Rename your chat</DialogTitle>
