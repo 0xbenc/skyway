@@ -379,7 +379,7 @@ const TopBar = () => {
           <Stack direction="row" spacing={1}>
             {system_prompts_.map((prompt, key) => {
               return (
-                <OutlinePaper onClick={() => {chatSelect(key, system_prompts_, setDrawerOpen, setSwitchPromptDialogOpen)}}>
+                <OutlinePaper key={key} onClick={() => {chatSelect(key, system_prompts_, setDrawerOpen, setSwitchPromptDialogOpen)}}>
                   <Typography variant="h6">{prompt.title}</Typography>
                   <Stack direction="row" spacing={1}>
                     <Typography variant="body2">{prompt.model} |</Typography>
