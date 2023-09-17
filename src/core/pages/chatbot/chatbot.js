@@ -130,7 +130,7 @@ const Chatbot = () => {
       skywayVersion: version_
     };
 
-    chatSync(chat, prevUUID);
+    chatSync(chat, prevUUID, true);
 
     setPrevUUID(newKey);
     setConversation(conversation_);
@@ -215,7 +215,7 @@ const Chatbot = () => {
       skywayVersion: version_
     };
 
-    chatSync(chat, prevUUID);
+    chatSync(chat, prevUUID, true);
 
     setPrevUUID(newKey);
     setConversation(conversation_);

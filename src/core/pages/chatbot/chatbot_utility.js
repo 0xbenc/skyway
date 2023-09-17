@@ -9,7 +9,7 @@ import { encrypt, encryptPrompts } from "../../utility/encryption";
  * @param {Object} chat - The chat item to be synched. 
  * @property {string} chat.uuid - identifies unique chats
  */
-const chatSync = (chat, oldUUID) => {
+const chatSync = (chat, oldUUID, active) => {
   const { chats, password } = useStore.getState();
   let updatedChats = [...chats];
 
@@ -24,10 +24,11 @@ const chatSync = (chat, oldUUID) => {
   };
 
   const copy = JSON.stringify([...updatedChats]);
-  const encCopy = encrypt(copy, password)
+  const encCopy = encrypt(copy, password);
+
+  if (active) useStore.setState({ current_chat: chat.uuid });
 
   useStore.setState({ chats: updatedChats });
-  // useStore.setState({ chats: updatedChats, current_chat: chat.uuid, chat_reset: true });
   eSet('chats', encCopy);
 };
 
@@ -94,7 +95,7 @@ const ImportChat = () => {
         };
 
         if (!matches) {
-          chatSync(potentialChat, "none");
+          chatSync(potentialChat, "none", false);
           useStore.setState({ chat_reset: true })
           useStore.getState().addNotification("Chat added to Library");
         } else {

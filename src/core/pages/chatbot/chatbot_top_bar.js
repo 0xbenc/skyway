@@ -83,7 +83,12 @@ const TopBar = () => {
 
     newChats[rename_dialog_index].title = rename_dialog_input;
 
-    chatSync(newChats[rename_dialog_index])
+    chatSync(
+      newChats[rename_dialog_index],
+      newChats[rename_dialog_index].uuid,
+      false
+    );
+
     useStore.setState({ rename_dialog_open: false });
   };
 
