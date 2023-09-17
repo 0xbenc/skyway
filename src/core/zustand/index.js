@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 // ----------------------------------------------------------------------
 
-export const useStore = create((set) => {
+export const useStore = create((set, get) => {
   return {
     // START SHARED //
 
@@ -61,6 +61,9 @@ export const useStore = create((set) => {
 
 
     // START CHATBOT //
+
+    chat_drawer_open: false,
+    chat_drawer_toggle: () => set({chat_drawer_open: !get().chat_drawer_open}),
 
     // current conversation token count
     token_count: 0,

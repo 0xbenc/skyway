@@ -54,7 +54,8 @@ const TopBar = () => {
   const prompt_save_status = useStore(state => state.prompt_save_status);
   const busy_ui = useStore(state => state.busy_ui);
 
-  const [drawerOpen, setDrawerOpen] = useState(false);
+  const chat_drawer_open = useStore(state => state.chat_drawer_open);
+
   const [renameDialogOpen, setRenameDialogOpen] = useState(false);
   const [renameDialogInput, setRenameDialogInput] = useState("");
   const [renameDialogIndex, setRenameDialogIndex] = useState(-1);
@@ -85,10 +86,10 @@ const TopBar = () => {
     setRenameDialogInput(e.target.value)
   };
 
-  const toggleChatDrawer = (tf) => (event) => {
+  const toggleChatDrawer = (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) return;
 
-    setDrawerOpen(tf);
+    useStore.getState().chat_drawer_toggle();
   };
 
   const navAPIKey = () => {
@@ -154,8 +155,8 @@ const TopBar = () => {
         overflow: "hidden"
       }}
       role="presentation"
-      onClick={toggleChatDrawer(false)}
-      onKeyDown={toggleChatDrawer(false)}
+      onClick={toggleChatDrawer}
+      onKeyDown={toggleChatDrawer}
     >
       <List>
         <ListItem>
@@ -254,7 +255,7 @@ const TopBar = () => {
 
   useEffect(() => {
     if (busy_ui) {
-      setDrawerOpen(false);
+      useStore.setState({chat_drawer_open: false})
     };
   }, [busy_ui])
 
@@ -266,7 +267,7 @@ const TopBar = () => {
             <Box>
               <IconButton
                 aria-label="close"
-                onClick={toggleChatDrawer(true)}
+                onClick={toggleChatDrawer}
                 size="large"
                 disabled={busy_ui}
               >
@@ -367,8 +368,8 @@ const TopBar = () => {
       </OutlinePaper>
       <Drawer
         anchor={'left'}
-        open={drawerOpen}
-        onClose={toggleChatDrawer(false)}
+        open={chat_drawer_open}
+        onClose={toggleChatDrawer}
       >
         <DrawerContents />
       </Drawer>
@@ -379,7 +380,7 @@ const TopBar = () => {
           <Stack direction="row" spacing={1}>
             {system_prompts_.map((prompt, key) => {
               return (
-                <OutlinePaper key={key} onClick={() => {chatSelect(key, system_prompts_, setDrawerOpen, setSwitchPromptDialogOpen)}}>
+                <OutlinePaper key={key} onClick={() => { chatSelect(key, system_prompts_, setSwitchPromptDialogOpen) }}>
                   <Typography variant="h6">{prompt.title}</Typography>
                   <Stack direction="row" spacing={1}>
                     <Typography variant="body2">{prompt.model} |</Typography>

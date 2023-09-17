@@ -47,7 +47,7 @@ const chatDelete = (uuid) => {
   eSet('chats', encCopy);
 };
 
-const chatSelect = (index, system_prompts, setDrawerOpen, setSwitchPromptDialogOpen) => {
+const chatSelect = (index, system_prompts, setSwitchPromptDialogOpen) => {
   const usedDate = new Date();
   const usedDateISO = String(usedDate.toISOString());
 
@@ -63,7 +63,7 @@ const chatSelect = (index, system_prompts, setDrawerOpen, setSwitchPromptDialogO
   eSet('system_prompts', encPrompts); // TODO verify this step is logically needed
   eSet('last_prompt', index);
 
-  setDrawerOpen(false)
+  useStore.getState().chat_drawer_toggle;
   setSwitchPromptDialogOpen(false)
 
   useStore.setState({
