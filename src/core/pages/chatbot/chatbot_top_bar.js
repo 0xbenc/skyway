@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 //
 import { useStore } from "../../zustand";
 //
@@ -41,6 +41,17 @@ import { eSet } from "../../utility/electronStore";
 // ----------------------------------------------------------------------
 
 const TopBar = () => {
+  const chats = useStore(state => state.chats);
+  const token_count = useStore(state => state.token_count);
+  const current_chat = useStore(state => state.current_chat);
+  const prompt_save_status = useStore(state => state.prompt_save_status);
+  const busy_ui = useStore(state => state.busy_ui);
+  const chat_drawer_open = useStore(state => state.chat_drawer_open);
+  const rename_dialog_open = useStore(state => state.rename_dialog_open);
+  const rename_dialog_input = useStore(state => state.rename_dialog_input);
+  const rename_dialog_index = useStore(state => state.rename_dialog_index);
+  const switch_prompt_dialog_open = useStore(state => state.switch_prompt_dialog_open);
+
   const active_system_prompt_ = useStore.getState().active_system_prompt;
   const open_ai_api_keys_ = useStore.getState().open_ai_api_keys;
   const open_ai_api_key_ = useStore.getState().open_ai_api_key;
@@ -48,25 +59,13 @@ const TopBar = () => {
   const version_ = useStore.getState().version;
   const dev_mode_ = useStore.getState().dev_mode;
 
-  const chats = useStore(state => state.chats);
-  const token_count = useStore(state => state.token_count);
-  const current_chat = useStore(state => state.current_chat);
-  const prompt_save_status = useStore(state => state.prompt_save_status);
-  const busy_ui = useStore(state => state.busy_ui);
-
-  const chat_drawer_open = useStore(state => state.chat_drawer_open);
-  const rename_dialog_open = useStore(state => state.rename_dialog_open);
-  const rename_dialog_input = useStore(state => state.rename_dialog_input);
-
-  const [renameDialogIndex, setRenameDialogIndex] = useState(-1);
-  const [switchPropmtDialogOpen, setSwitchPromptDialogOpen] = useState(false);
-
   const handleRenameDialogOpen = (e, index) => {
     console.log(index, chats[chats.length - index - 1].title)
 
     e.stopPropagation();
-    setRenameDialogIndex(chats.length - index - 1)
+
     useStore.setState({
+      rename_dialog_index: chats.length - index - 1,
       rename_dialog_input: chats[chats.length - index - 1].title,
       rename_dialog_open: true
     });
@@ -81,8 +80,10 @@ const TopBar = () => {
 
   const handleRenameDialogSave = () => {
     let newChats = [...chats];
-    newChats[renameDialogIndex].title = rename_dialog_input;
-    chatSync(newChats[renameDialogIndex])
+
+    newChats[rename_dialog_index].title = rename_dialog_input;
+
+    chatSync(newChats[rename_dialog_index])
     useStore.setState({ rename_dialog_open: false });
   };
 
@@ -110,11 +111,11 @@ const TopBar = () => {
 
   const switchPromptOpen = (event) => {
     event.stopPropagation();
-    setSwitchPromptDialogOpen(true)
+    useStore.setState({ switch_prompt_dialog_open: true })
   };
 
   const switchPromptClose = () => {
-    setSwitchPromptDialogOpen(false)
+    useStore.setState({ switch_prompt_dialog_open: false })
   };
 
   const ExportChat = (uuid) => {
@@ -378,13 +379,13 @@ const TopBar = () => {
         <DrawerContents />
       </Drawer>
 
-      <Dialog fullWidth onClose={switchPromptClose} open={switchPropmtDialogOpen}>
+      <Dialog fullWidth onClose={switchPromptClose} open={switch_prompt_dialog_open}>
         <DialogTitle>Choose another prompt</DialogTitle>
         <DialogContent>
           <Stack direction="row" spacing={1}>
             {system_prompts_.map((prompt, key) => {
               return (
-                <OutlinePaper key={key} onClick={() => { chatSelect(key, system_prompts_, setSwitchPromptDialogOpen) }}>
+                <OutlinePaper key={key} onClick={() => { chatSelect(key, system_prompts_) }}>
                   <Typography variant="h6">{prompt.title}</Typography>
                   <Stack direction="row" spacing={1}>
                     <Typography variant="body2">{prompt.model} |</Typography>

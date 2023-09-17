@@ -26,7 +26,8 @@ const chatSync = (chat, oldUUID) => {
   const copy = JSON.stringify([...updatedChats]);
   const encCopy = encrypt(copy, password)
 
-  useStore.setState({ chats: updatedChats, current_chat: chat.uuid, chat_reset: true });
+  useStore.setState({ chats: updatedChats });
+  // useStore.setState({ chats: updatedChats, current_chat: chat.uuid, chat_reset: true });
   eSet('chats', encCopy);
 };
 
@@ -47,7 +48,7 @@ const chatDelete = (uuid) => {
   eSet('chats', encCopy);
 };
 
-const chatSelect = (index, system_prompts, setSwitchPromptDialogOpen) => {
+const chatSelect = (index, system_prompts) => {
   const usedDate = new Date();
   const usedDateISO = String(usedDate.toISOString());
 
@@ -64,9 +65,9 @@ const chatSelect = (index, system_prompts, setSwitchPromptDialogOpen) => {
   eSet('last_prompt', index);
 
   useStore.getState().chat_drawer_toggle;
-  setSwitchPromptDialogOpen(false)
 
   useStore.setState({
+    switch_prompt_dialog_open: false,
     system_prompts: systems,
     active_system_prompt: system_prompts[index],
     last_prompt: index,

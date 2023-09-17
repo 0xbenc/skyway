@@ -62,12 +62,16 @@ export const useStore = create((set, get) => {
 
     // START CHATBOT //
 
-    chat_drawer_open: false,
+    chat_drawer_open: false, //
     chat_drawer_toggle: () => set({chat_drawer_open: !get().chat_drawer_open}),
 
     rename_dialog_open: false,
 
     rename_dialog_input: "",
+
+    rename_dialog_index: -1,
+
+    switch_prompt_dialog_open: false, //
 
     // current conversation token count
     token_count: 0,
