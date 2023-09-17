@@ -5,7 +5,7 @@ import { useStore } from "../../zustand";
 import { navigate } from "../../utility/navigatePage";
 import { Top } from "./chatbot_styles";
 import { OutlinePaper } from "../../mui/reusable";
-import { ImportChat, chatDelete, chatSelect, chatSync } from "./chatbot_utility";
+import { ImportChat, chatDelete, chatSelect } from "./chatbot_utility";
 import { cleanFileTitle } from "../../utility/string";
 import { isoToHuman } from "../../utility/time";
 //
@@ -24,7 +24,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import MenuIcon from '@mui/icons-material/Menu';
 import Divider from "@mui/material/Divider";
-import { Tooltip, Grid, Dialog, DialogTitle, FormControl, TextField, DialogContent, DialogActions } from "@mui/material";
+import { Tooltip, Grid, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
 //
 import HttpsIcon from '@mui/icons-material/Https';
 import ChatIcon from '@mui/icons-material/Chat';
@@ -38,6 +38,7 @@ import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
 import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 import { encryptPrompts } from "../../utility/encryption";
 import { eSet } from "../../utility/electronStore";
+import RenameDialog from "./renameDialog";
 // ----------------------------------------------------------------------
 
 const TopBar = () => {
@@ -47,9 +48,6 @@ const TopBar = () => {
   const prompt_save_status = useStore(state => state.prompt_save_status);
   const busy_ui = useStore(state => state.busy_ui);
   const chat_drawer_open = useStore(state => state.chat_drawer_open);
-  const rename_dialog_open = useStore(state => state.rename_dialog_open);
-  const rename_dialog_input = useStore(state => state.rename_dialog_input);
-  const rename_dialog_index = useStore(state => state.rename_dialog_index);
   const switch_prompt_dialog_open = useStore(state => state.switch_prompt_dialog_open);
 
   const active_system_prompt_ = useStore.getState().active_system_prompt;
@@ -69,31 +67,6 @@ const TopBar = () => {
       rename_dialog_input: chats[chats.length - index - 1].title,
       rename_dialog_open: true
     });
-  };
-
-  const handleRenameDialogCloseOut = () => {
-    useStore.setState({
-      rename_dialog_input: "",
-      rename_dialog_open: false
-    });
-  };
-
-  const handleRenameDialogSave = () => {
-    let newChats = [...chats];
-
-    newChats[rename_dialog_index].title = rename_dialog_input;
-
-    chatSync(
-      newChats[rename_dialog_index],
-      newChats[rename_dialog_index].uuid,
-      false
-    );
-
-    useStore.setState({ rename_dialog_open: false });
-  };
-
-  const handleRenameDialogInput = (e) => {
-    useStore.setState({ rename_dialog_input: e.target.value })
   };
 
   const toggleChatDrawer = (event) => {
@@ -412,39 +385,7 @@ const TopBar = () => {
         </DialogActions>
       </Dialog>
 
-      <Dialog fullWidth onClose={handleRenameDialogCloseOut} open={rename_dialog_open}>
-        <DialogTitle>Rename your chat</DialogTitle>
-        <DialogContent>
-          <FormControl fullWidth>
-            <TextField
-              id="rename-zone"
-              label="Chat Title"
-              variant="filled"
-              value={rename_dialog_input}
-              onChange={handleRenameDialogInput}
-              required={true}
-              fullWidth
-            >
-            </TextField>
-          </FormControl>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            variant="text"
-            color="secondary"
-            onClick={handleRenameDialogCloseOut}
-          >
-            Cancel
-          </Button>
-          <Button
-            variant="outlined"
-            color="secondary"
-            onClick={handleRenameDialogSave}
-          >
-            Save
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <RenameDialog />
     </Top>
   );
 };
