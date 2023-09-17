@@ -55,9 +55,9 @@ const TopBar = () => {
   const busy_ui = useStore(state => state.busy_ui);
 
   const chat_drawer_open = useStore(state => state.chat_drawer_open);
+  const rename_dialog_open = useStore(state => state.rename_dialog_open);
+  const rename_dialog_input = useStore(state => state.rename_dialog_input);
 
-  const [renameDialogOpen, setRenameDialogOpen] = useState(false);
-  const [renameDialogInput, setRenameDialogInput] = useState("");
   const [renameDialogIndex, setRenameDialogIndex] = useState(-1);
   const [switchPropmtDialogOpen, setSwitchPromptDialogOpen] = useState(false);
 
@@ -66,24 +66,28 @@ const TopBar = () => {
 
     e.stopPropagation();
     setRenameDialogIndex(chats.length - index - 1)
-    setRenameDialogOpen(true);
-    setRenameDialogInput(chats[chats.length - index - 1].title);
+    useStore.setState({
+      rename_dialog_input: chats[chats.length - index - 1].title,
+      rename_dialog_open: true
+    });
   };
 
   const handleRenameDialogCloseOut = () => {
-    setRenameDialogInput("");
-    setRenameDialogOpen(false);
+    useStore.setState({
+      rename_dialog_input: "",
+      rename_dialog_open: false
+    });
   };
 
   const handleRenameDialogSave = () => {
     let newChats = [...chats];
-    newChats[renameDialogIndex].title = renameDialogInput;
+    newChats[renameDialogIndex].title = rename_dialog_input;
     chatSync(newChats[renameDialogIndex])
-    setRenameDialogOpen(false);
+    useStore.setState({ rename_dialog_open: false });
   };
 
   const handleRenameDialogInput = (e) => {
-    setRenameDialogInput(e.target.value)
+    useStore.setState({ rename_dialog_input: e.target.value })
   };
 
   const toggleChatDrawer = (event) => {
@@ -255,7 +259,7 @@ const TopBar = () => {
 
   useEffect(() => {
     if (busy_ui) {
-      useStore.setState({chat_drawer_open: false})
+      useStore.setState({ chat_drawer_open: false })
     };
   }, [busy_ui])
 
@@ -402,7 +406,7 @@ const TopBar = () => {
         </DialogActions>
       </Dialog>
 
-      <Dialog fullWidth onClose={handleRenameDialogCloseOut} open={renameDialogOpen}>
+      <Dialog fullWidth onClose={handleRenameDialogCloseOut} open={rename_dialog_open}>
         <DialogTitle>Rename your chat</DialogTitle>
         <DialogContent>
           <FormControl fullWidth>
@@ -410,7 +414,7 @@ const TopBar = () => {
               id="rename-zone"
               label="Chat Title"
               variant="filled"
-              value={renameDialogInput}
+              value={rename_dialog_input}
               onChange={handleRenameDialogInput}
               required={true}
               fullWidth

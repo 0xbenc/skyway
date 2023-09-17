@@ -26,7 +26,7 @@ const chatSync = (chat, oldUUID) => {
   const copy = JSON.stringify([...updatedChats]);
   const encCopy = encrypt(copy, password)
 
-  useStore.setState({ chats: updatedChats, current_chat: chat.uuid });
+  useStore.setState({ chats: updatedChats, current_chat: chat.uuid, chat_reset: true });
   eSet('chats', encCopy);
 };
 

@@ -65,6 +65,10 @@ export const useStore = create((set, get) => {
     chat_drawer_open: false,
     chat_drawer_toggle: () => set({chat_drawer_open: !get().chat_drawer_open}),
 
+    rename_dialog_open: false,
+
+    rename_dialog_input: "",
+
     // current conversation token count
     token_count: 0,
 
