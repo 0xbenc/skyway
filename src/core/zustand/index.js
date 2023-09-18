@@ -74,6 +74,8 @@ export const useStore = create((set, get) => {
     user_message_input: "",
 
     conversation: [],
+
+    scroll_time: false,
     
     switch_prompt_dialog_open: false, //
 

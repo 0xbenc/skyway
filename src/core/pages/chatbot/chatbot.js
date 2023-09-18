@@ -41,9 +41,6 @@ const Chatbot = () => {
   const [prevUUID, setPrevUUID] = useState("none");
   const [chatTitle, setChatTitle] = useState("");
 
-  // used as a trigger to scroll chat window to the bottom
-  const [scrollTime, setScrollTime] = useState(false);
-
   const chat_reset = useStore(state => state.chat_reset);
   const chat_open = useStore(state => state.chat_open);
   const active_system_prompt_ = useStore(state => state.active_system_prompt);
@@ -51,6 +48,8 @@ const Chatbot = () => {
   const user_message_input = useStore(state => state.user_message_input);
 
   const conversation = useStore(state => state.conversation);
+
+  const scroll_time = useStore(state => state.scroll_time);
 
   const color_mode_ = useStore.getState().color_mode;
 
@@ -101,7 +100,7 @@ const Chatbot = () => {
       user_message_input: active_system_prompt_.prefill ? active_system_prompt_.prefill : ""
     });
 
-    setScrollTime(true)
+    useStore.setState({ scroll_time: true });
 
     const response = await fetchChatCompletion(
       upstream,
@@ -137,8 +136,12 @@ const Chatbot = () => {
 
     setPrevUUID(newKey);
     setBusyUI(false);
-    setScrollTime(true);
-    useStore.setState({ conversation: conversation_, busy_ui: false })
+
+    useStore.setState({
+      scroll_time: true,
+      conversation: conversation_,
+      busy_ui: false
+    })
   };
 
   // sends the user-chat message as a prompt 
@@ -225,9 +228,10 @@ const Chatbot = () => {
 
     setPrevUUID(newKey);
 
-    useStore.setState({ conversation: conversation_ })
-
-    setScrollTime(true);
+    useStore.setState({
+      scroll_time: true,
+      conversation: conversation_
+    })
   };
 
   const ReSubmitPrompt = () => {
@@ -247,11 +251,11 @@ const Chatbot = () => {
 
   // Handles autoscroll
   useEffect(() => {
-    if (scrollTime) {
-      setScrollTime(false);
+    if (scroll_time) {
+      useStore.setState({ scroll_time: false });
       conversationScrollRef.current.scrollIntoView({ behaviour: "smooth" });
     };
-  }, [scrollTime]);
+  }, [scroll_time]);
 
   // Handles autofocus cursor
   useEffect(() => {
