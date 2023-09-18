@@ -37,7 +37,6 @@ const Chatbot = () => {
   const [justOnce, setJustOnce] = useState(false);
 
   const [prevUUID, setPrevUUID] = useState("none");
-  const [chatTitle, setChatTitle] = useState("");
 
   const chat_reset = useStore(state => state.chat_reset);
   const chat_open = useStore(state => state.chat_open);
@@ -50,6 +49,8 @@ const Chatbot = () => {
   const scroll_time = useStore(state => state.scroll_time);
 
   const busy_ui = useStore(state => state.busy_ui);
+
+  const chat_title = useStore(state => state.chat_title);
 
   const color_mode_ = useStore.getState().color_mode;
 
@@ -73,8 +74,8 @@ const Chatbot = () => {
 
     const shortChatTitle = user_message_input.length > 31 ? `${String(user_message_input).substring(0, 31)}...` : String(user_message_input).substring(0, 31);
 
-    if (chatTitle === "none") {
-      setChatTitle(shortChatTitle);
+    if (chat_title === "none") {
+      useStore.setState({ chat_title: shortChatTitle })
     };
 
     const newTimeStamps = [...timeStamps];
@@ -125,7 +126,7 @@ const Chatbot = () => {
       conversation: conversation_,
       timeStamps: newTimeStamps,
       uuid: newKey,
-      title: chatTitle === "none" ? shortChatTitle : chatTitle,
+      title: chat_title === "none" ? shortChatTitle : chat_title,
       prompt: active_system_prompt_,
       total_tokens: response.usage.total_tokens,
       lastActive: newTimeStamps[newTimeStamps.length - 1],
@@ -214,7 +215,7 @@ const Chatbot = () => {
       conversation: conversation_,
       timeStamps: timeArray,
       uuid: newKey,
-      title: chatTitle,
+      title: chat_title,
       prompt: active_system_prompt_,
       total_tokens: response.usage.total_tokens,
       lastActive: timeArray[timeArray.length - 1],
@@ -266,8 +267,8 @@ const Chatbot = () => {
       setJustOnce(true);
       setTimeStamps([]);
       setPrevUUID("none")
-      setChatTitle("none");
       useStore.setState({
+        chat_title: "none",
         conversation: [],
         token_count: 0,
         current_chat: "none",
@@ -310,9 +311,9 @@ const Chatbot = () => {
 
           setTimeStamps(chats_[i].timeStamps);
           setPrevUUID(chats_[i].uuid);
-          setChatTitle(chats_[i].title)
 
           useStore.setState({
+            chat_title: chats_[i].title,
             conversation: chats_[i].conversation,
             token_count: chats_[i].total_tokens,
             prompt_save_status: activeChatInLibrary,

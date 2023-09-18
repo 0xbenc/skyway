@@ -77,6 +77,8 @@ export const useStore = create((set, get) => {
 
     scroll_time: false,
 
+    chat_title: "",
+
     switch_prompt_dialog_open: false, //
 
     // current conversation token count
