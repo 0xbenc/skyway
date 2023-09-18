@@ -32,8 +32,6 @@ const Chatbot = () => {
 
   const conversationScrollRef = useRef(null);
 
-  const [userMessageInput, setUserMessageInput] = useState("");
-
   const [conversation, setConversation] = useState([]);
 
   const [busyUI, setBusyUI] = useState(false);
@@ -52,6 +50,8 @@ const Chatbot = () => {
   const chat_open = useStore(state => state.chat_open);
   const active_system_prompt_ = useStore(state => state.active_system_prompt);
 
+  const user_message_input = useStore(state => state.user_message_input);
+
   const color_mode_ = useStore.getState().color_mode;
 
   const version_ = useStore.getState().version
@@ -62,7 +62,7 @@ const Chatbot = () => {
   };
 
   const handleUserPromptInput = (event) => {
-    setUserMessageInput(event.target.value);
+    useStore.setState({ user_message_input: event.target.value });
   };
 
   const SubmitPromptAsync = async (sendDateISO) => {
@@ -70,9 +70,9 @@ const Chatbot = () => {
 
     const conversation_ = [...conversation];
     const activeSystemPrompt_ = { role: "system", content: active_system_prompt_.prompt };
-    const userPrompt_ = { role: "user", content: userMessageInput };
+    const userPrompt_ = { role: "user", content: user_message_input };
 
-    const shortChatTitle = userMessageInput.length > 31 ? `${String(userMessageInput).substring(0, 31)}...` : String(userMessageInput).substring(0, 31);
+    const shortChatTitle = user_message_input.length > 31 ? `${String(user_message_input).substring(0, 31)}...` : String(user_message_input).substring(0, 31);
 
     if (chatTitle === "none") {
       setChatTitle(shortChatTitle);
@@ -96,7 +96,9 @@ const Chatbot = () => {
 
     setTimeStamps(newTimeStamps);
     setConversation(conversation_);
-    setUserMessageInput(active_system_prompt_.prefill ? active_system_prompt_.prefill : "");
+
+    useStore.setState({ user_message_input: active_system_prompt_.prefill ? active_system_prompt_.prefill : "" });
+
     setScrollTime(true)
 
     const response = await fetchChatCompletion(
@@ -116,7 +118,7 @@ const Chatbot = () => {
       setTimeStamps(newTimeStamps);
     };
 
-    const newKey = generateKeyV4() 
+    const newKey = generateKeyV4()
 
     const chat = {
       conversation: conversation_,
@@ -152,7 +154,9 @@ const Chatbot = () => {
   const EditMode = () => {
     const conversation_ = [...conversation];
     conversation_.pop();
-    setUserMessageInput(conversation_[conversation_.length - 1].content);
+
+    useStore.setState({ user_message_input: conversation_[conversation_.length - 1].content });
+
     conversation_.pop();
     setConversation(conversation_);
 
@@ -185,7 +189,8 @@ const Chatbot = () => {
     let timeArray = [];
 
     if (response === "error") {
-      setUserMessageInput("");
+      useStore.setState({ user_message_input: "" });
+
       conversation_.push(errorMessage);
     } else {
       useStore.setState({ token_count: response.usage.total_tokens });
@@ -201,7 +206,7 @@ const Chatbot = () => {
       setTimeStamps(timeArray);
     };
 
-    const newKey = generateKeyV4() 
+    const newKey = generateKeyV4()
 
     const chat = {
       conversation: conversation_,
@@ -232,7 +237,7 @@ const Chatbot = () => {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
 
-      if (userMessageInput !== "") SubmitPrompt();
+      if (user_message_input !== "") SubmitPrompt();
     };
   };
 
@@ -255,13 +260,17 @@ const Chatbot = () => {
   useEffect(() => {
     if (!justOnce) {
       setJustOnce(true);
-      setUserMessageInput(active_system_prompt_.prefill ? active_system_prompt_.prefill : "");
       setTimeStamps([]);
       setConversation([]);
       setBusyUI(false);
       setPrevUUID("none")
       setChatTitle("none");
-      useStore.setState({ token_count: 0, current_chat: "none", busy_ui: false });
+      useStore.setState({
+        token_count: 0,
+        current_chat: "none",
+        busy_ui: false,
+        user_message_input: active_system_prompt_.prefill ? active_system_prompt_.prefill : ""
+      });
       inputRef.current.focus();
     };
   }, [justOnce]);
@@ -292,7 +301,10 @@ const Chatbot = () => {
             }
           }
 
-          setUserMessageInput(active_system_prompt_.prefill ? active_system_prompt_.prefill : "");
+          useStore.setState({
+            user_message_input: active_system_prompt_.prefill ? active_system_prompt_.prefill : ""
+          });
+
           setTimeStamps(chats_[i].timeStamps);
           setConversation(chats_[i].conversation);
           setBusyUI(false);
@@ -367,7 +379,7 @@ const Chatbot = () => {
                   id="prompt-zone"
                   label={active_system_prompt_.userInputLabel}
                   variant="filled"
-                  value={userMessageInput}
+                  value={user_message_input}
                   inputRef={inputRef}
                   onChange={handleUserPromptInput}
                   onKeyDown={handleKeyDown}
@@ -382,7 +394,7 @@ const Chatbot = () => {
               <Box display="flex" flexDirection="column" justifyContent="flex-end">
                 <Box margin={1}>
                   {!busyUI &&
-                    <IconButton onClick={SubmitPrompt} disabled={!userMessageInput.length}>
+                    <IconButton onClick={SubmitPrompt} disabled={!user_message_input.length}>
                       <SendIcon />
                     </IconButton>
                   }
