@@ -72,6 +72,8 @@ export const useStore = create((set, get) => {
     rename_dialog_index: -1,
 
     user_message_input: "",
+
+    conversation: [],
     
     switch_prompt_dialog_open: false, //
 

@@ -32,8 +32,6 @@ const Chatbot = () => {
 
   const conversationScrollRef = useRef(null);
 
-  const [conversation, setConversation] = useState([]);
-
   const [busyUI, setBusyUI] = useState(false);
 
   const [timeStamps, setTimeStamps] = useState([]);
@@ -51,6 +49,8 @@ const Chatbot = () => {
   const active_system_prompt_ = useStore(state => state.active_system_prompt);
 
   const user_message_input = useStore(state => state.user_message_input);
+
+  const conversation = useStore(state => state.conversation);
 
   const color_mode_ = useStore.getState().color_mode;
 
@@ -95,9 +95,11 @@ const Chatbot = () => {
     };
 
     setTimeStamps(newTimeStamps);
-    setConversation(conversation_);
 
-    useStore.setState({ user_message_input: active_system_prompt_.prefill ? active_system_prompt_.prefill : "" });
+    useStore.setState({
+      conversation: conversation_,
+      user_message_input: active_system_prompt_.prefill ? active_system_prompt_.prefill : ""
+    });
 
     setScrollTime(true)
 
@@ -134,10 +136,9 @@ const Chatbot = () => {
     chatSync(chat, prevUUID, true);
 
     setPrevUUID(newKey);
-    setConversation(conversation_);
     setBusyUI(false);
     setScrollTime(true);
-    useStore.setState({ busy_ui: false })
+    useStore.setState({ conversation: conversation_, busy_ui: false })
   };
 
   // sends the user-chat message as a prompt 
@@ -158,7 +159,8 @@ const Chatbot = () => {
     useStore.setState({ user_message_input: conversation_[conversation_.length - 1].content });
 
     conversation_.pop();
-    setConversation(conversation_);
+
+    useStore.setState({ conversation: conversation_ });
 
     let arr = [];
 
@@ -222,7 +224,9 @@ const Chatbot = () => {
     chatSync(chat, prevUUID, true);
 
     setPrevUUID(newKey);
-    setConversation(conversation_);
+
+    useStore.setState({ conversation: conversation_ })
+
     setScrollTime(true);
   };
 
@@ -261,11 +265,11 @@ const Chatbot = () => {
     if (!justOnce) {
       setJustOnce(true);
       setTimeStamps([]);
-      setConversation([]);
       setBusyUI(false);
       setPrevUUID("none")
       setChatTitle("none");
       useStore.setState({
+        conversation: [],
         token_count: 0,
         current_chat: "none",
         busy_ui: false,
@@ -306,11 +310,17 @@ const Chatbot = () => {
           });
 
           setTimeStamps(chats_[i].timeStamps);
-          setConversation(chats_[i].conversation);
           setBusyUI(false);
           setPrevUUID(chats_[i].uuid);
           setChatTitle(chats_[i].title)
-          useStore.setState({ token_count: chats_[i].total_tokens, prompt_save_status: activeChatInLibrary, busy_ui: false });
+
+          useStore.setState({
+            conversation: chats_[i].conversation,
+            token_count: chats_[i].total_tokens,
+            prompt_save_status: activeChatInLibrary,
+            busy_ui: false
+          });
+
           inputRef.current.focus();
         }
       }
