@@ -5,7 +5,7 @@ import { useStore } from "../../zustand";
 import { navigate } from "../../utility/navigatePage";
 import { Top } from "./chatbot_styles";
 import { OutlinePaper } from "../../mui/reusable";
-import { ImportChat, chatDelete, chatSelect } from "./chatbot_utility";
+import { ImportChat, chatDelete } from "./chatbot_utility";
 import { cleanFileTitle } from "../../utility/string";
 import { isoToHuman } from "../../utility/time";
 //
@@ -14,7 +14,6 @@ import {
   Typography,
   Box,
   Stack,
-  Button,
 } from "@mui/material";
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -24,7 +23,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import MenuIcon from '@mui/icons-material/Menu';
 import Divider from "@mui/material/Divider";
-import { Tooltip, Grid, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
+import { Tooltip, Grid } from "@mui/material";
 //
 import HttpsIcon from '@mui/icons-material/Https';
 import ChatIcon from '@mui/icons-material/Chat';
@@ -39,6 +38,7 @@ import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 import { encryptPrompts } from "../../utility/encryption";
 import { eSet } from "../../utility/electronStore";
 import RenameDialog from "./renameDialog";
+import SwitchPromptDialog from "./switch_prompt_dialog";
 // ----------------------------------------------------------------------
 
 const TopBar = () => {
@@ -48,7 +48,6 @@ const TopBar = () => {
   const prompt_save_status = useStore(state => state.prompt_save_status);
   const busy_ui = useStore(state => state.busy_ui);
   const chat_drawer_open = useStore(state => state.chat_drawer_open);
-  const switch_prompt_dialog_open = useStore(state => state.switch_prompt_dialog_open);
 
   const active_system_prompt_ = useStore.getState().active_system_prompt;
   const open_ai_api_keys_ = useStore.getState().open_ai_api_keys;
@@ -90,10 +89,6 @@ const TopBar = () => {
   const switchPromptOpen = (event) => {
     event.stopPropagation();
     useStore.setState({ switch_prompt_dialog_open: true })
-  };
-
-  const switchPromptClose = () => {
-    useStore.setState({ switch_prompt_dialog_open: false })
   };
 
   const ExportChat = (uuid) => {
@@ -357,33 +352,7 @@ const TopBar = () => {
         <DrawerContents />
       </Drawer>
 
-      <Dialog fullWidth onClose={switchPromptClose} open={switch_prompt_dialog_open}>
-        <DialogTitle>Choose another prompt</DialogTitle>
-        <DialogContent>
-          <Stack direction="row" spacing={1}>
-            {system_prompts_.map((prompt, key) => {
-              return (
-                <OutlinePaper key={key} onClick={() => { chatSelect(key, system_prompts_) }}>
-                  <Typography variant="h6">{prompt.title}</Typography>
-                  <Stack direction="row" spacing={1}>
-                    <Typography variant="body2">{prompt.model} |</Typography>
-                    <Typography variant="body2">{prompt.engine}</Typography>
-                  </Stack>
-                </OutlinePaper>
-              )
-            })}
-          </Stack>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            variant="text"
-            color="secondary"
-            onClick={switchPromptClose}
-          >
-            Cancel
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <SwitchPromptDialog />
 
       <RenameDialog />
     </Top>
