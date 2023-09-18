@@ -32,8 +32,6 @@ const Chatbot = () => {
 
   const conversationScrollRef = useRef(null);
 
-  const [busyUI, setBusyUI] = useState(false);
-
   const [timeStamps, setTimeStamps] = useState([]);
 
   const [justOnce, setJustOnce] = useState(false);
@@ -50,6 +48,8 @@ const Chatbot = () => {
   const conversation = useStore(state => state.conversation);
 
   const scroll_time = useStore(state => state.scroll_time);
+
+  const busy_ui = useStore(state => state.busy_ui);
 
   const color_mode_ = useStore.getState().color_mode;
 
@@ -135,7 +135,6 @@ const Chatbot = () => {
     chatSync(chat, prevUUID, true);
 
     setPrevUUID(newKey);
-    setBusyUI(false);
 
     useStore.setState({
       scroll_time: true,
@@ -149,7 +148,6 @@ const Chatbot = () => {
     const sendDate = new Date();
     const sendDateISO = String(sendDate.toISOString());
 
-    setBusyUI(true);
     useStore.setState({ busy_ui: true })
     SubmitPromptAsync(sendDateISO);
   };
@@ -200,7 +198,6 @@ const Chatbot = () => {
     } else {
       useStore.setState({ token_count: response.usage.total_tokens });
       conversation_.push(response.choices[0].message);
-      setBusyUI(false);
       useStore.setState({ busy_ui: false })
       for (let i = 0; i < timeStamps.length - 1; i++) {
         timeArray.push(timeStamps[i]);
@@ -235,7 +232,6 @@ const Chatbot = () => {
   };
 
   const ReSubmitPrompt = () => {
-    setBusyUI(true);
     useStore.setState({ busy_ui: true })
     ResubmitPromptAsync();
   };
@@ -259,17 +255,16 @@ const Chatbot = () => {
 
   // Handles autofocus cursor
   useEffect(() => {
-    if (!busyUI) {
+    if (!busy_ui) {
       inputRef.current.focus();
     };
-  }, [busyUI]);
+  }, [busy_ui]);
 
   // Handles initilization
   useEffect(() => {
     if (!justOnce) {
       setJustOnce(true);
       setTimeStamps([]);
-      setBusyUI(false);
       setPrevUUID("none")
       setChatTitle("none");
       useStore.setState({
@@ -285,15 +280,15 @@ const Chatbot = () => {
 
   // Handles reset from [File -> New Chat] / [Ctrl + N]
   useEffect(() => {
-    if (chat_reset && !busyUI) {
+    if (chat_reset && !busy_ui) {
       setJustOnce(false);
       useStore.setState({ chat_reset: false });
     };
-  }, [chat_reset, busyUI]);
+  }, [chat_reset, busy_ui]);
 
   // Handles the selection of a previous chat
   useEffect(() => {
-    if (chat_open && !busyUI) {
+    if (chat_open && !busy_ui) {
       useStore.setState({ chat_open: false });
       const current_chat_ = useStore.getState().current_chat;
       const chats_ = useStore.getState().chats;
@@ -314,7 +309,6 @@ const Chatbot = () => {
           });
 
           setTimeStamps(chats_[i].timeStamps);
-          setBusyUI(false);
           setPrevUUID(chats_[i].uuid);
           setChatTitle(chats_[i].title)
 
@@ -329,7 +323,7 @@ const Chatbot = () => {
         }
       }
     };
-  }, [chat_open, busyUI, active_system_prompt_]);
+  }, [chat_open, busy_ui, active_system_prompt_]);
 
   return (
     <>
@@ -398,7 +392,7 @@ const Chatbot = () => {
                   onChange={handleUserPromptInput}
                   onKeyDown={handleKeyDown}
                   required={true}
-                  disabled={busyUI}
+                  disabled={busy_ui}
                   fullWidth
                   multiline={true}
                   minRows={1}
@@ -407,12 +401,12 @@ const Chatbot = () => {
               </FormControl>
               <Box display="flex" flexDirection="column" justifyContent="flex-end">
                 <Box margin={1}>
-                  {!busyUI &&
+                  {!busy_ui &&
                     <IconButton onClick={SubmitPrompt} disabled={!user_message_input.length}>
                       <SendIcon />
                     </IconButton>
                   }
-                  {busyUI && <CircularProgress size="2rem" color="secondary" />}
+                  {busy_ui && <CircularProgress size="2rem" color="secondary" />}
                 </Box>
               </Box>
             </Stack>

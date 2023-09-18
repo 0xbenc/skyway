@@ -27,7 +27,7 @@ export const useStore = create((set, get) => {
     // decrypted password
     password: "missing",
 
-    //used outside newchat to disable UI elements
+    //used to disable UI elements
     busy_ui: false,
 
     // powers notistack
@@ -76,7 +76,7 @@ export const useStore = create((set, get) => {
     conversation: [],
 
     scroll_time: false,
-    
+
     switch_prompt_dialog_open: false, //
 
     // current conversation token count
