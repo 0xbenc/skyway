@@ -79,6 +79,8 @@ export const useStore = create((set, get) => {
 
     chat_title: "",
 
+    timestamps: [],
+
     switch_prompt_dialog_open: false, //
 
     // current conversation token count
@@ -94,7 +96,7 @@ export const useStore = create((set, get) => {
     chat_open: false,
 
     // stores all conversations, includes the system prompt that was used per chat
-    // conversation, timeStamps, uuid, title, prompt, total_tokens, lastActive
+    // conversation, timestamps, uuid, title, prompt, total_tokens, lastActive
     chats: [],
 
     // uuid

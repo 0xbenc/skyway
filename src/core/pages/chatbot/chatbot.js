@@ -32,8 +32,6 @@ const Chatbot = () => {
 
   const conversationScrollRef = useRef(null);
 
-  const [timeStamps, setTimeStamps] = useState([]);
-
   const [justOnce, setJustOnce] = useState(false);
 
   const [prevUUID, setPrevUUID] = useState("none");
@@ -51,6 +49,8 @@ const Chatbot = () => {
   const busy_ui = useStore(state => state.busy_ui);
 
   const chat_title = useStore(state => state.chat_title);
+
+  const timestamps = useStore(state => state.timestamps);
 
   const color_mode_ = useStore.getState().color_mode;
 
@@ -78,7 +78,7 @@ const Chatbot = () => {
       useStore.setState({ chat_title: shortChatTitle })
     };
 
-    const newTimeStamps = [...timeStamps];
+    const newTimeStamps = [...timestamps];
     newTimeStamps.push(sendDateISO);
 
     if (!conversation_.length) {
@@ -94,9 +94,8 @@ const Chatbot = () => {
       upstream = [...conversation_];
     };
 
-    setTimeStamps(newTimeStamps);
-
     useStore.setState({
+      timestamps: newTimeStamps,
       conversation: conversation_,
       user_message_input: active_system_prompt_.prefill ? active_system_prompt_.prefill : ""
     });
@@ -117,14 +116,14 @@ const Chatbot = () => {
 
       newTimeStamps.push(unixToISO(response.created));
 
-      setTimeStamps(newTimeStamps);
+      useStore.setState({timestamps: newTimeStamps});
     };
 
     const newKey = generateKeyV4()
 
     const chat = {
       conversation: conversation_,
-      timeStamps: newTimeStamps,
+      timestamps: newTimeStamps,
       uuid: newKey,
       title: chat_title === "none" ? shortChatTitle : chat_title,
       prompt: active_system_prompt_,
@@ -166,11 +165,11 @@ const Chatbot = () => {
 
     let arr = [];
 
-    for (let i = 0; i < timeStamps.length - 2; i++) {
-      arr.push(timeStamps[i]);
+    for (let i = 0; i < timestamps.length - 2; i++) {
+      arr.push(timestamps[i]);
     };
 
-    setTimeStamps(arr);
+    useStore.setState({timestamps: arr})
     inputRef.current.focus();
   };
 
@@ -200,20 +199,20 @@ const Chatbot = () => {
       useStore.setState({ token_count: response.usage.total_tokens });
       conversation_.push(response.choices[0].message);
       useStore.setState({ busy_ui: false })
-      for (let i = 0; i < timeStamps.length - 1; i++) {
-        timeArray.push(timeStamps[i]);
+      for (let i = 0; i < timestamps.length - 1; i++) {
+        timeArray.push(timestamps[i]);
       };
 
       timeArray.push(unixToISO(response.created));
 
-      setTimeStamps(timeArray);
+      useStore.setState({timestamps: timeArray});
     };
 
     const newKey = generateKeyV4()
 
     const chat = {
       conversation: conversation_,
-      timeStamps: timeArray,
+      timestamps: timeArray,
       uuid: newKey,
       title: chat_title,
       prompt: active_system_prompt_,
@@ -265,9 +264,9 @@ const Chatbot = () => {
   useEffect(() => {
     if (!justOnce) {
       setJustOnce(true);
-      setTimeStamps([]);
       setPrevUUID("none")
       useStore.setState({
+        timestamps: [],
         chat_title: "none",
         conversation: [],
         token_count: 0,
@@ -309,10 +308,10 @@ const Chatbot = () => {
             user_message_input: active_system_prompt_.prefill ? active_system_prompt_.prefill : ""
           });
 
-          setTimeStamps(chats_[i].timeStamps);
           setPrevUUID(chats_[i].uuid);
 
           useStore.setState({
+            timestamps: chats_[i].timestamps,
             chat_title: chats_[i].title,
             conversation: chats_[i].conversation,
             token_count: chats_[i].total_tokens,
@@ -339,7 +338,7 @@ const Chatbot = () => {
                     <FormattedLeftResponse content={chat.content} color_mode={color_mode_} />
                     <Divider />
                     <Stack direction="row" spacing={1} alignItems="center">
-                      <Typography>{isoToHuman(timeStamps[key])}</Typography>
+                      <Typography>{isoToHuman(timestamps[key])}</Typography>
 
                       <CopyToClipboard text={chat.content}>
                         <IconButton size="small">
@@ -357,7 +356,7 @@ const Chatbot = () => {
                     <FormattedRightResponse content={chat.content} color_mode={color_mode_} />
                     <Divider />
                     <Stack direction="row" spacing={1} alignItems="center">
-                      <Typography>{isoToHuman(timeStamps[key])}</Typography>
+                      <Typography>{isoToHuman(timestamps[key])}</Typography>
 
                       <CopyToClipboard text={chat.content}>
                         <IconButton size="small">
