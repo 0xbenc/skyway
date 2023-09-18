@@ -34,25 +34,17 @@ const Chatbot = () => {
 
   const [justOnce, setJustOnce] = useState(false);
 
-  const [prevUUID, setPrevUUID] = useState("none");
-
   const chat_reset = useStore(state => state.chat_reset);
   const chat_open = useStore(state => state.chat_open);
   const active_system_prompt_ = useStore(state => state.active_system_prompt);
-
   const user_message_input = useStore(state => state.user_message_input);
-
   const conversation = useStore(state => state.conversation);
-
   const scroll_time = useStore(state => state.scroll_time);
-
   const busy_ui = useStore(state => state.busy_ui);
-
   const chat_title = useStore(state => state.chat_title);
-
   const timestamps = useStore(state => state.timestamps);
-
-  const color_mode_ = useStore.getState().color_mode;
+  const previous_uuid = useStore(state => state.previous_uuid);
+  const color_mode = useStore(state => state.color_mode);
 
   const version_ = useStore.getState().version
 
@@ -116,7 +108,7 @@ const Chatbot = () => {
 
       newTimeStamps.push(unixToISO(response.created));
 
-      useStore.setState({timestamps: newTimeStamps});
+      useStore.setState({ timestamps: newTimeStamps });
     };
 
     const newKey = generateKeyV4()
@@ -132,11 +124,10 @@ const Chatbot = () => {
       skywayVersion: version_
     };
 
-    chatSync(chat, prevUUID, true);
-
-    setPrevUUID(newKey);
+    chatSync(chat, previous_uuid, true);
 
     useStore.setState({
+      previous_uuid: newKey,
       scroll_time: true,
       conversation: conversation_,
       busy_ui: false
@@ -169,7 +160,7 @@ const Chatbot = () => {
       arr.push(timestamps[i]);
     };
 
-    useStore.setState({timestamps: arr})
+    useStore.setState({ timestamps: arr })
     inputRef.current.focus();
   };
 
@@ -205,7 +196,7 @@ const Chatbot = () => {
 
       timeArray.push(unixToISO(response.created));
 
-      useStore.setState({timestamps: timeArray});
+      useStore.setState({ timestamps: timeArray });
     };
 
     const newKey = generateKeyV4()
@@ -221,11 +212,10 @@ const Chatbot = () => {
       skywayVersion: version_
     };
 
-    chatSync(chat, prevUUID, true);
-
-    setPrevUUID(newKey);
+    chatSync(chat, previous_uuid, true);
 
     useStore.setState({
+      previous_uuid: newKey,
       scroll_time: true,
       conversation: conversation_
     })
@@ -264,8 +254,8 @@ const Chatbot = () => {
   useEffect(() => {
     if (!justOnce) {
       setJustOnce(true);
-      setPrevUUID("none")
       useStore.setState({
+        previous_uuid: "none",
         timestamps: [],
         chat_title: "none",
         conversation: [],
@@ -308,9 +298,8 @@ const Chatbot = () => {
             user_message_input: active_system_prompt_.prefill ? active_system_prompt_.prefill : ""
           });
 
-          setPrevUUID(chats_[i].uuid);
-
           useStore.setState({
+            previous_uuid: chats_[i].uuid,
             timestamps: chats_[i].timestamps,
             chat_title: chats_[i].title,
             conversation: chats_[i].conversation,
@@ -335,7 +324,7 @@ const Chatbot = () => {
               {chat.role !== "system" && <>
                 {chat.role === "assistant" ? <LeftBox>
                   <LeftChatBox>
-                    <FormattedLeftResponse content={chat.content} color_mode={color_mode_} />
+                    <FormattedLeftResponse content={chat.content} color_mode={color_mode} />
                     <Divider />
                     <Stack direction="row" spacing={1} alignItems="center">
                       <Typography>{isoToHuman(timestamps[key])}</Typography>
@@ -353,7 +342,7 @@ const Chatbot = () => {
                   </LeftChatBox>
                 </LeftBox> : <RightBox>
                   <RightChatBox>
-                    <FormattedRightResponse content={chat.content} color_mode={color_mode_} />
+                    <FormattedRightResponse content={chat.content} color_mode={color_mode} />
                     <Divider />
                     <Stack direction="row" spacing={1} alignItems="center">
                       <Typography>{isoToHuman(timestamps[key])}</Typography>

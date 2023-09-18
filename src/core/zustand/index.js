@@ -81,6 +81,8 @@ export const useStore = create((set, get) => {
 
     timestamps: [],
 
+    previous_uuid: "none",
+
     switch_prompt_dialog_open: false, //
 
     // current conversation token count
