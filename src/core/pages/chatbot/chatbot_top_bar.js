@@ -18,9 +18,6 @@ import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
 import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 import { encryptPrompts } from "../../utility/encryption";
 import { eSet } from "../../utility/electronStore";
-import RenameDialog from "./renameDialog";
-import SwitchPromptDialog from "./switch_prompt_dialog";
-import ChatDrawer from "./chat_drawer";
 // ----------------------------------------------------------------------
 
 const TopBar = () => {
@@ -152,12 +149,6 @@ const TopBar = () => {
           </OutlinePaper>
         </Stack>
       </OutlinePaper>
-
-      <ChatDrawer />
-
-      <SwitchPromptDialog />
-
-      <RenameDialog />
     </Top>
   );
 };
