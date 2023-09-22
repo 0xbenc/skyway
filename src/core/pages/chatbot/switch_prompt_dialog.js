@@ -9,6 +9,7 @@ import {
   Typography,
   Stack,
   Button,
+  Divider,
 } from "@mui/material";
 import { Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
 // ----------------------------------------------------------------------
@@ -29,11 +30,12 @@ const SwitchPromptDialog = () => {
           <Stack direction="row" spacing={1}>
             {system_prompts_.map((prompt, key) => {
               return (
-                <OutlinePaper key={key} onClick={() => { chatSelect(key, system_prompts_) }}>
+                <OutlinePaper key={key} onClick={() => { chatSelect(key, system_prompts_) }} sx={{ cursor: 'pointer' }} >
                   <Typography variant="h6">{prompt.title}</Typography>
-                  <Stack direction="row" spacing={1}>
-                    <Typography variant="body2">{prompt.model} |</Typography>
-                    <Typography variant="body2">{prompt.engine}</Typography>
+                  <Divider />
+                  <Stack direction="column" spacing={0.5}>
+                    <Typography variant="subtitle2">{prompt.model}</Typography>
+                    <Typography variant="subtitle2">{prompt.engine}</Typography>
                   </Stack>
                 </OutlinePaper>
               )
