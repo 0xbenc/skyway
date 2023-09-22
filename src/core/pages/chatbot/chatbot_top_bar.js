@@ -24,8 +24,8 @@ const TopBar = () => {
   const token_count = useStore(state => state.token_count);
   const prompt_save_status = useStore(state => state.prompt_save_status);
   const busy_ui = useStore(state => state.busy_ui);
+  const active_system_prompt = useStore(state => state.active_system_prompt);
 
-  const active_system_prompt_ = useStore.getState().active_system_prompt;
   const open_ai_api_keys_ = useStore.getState().open_ai_api_keys;
   const open_ai_api_key_ = useStore.getState().open_ai_api_key;
   const system_prompts_ = useStore.getState().system_prompts;
@@ -64,7 +64,7 @@ const TopBar = () => {
                 </Typography>
                 <Stack direction="row" spacing={1}>
                   <Typography variant="body1">
-                    <b>{active_system_prompt_.title}</b>
+                    <b>{active_system_prompt.title}</b>
                   </Typography>
                   {prompt_save_status && <Tooltip title={"Prompt is in your library"}>
                     <BookmarkAddedIcon size="small" />
@@ -79,7 +79,7 @@ const TopBar = () => {
 
                           let newPrompts = [...system_prompts_];
 
-                          let potentialPrompt = active_system_prompt_;
+                          let potentialPrompt = useStore.getState().active_system_prompt;
 
                           potentialPrompt.importedDate = importedDateISO;
 
@@ -106,7 +106,7 @@ const TopBar = () => {
                   Model
                 </Typography>
                 <Typography variant="body1">
-                  <b>{active_system_prompt_.model}</b>
+                  <b>{active_system_prompt.model}</b>
                 </Typography>
               </Stack>
             </OutlinePaper>
@@ -116,7 +116,7 @@ const TopBar = () => {
                   Engine
                 </Typography>
                 <Typography variant="body1">
-                  <b>{active_system_prompt_.engine}</b>
+                  <b>{active_system_prompt.engine}</b>
                 </Typography>
               </Stack>
             </OutlinePaper>
@@ -133,16 +133,16 @@ const TopBar = () => {
           </Stack>
           <OutlinePaper>
             <Stack direction="column" spacing={1} textAlign={"right"}>
-              {active_system_prompt_.engine === "token limited" && <Typography variant="body1">
+              {active_system_prompt.engine === "token limited" && <Typography variant="body1">
                 Total Tokens
               </Typography>}
-              {active_system_prompt_.engine === "token limited" && <Typography variant="body1">
-                <b>{String(token_count)}/{active_system_prompt_.limit}</b>
+              {active_system_prompt.engine === "token limited" && <Typography variant="body1">
+                <b>{String(token_count)}/{active_system_prompt.limit}</b>
               </Typography>}
-              {active_system_prompt_.engine === "amnesia" && <Typography variant="body1">
+              {active_system_prompt.engine === "amnesia" && <Typography variant="body1">
                 Previous Tokens
               </Typography>}
-              {active_system_prompt_.engine === "amnesia" && <Typography variant="body1">
+              {active_system_prompt.engine === "amnesia" && <Typography variant="body1">
                 <b>{token_count}</b>
               </Typography>}
             </Stack>

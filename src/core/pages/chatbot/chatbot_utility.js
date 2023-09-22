@@ -49,7 +49,7 @@ const chatDelete = (uuid) => {
   eSet('chats', encCopy);
 };
 
-const chatSelect = (index, system_prompts) => {
+const promptSelect = (index, system_prompts) => {
   const usedDate = new Date();
   const usedDateISO = String(usedDate.toISOString());
 
@@ -71,6 +71,7 @@ const chatSelect = (index, system_prompts) => {
     switch_prompt_dialog_open: false,
     system_prompts: systems,
     active_system_prompt: system_prompts[index],
+    chat_drawer_open: false,
     last_prompt: index,
     chat_reset: true
   });
@@ -105,4 +106,4 @@ const ImportChat = () => {
     });
 };
 
-export { chatSync, chatSelect, chatDelete, ImportChat };
+export { chatSync, promptSelect, chatDelete, ImportChat };

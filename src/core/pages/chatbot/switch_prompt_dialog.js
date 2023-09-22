@@ -3,7 +3,7 @@ import React from "react";
 import { useStore } from "../../zustand";
 //
 import { OutlinePaper } from "../../mui/reusable";
-import { chatSelect } from "./chatbot_utility";
+import { promptSelect } from "./chatbot_utility";
 //
 import {
   Typography,
@@ -30,7 +30,7 @@ const SwitchPromptDialog = () => {
           <Stack direction="row" spacing={1}>
             {system_prompts_.map((prompt, key) => {
               return (
-                <OutlinePaper key={key} onClick={() => { chatSelect(key, system_prompts_) }} sx={{ cursor: 'pointer' }} >
+                <OutlinePaper key={key} onClick={() => { promptSelect(key, system_prompts_) }} sx={{ cursor: 'pointer' }} >
                   <Typography variant="h6">{prompt.title}</Typography>
                   <Divider />
                   <Stack direction="column" spacing={0.5}>
