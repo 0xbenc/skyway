@@ -3,7 +3,7 @@ import React from "react";
 import { useStore } from "../../zustand";
 //
 import { navigate } from "../../utility/navigatePage";
-import { ExportChat, ImportChat, chatDelete } from "./chatbot_utility";
+import { ExportChat, ImportChat, chatDelete } from "./utility";
 import { isoToHuman } from "../../utility/time";
 //
 import {

@@ -2,7 +2,7 @@ import React from "react";
 //
 import { useStore } from "../../zustand";
 //
-import { chatSync } from "./chatbot_utility";
+import { chatSync } from "./utility";
 //
 import { Button } from "@mui/material";
 import { Dialog, DialogTitle, FormControl, TextField, DialogContent, DialogActions } from "@mui/material";

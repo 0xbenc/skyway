@@ -8,7 +8,7 @@ import { EditSystemPromptPage } from "./systemPrompt";
 import { NewSystemPromptPage } from "./newSystemPrompt";
 import { ChatbotPage } from "./chatbot";
 import { RecoveryPage } from "./recovery";
-import { ChangeAPIKeyPage } from "./change_api_key";
+import { ChangeAPIKeyPage } from "./changeAPIKey";
 // ----------------------------------------------------------------------
 
 const HandlePages = () => {

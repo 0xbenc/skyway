@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 //
 import { useStore } from "../../zustand";
 //
-import { Top } from "./chatbot_styles";
+import { Top } from "./styles";
 import { OutlinePaper } from "../../mui/reusable";
 //
 import {

@@ -1,6 +1,6 @@
 import React from "react";
 //
-import { ChangeAPIKey } from "./change_api_key";
+import { ChangeAPIKey } from "./changeAPIKey";
 // ----------------------------------------------------------------------
 
 const ChangeAPIKeyPage = () => {

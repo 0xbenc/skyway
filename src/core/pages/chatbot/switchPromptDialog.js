@@ -3,7 +3,7 @@ import React from "react";
 import { useStore } from "../../zustand";
 //
 import { OutlinePaper } from "../../mui/reusable";
-import { promptSelect } from "./chatbot_utility";
+import { promptSelect } from "./utility";
 //
 import {
   Typography,

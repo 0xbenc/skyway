@@ -2,9 +2,9 @@ import React from "react";
 //
 import { Chatbot } from "./chatbot";
 import { RenameDialog } from "./renameDialog";
-import { SwitchPromptDialog } from "./switch_prompt_dialog";
-import { ChatDrawer } from "./chat_drawer";
-import { TopBar } from "./chatbot_top_bar";
+import { SwitchPromptDialog } from "./switchPromptDialog";
+import { ChatDrawer } from "./drawer";
+import { TopBar } from "./topBar";
 // ----------------------------------------------------------------------
 
 const ChatbotPage = () => {
