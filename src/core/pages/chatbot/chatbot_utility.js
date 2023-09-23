@@ -4,12 +4,15 @@ import { encrypt, encryptPrompts } from "../../utility/encryption";
 // ----------------------------------------------------------------------
 
 /**
- * Updates an existing chat or appends a new one to the array of chats
- * 
- * @param {Object} chat - The chat item to be synched. 
- * @property {string} chat.uuid - identifies unique chats
+ * Synchronizes a chat in the zustand store using the provided chat object. Replaces an existing chat if oldUUID exists or adds a new one if "none". Finally, it encrypts and saves the updated chats in electron store.
+ *
+ * @param {Object} chat - The chat object to be synchronized. It should include 'uuid' property.
+ * @param {string} oldUUID - The UUID of the chat to be replaced. If it equals "none", a new chat is added.
+ * @param {boolean} chatIsActive - If true, sets the current active chat to the chat being synchronized.
+ *
+ * @returns {undefined} This function doesn't return anything. It updates application state and local storage.
  */
-const chatSync = (chat, oldUUID, active) => {
+const chatSync = (chat, oldUUID, chatIsActive) => {
   const { chats, password } = useStore.getState();
   let updatedChats = [...chats];
 
@@ -20,16 +23,18 @@ const chatSync = (chat, oldUUID, active) => {
 
     if (index !== -1) {
       updatedChats = chats.map((item, i) => i === index ? chat : item);
+    } else {
+      updatedChats.push(chat);
     };
   };
 
-  const copy = JSON.stringify([...updatedChats]);
-  const encCopy = encrypt(copy, password);
+  const updatedChatsString = JSON.stringify([...updatedChats]);
+  const updatedChatsEncryptedString = encrypt(updatedChatsString, password);
 
-  if (active) useStore.setState({ current_chat: chat.uuid });
+  if (chatIsActive) useStore.setState({ current_chat: chat.uuid });
 
   useStore.setState({ chats: updatedChats });
-  eSet('chats', encCopy);
+  eSet('chats', updatedChatsEncryptedString);
 };
 
 const chatDelete = (uuid) => {
@@ -42,11 +47,11 @@ const chatDelete = (uuid) => {
     updatedChats.splice(index, 1);
   };
 
-  const copy = JSON.stringify([...updatedChats]);
-  const encCopy = encrypt(copy, password);
+  const updatedChatsString = JSON.stringify([...updatedChats]);
+  const updatedChatsEncryptedString = encrypt(updatedChatsString, password);
 
   useStore.setState({ chats: updatedChats });
-  eSet('chats', encCopy);
+  eSet('chats', updatedChatsEncryptedString);
 };
 
 const promptSelect = (index, system_prompts) => {
