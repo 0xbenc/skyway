@@ -5,9 +5,8 @@ import { useStore } from "../../zustand";
 import { previewText } from "../../utility/string";
 import { navigate } from "../../utility/navigatePage";
 import { BasicBox, OutlinePaper } from "../../mui/reusable";
-import { deleteSystemPrompt } from "./systemPrompts_utility";
+import { ExportPrompt, deleteSystemPrompt } from "./systemPrompts_utility";
 import Title from "../../components/title";
-import { cleanFileTitle } from "../../utility/string";
 import { ImportPrompt } from "./systemPrompts_utility";
 //
 import {
@@ -32,27 +31,6 @@ const SystemPrompts = () => {
     console.log("NAVIGATION: system_prompt", system_prompts[index].title)
     useStore.setState({ page: "system_prompt", system_prompt_to_edit: index })
   }
-
-  const ExportPrompt = (index) => {
-    const exporter = async (index) => {
-      const dir = await window.electron.engine.dialog_choose_directory();
-      if (!dir) {
-        return;  // Cancelled directory choice, exit exporter function
-      }
-      const jsonstr = JSON.stringify(system_prompts[index]);
-      const title = system_prompts[index].title;
-      const cleanTitle = cleanFileTitle(title);
-      const args = {
-        dir: dir,
-        jsonstr: jsonstr,
-        filename: cleanTitle
-      };
-
-      window.electron.engine.send('save-json', args);
-    };
-
-    exporter(index);
-  };
 
   return (
     <BasicBox>

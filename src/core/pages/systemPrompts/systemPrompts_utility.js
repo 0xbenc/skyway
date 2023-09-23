@@ -2,6 +2,7 @@ import { useStore } from "../../zustand";
 //
 import { encryptPrompts } from "../../utility/encryption";
 import { eSet } from "../../utility/electronStore";
+import { cleanFileTitle } from "../../utility/string";
 // ----------------------------------------------------------------------
 
 const deleteSystemPrompt = (index) => {
@@ -67,4 +68,34 @@ const ImportPrompt = () => {
     });
 };
 
-export { deleteSystemPrompt, ImportPrompt }
+const ExportPrompt = (index) => {
+  const system_prompts = useStore.getState().system_prompts;
+
+  const exporter = async (index) => {
+    const dir = await window.electron.engine.dialog_choose_directory();
+    if (!dir) {
+      return;  // Cancelled directory choice, exit exporter function
+    }
+    
+    const chatsCopy = [...system_prompts]
+
+    let chatCopy = chatsCopy[index];
+    chatCopy.skywayType = "prompt";
+
+    const jsonstr = JSON.stringify(chatCopy);
+    
+    const cleanTitle = cleanFileTitle(chatCopy.title);
+    
+    const args = {
+      dir: dir,
+      jsonstr: jsonstr,
+      filename: cleanTitle
+    };
+
+    window.electron.engine.send('save-json', args);
+  };
+
+  exporter(index);
+};
+
+export { deleteSystemPrompt, ImportPrompt, ExportPrompt }
