@@ -186,4 +186,4 @@ const ChatDrawer = () => {
   )
 };
 
-export default ChatDrawer;
+export { ChatDrawer };

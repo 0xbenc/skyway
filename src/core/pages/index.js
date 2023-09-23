@@ -2,12 +2,12 @@ import React from "react";
 //
 import { useStore } from "../zustand";
 //
-import Login from "./login";
-import SystemPrompts from "./systemPrompts";
-import SystemPrompt from "./systemPrompt";
-import NewSystemPrompt from "./newSystemPrompt";
-import Chatbot from "./chatbot";
-import Recovery from "./recovery";
+import { LoginPage } from "./login";
+import { SystemPromptsPage } from "./systemPrompts";
+import { EditSystemPromptPage } from "./systemPrompt";
+import { NewSystemPromptPage } from "./newSystemPrompt";
+import { ChatbotPage } from "./chatbot";
+import { RecoveryPage } from "./recovery";
 import { ChangeAPIKeyPage } from "./change_api_key";
 // ----------------------------------------------------------------------
 
@@ -16,13 +16,13 @@ const HandlePages = () => {
 
   return (
     <>
-      {page === "login" && <Login />}
-      {page === "recovery" && <Recovery />}
-      {page === "chatbot" && <Chatbot />}
+      {page === "login" && <LoginPage />}
+      {page === "recovery" && <RecoveryPage />}
+      {page === "chatbot" && <ChatbotPage />}
       {page === "change api key" && <ChangeAPIKeyPage />}
-      {page === "system_prompts" && <SystemPrompts />}
-      {page === "new_system_prompt" && <NewSystemPrompt />}
-      {page === "system_prompt" && <SystemPrompt />}
+      {page === "system_prompts" && <SystemPromptsPage />}
+      {page === "new_system_prompt" && <NewSystemPromptPage />}
+      {page === "system_prompt" && <EditSystemPromptPage />}
     </>
   );
 };

@@ -153,4 +153,4 @@ const TopBar = () => {
   );
 };
 
-export default TopBar;
+export { TopBar };

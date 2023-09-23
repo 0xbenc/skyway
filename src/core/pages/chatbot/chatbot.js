@@ -5,8 +5,8 @@ import { useStore } from "../../zustand";
 //
 import { fetchChatCompletion } from "../../utility/fetchData";
 import { isoToHuman, unixToISO } from "../../utility/time";
-import error from "../../utility/error";
-import generateKeyV4 from "../../utility/uuid";
+import { error } from "../../utility/error";
+import { generateKeyV4 } from "../../utility/uuid";
 import { LeftBox, RightBox, LeftChatBox, RightChatBox, ChatField, Middle, Bottom } from "./chatbot_styles";
 import { FormattedLeftResponse, FormattedRightResponse } from "./chatbot_components";
 import { chatSync } from "./chatbot_utility";
@@ -406,4 +406,4 @@ const Chatbot = () => {
   );
 };
 
-export default Chatbot;
+export { Chatbot };

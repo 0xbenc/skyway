@@ -56,4 +56,4 @@ const SwitchPromptDialog = () => {
   );
 };
 
-export default SwitchPromptDialog;
+export { SwitchPromptDialog };

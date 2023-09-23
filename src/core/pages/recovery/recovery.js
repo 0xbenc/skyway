@@ -110,4 +110,4 @@ const Recovery = () => {
   );
 };
 
-export default Recovery;
+export { Recovery };

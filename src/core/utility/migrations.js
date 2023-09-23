@@ -1,4 +1,4 @@
-const { default: generateKeyV4 } = require('./uuid');
+const { generateKeyV4 } = require('./uuid');
 // Uses require because the function is called by src/main.js
 // ----------------------------------------------------------------------
 

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 //
 import { useStore } from "../../zustand";
 //
-import Prompts from "../../utility/defaultSystemPrompts";
+import { Prompts } from "../../utility/defaultSystemPrompts";
 import { seeds } from "../../utility/seeds";
 import { generateRandomNumbers } from "../../utility/number";
 import { eGet, eSet } from "../../utility/electronStore";
@@ -384,4 +384,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export { Login };

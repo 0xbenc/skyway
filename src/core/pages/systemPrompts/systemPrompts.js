@@ -122,4 +122,4 @@ const SystemPrompts = () => {
   );
 };
 
-export default SystemPrompts;
+export { SystemPrompts };

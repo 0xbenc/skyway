@@ -76,4 +76,4 @@ const RenameDialog = () => {
   );
 };
 
-export default RenameDialog;
+export { RenameDialog };

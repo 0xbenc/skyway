@@ -36,4 +36,4 @@ const Prompts = [
 ];
 
 
-export default Prompts;
+export { Prompts };
