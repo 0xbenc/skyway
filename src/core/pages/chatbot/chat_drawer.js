@@ -3,8 +3,7 @@ import React from "react";
 import { useStore } from "../../zustand";
 //
 import { navigate } from "../../utility/navigatePage";
-import { ImportChat, chatDelete } from "./chatbot_utility";
-import { cleanFileTitle } from "../../utility/string";
+import { ExportChat, ImportChat, chatDelete } from "./chatbot_utility";
 import { isoToHuman } from "../../utility/time";
 //
 import {
@@ -70,39 +69,6 @@ const ChatDrawer = () => {
   const switchPromptOpen = (event) => {
     event.stopPropagation();
     useStore.setState({ switch_prompt_dialog_open: true })
-  };
-
-  const ExportChat = (uuid) => {
-    const exporter = async (uuid) => {
-      const dir = await window.electron.engine.dialog_choose_directory();
-      if (!dir) {
-        return;  // Cancelled directory choice, exit exporter function
-      }
-
-      let indexMatch = -1;
-
-      for (let i = 0; i < chats.length; i++) {
-        if (uuid === chats[i].uuid) {
-          indexMatch = i
-        };
-      };
-
-      if (indexMatch > -1) {
-        const chatCopy = [...chats];
-        const jsonstr = JSON.stringify(chatCopy[indexMatch]);
-        const title = chatCopy[indexMatch].title;
-        const cleanTitle = cleanFileTitle(title);
-        const args = {
-          dir: dir,
-          jsonstr: jsonstr,
-          filename: cleanTitle
-        };
-
-        window.electron.engine.send('save-json', args);
-      };
-    };
-
-    exporter(uuid);
   };
 
   return (

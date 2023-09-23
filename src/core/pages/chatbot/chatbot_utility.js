@@ -1,6 +1,7 @@
 import { useStore } from '../../zustand';
 import { eSet } from "../../utility/electronStore";
 import { encrypt, encryptPrompts } from "../../utility/encryption";
+import { cleanFileTitle } from '../../utility/string';
 // ----------------------------------------------------------------------
 
 /**
@@ -111,4 +112,44 @@ const ImportChat = () => {
     });
 };
 
-export { chatSync, promptSelect, chatDelete, ImportChat };
+const ExportChat = (uuid) => {
+  const chats = useStore.getState().chats;
+  const exporter = async (uuid) => {
+    const dir = await window.electron.engine.dialog_choose_directory();
+    if (!dir) {
+      return;  // Cancelled directory choice, exit exporter function
+    }
+
+    let indexMatch = -1;
+
+    for (let i = 0; i < chats.length; i++) {
+      if (uuid === chats[i].uuid) {
+        indexMatch = i
+      };
+    };
+
+    if (indexMatch > -1) {
+      const chatsCopy = [...chats];
+      
+      let chatCopy = chatsCopy[indexMatch];
+      chatCopy.skywayType = "chat";
+      
+      const jsonstr = JSON.stringify(chatCopy);
+      
+      const title = chatCopy.title;
+      const cleanTitle = cleanFileTitle(title);
+      
+      const args = {
+        dir: dir,
+        jsonstr: jsonstr,
+        filename: cleanTitle
+      };
+
+      window.electron.engine.send('save-json', args);
+    };
+  };
+
+  exporter(uuid);
+};
+
+export { chatSync, promptSelect, chatDelete, ImportChat, ExportChat };
