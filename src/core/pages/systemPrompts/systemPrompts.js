@@ -91,7 +91,7 @@ const SystemPrompts = () => {
                         <Chip label={prompt.engine} variant="outlined" sx={{ marginBottom: 1, marginLeft: 1 }} />
                       </Grid>
 
-                      <Grid item sm={12}>
+                      {key > 1 && <Grid item sm={12}>
                         <Stack direction="row">
                           <Tooltip title="Edit System Prompt">
                             <IconButton onClick={() => { goSystemPromptPage(key) }}>
@@ -109,7 +109,7 @@ const SystemPrompts = () => {
                             </IconButton>
                           </Tooltip>
                         </Stack>
-                      </Grid>
+                      </Grid>}
                     </Grid>
                   </OutlinePaper>
                 </Grid>
