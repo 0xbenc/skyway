@@ -1,6 +1,6 @@
 import React from "react";
 //
-import ChangeAPIKey from "./change_api_key";
+import { ChangeAPIKey } from "./change_api_key";
 // ----------------------------------------------------------------------
 
 const ChangeAPIKeyPage = () => {
@@ -10,4 +10,4 @@ const ChangeAPIKeyPage = () => {
   );
 };
 
-export default ChangeAPIKeyPage;
+export { ChangeAPIKeyPage };

@@ -8,7 +8,7 @@ import SystemPrompt from "./systemPrompt";
 import NewSystemPrompt from "./newSystemPrompt";
 import Chatbot from "./chatbot";
 import Recovery from "./recovery";
-import ChangeAPIKey from "./change_api_key";
+import { ChangeAPIKeyPage } from "./change_api_key";
 // ----------------------------------------------------------------------
 
 const HandlePages = () => {
@@ -19,7 +19,7 @@ const HandlePages = () => {
       {page === "login" && <Login />}
       {page === "recovery" && <Recovery />}
       {page === "chatbot" && <Chatbot />}
-      {page === "change api key" && <ChangeAPIKey />}
+      {page === "change api key" && <ChangeAPIKeyPage />}
       {page === "system_prompts" && <SystemPrompts />}
       {page === "new_system_prompt" && <NewSystemPrompt />}
       {page === "system_prompt" && <SystemPrompt />}
@@ -27,4 +27,4 @@ const HandlePages = () => {
   );
 };
 
-export default HandlePages;
+export { HandlePages };

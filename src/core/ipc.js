@@ -58,4 +58,4 @@ const HandleIPC = () => {
   return null;
 };
 
-export default HandleIPC;
+export { HandleIPC };

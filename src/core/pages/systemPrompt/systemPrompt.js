@@ -5,7 +5,7 @@ import { useStore } from "../../zustand";
 import { encryptPrompts } from "../../utility/encryption";
 import { BasicBox, OutlinePaper } from "../../mui/reusable";
 import { eSet } from "../../utility/electronStore";
-import Title from "../../components/title";
+import { Title } from "../../components/title";
 import generateKeyV4 from "../../utility/uuid";
 //
 import {

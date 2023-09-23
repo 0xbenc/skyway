@@ -2,6 +2,17 @@
 
 ---
 
+## File Names
+
+File name should be camelCase: 
+
+`fetchData.js` not `fetch_data.js`
+
+## React Exports
+
+Don't use `export default`. 
+Be intentional that import and export names match in React.
+
 ## React Imports
 
 ### Actual Style

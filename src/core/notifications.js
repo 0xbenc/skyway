@@ -40,4 +40,4 @@ const HandleNotifications = () => {
   );
 };
 
-export default HandleNotifications;
+export { HandleNotifications };

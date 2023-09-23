@@ -6,7 +6,7 @@ import { previewText } from "../../utility/string";
 import { navigate } from "../../utility/navigatePage";
 import { BasicBox, OutlinePaper } from "../../mui/reusable";
 import { ExportPrompt, deleteSystemPrompt } from "./systemPrompts_utility";
-import Title from "../../components/title";
+import { Title } from "../../components/title";
 import { ImportPrompt } from "./systemPrompts_utility";
 //
 import {

@@ -1,7 +1,5 @@
 import React from "react";
 //
-import { useStore } from "../zustand";
-//
 import { navigate } from "../utility/navigatePage";
 import { OutlinePaper } from "../mui/reusable";
 //
@@ -36,4 +34,4 @@ const Title = ({ value }) => {
   );
 };
 
-export default Title;
+export { Title };
