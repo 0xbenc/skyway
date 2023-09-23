@@ -8,7 +8,7 @@ import { generateRandomNumbers } from "../../utility/number";
 import { eGet, eSet } from "../../utility/electronStore";
 import { decrypt, decryptPrompts, encryptPrompts, encrypt } from "../../utility/encryption";
 import { BasicBox, OutlinePaper } from "../../mui/reusable";
-import { SeedPaper } from "./login_styles";
+import { SeedPaper } from "./styles";
 //
 import { FormControl, TextField, Button, Typography, Box, Stack } from "@mui/material";
 // ----------------------------------------------------------------------
