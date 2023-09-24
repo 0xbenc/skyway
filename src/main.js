@@ -58,7 +58,39 @@ const setUpMainInteractions = mainWindow => {
   });
 
   ipcMain.handle('dialog-open-filtered-file', (event, directory, filters) => openFilteredFile(mainWindow, event, directory, filters));
-  ipcMain.handle('openai-api', callOpenAI);
+  
+  ipcMain.handle('openai-api', async (_, endpoint, data, key) => {
+    const bearer = `Bearer ${key}`
+    try {
+      const response = await axios({
+        method: 'post',
+        url: 'https://api.openai.com/' + endpoint,
+        data,
+        headers: {
+          'Authorization': bearer,
+          'Content-Type': 'application/json'
+        },
+        responseType: 'stream'
+      });
+  
+      response.data.on('data', (chunk) => {
+        const decoder = new TextDecoder("utf-8");
+        const dChunk = decoder.decode(chunk)
+        mainWindow.webContents.send('openai-api-data', dChunk);
+      });
+  
+      return new Promise((resolve, reject) => {
+        response.data.on('end', () => {
+          resolve('done');
+        });
+        response.data.on('error', reject);
+      });
+    } catch (error) {
+      console.error("API request error", error)
+      throw error
+    };
+  });
+
   ipcMain.handle('version-get', () => app.getVersion());
   ipcMain.on('store-get', (event, val) => { event.returnValue = store.get(val); });
   ipcMain.on('store-set', (_, key, val) => { store.set(key, val); });
@@ -91,22 +123,6 @@ const openFilteredFile = async (mainWindow, _, directory, filters) => {
       "folderPath": folderPath
     };
     return file;
-  };
-};
-
-const callOpenAI = async (_, endpoint, data, key) => {
-  const bearer = `Bearer ${key}`
-  try {
-    const response = await axios.post('https://api.openai.com/' + endpoint, data, {
-      headers: {
-        'Authorization': bearer,
-        'Content-Type': 'application/json'
-      },
-    })
-    return response.data
-  } catch (error) {
-    console.error("API request error", error)
-    throw error
   };
 };
 

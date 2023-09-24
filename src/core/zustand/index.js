@@ -85,6 +85,9 @@ export const useStore = create((set, get) => {
 
     switch_prompt_dialog_open: false, //
 
+    //WIP state for chatstream
+    current_message: "",
+
     // current conversation token count
     token_count: 0,
 

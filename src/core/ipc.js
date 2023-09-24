@@ -55,6 +55,43 @@ const HandleIPC = () => {
     };
   }, []);
 
+  useEffect(() => {
+    window.electron.engine.on('openai-api-data', (_, data) => {
+
+      function parseAndAddData(dataString, cleanArray) {
+        const trimmed = String(dataString).trim()
+        const dataParts = trimmed.split('\n');
+
+        for (let part of dataParts) {
+          const jsonString = part.startsWith('data: ') ? part.replace('data: ', '') : part;
+
+          if (jsonString !== "" && jsonString !== "[DONE]") {
+            try {
+              const jsonObject = JSON.parse(jsonString);
+              cleanArray.push(jsonObject);
+            } catch (e) {
+              console.error('Error parsing JSON string:', e);
+            }
+          }
+        }
+      }
+
+      let cleanArray = [];
+      let cleanString = "";
+
+      parseAndAddData(data, cleanArray);
+
+      for (let i = 0; i < cleanArray.length; i++) {
+        cleanString = cleanString += cleanArray[i].choices[0].delta.content
+      }
+
+      if (cleanString !== "undefined") {
+        const prevCurrentMessage = useStore.getState().current_message;
+        useStore.setState({ current_message: prevCurrentMessage + cleanString })
+      }
+    });
+  }, []);
+
   return null;
 };
 

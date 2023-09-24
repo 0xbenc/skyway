@@ -7,10 +7,10 @@ import { useStore } from "../zustand";
  * @param {Object[]} messages - An array of message objects where each object contains data about the role and content of the message.
  * @param {String} model - The model to use for the completion, recommended 'gpt-3.5-turbo'.
  * @param {Object} params - Extra parameters if any.
- * @return {Promise<Object|String>} - The response from the API or "error", if an error occurs.
  */
 const fetchChatCompletion = async (messages, model, params) => {
   const data = {
+    stream: true,
     messages,
     model,
     ...params
@@ -19,8 +19,7 @@ const fetchChatCompletion = async (messages, model, params) => {
   const keys = useStore.getState().open_ai_api_keys
 
   try {
-    const response = await window.electron.engine.chat(data, keys[key].key);
-    return response;
+    await window.electron.engine.chat(data, keys[key].key);
   } catch (error) {
     return "error";
   };

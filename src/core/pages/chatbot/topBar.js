@@ -134,7 +134,7 @@ const TopBar = () => {
           <OutlinePaper>
             <Stack direction="column" spacing={1} textAlign={"right"}>
               {active_system_prompt.engine === "token limited" && <Typography variant="body1">
-                Total Tokens
+                Token Limit
               </Typography>}
               {active_system_prompt.engine === "token limited" && <Typography variant="body1">
                 <b>{String(token_count)}/{active_system_prompt.limit}</b>

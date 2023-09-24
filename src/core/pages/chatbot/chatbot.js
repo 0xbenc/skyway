@@ -46,6 +46,8 @@ const Chatbot = () => {
   const previous_uuid = useStore(state => state.previous_uuid);
   const color_mode = useStore(state => state.color_mode);
 
+  // const current_message = useStore(state => state.current_message);
+
   const version_ = useStore.getState().version
 
   const errorMessage = {
@@ -103,12 +105,12 @@ const Chatbot = () => {
     if (response === "error") {
       conversation_.push(errorMessage);
     } else {
-      useStore.setState({ token_count: response.usage.total_tokens });
-      conversation_.push(response.choices[0].message);
+      // useStore.setState({ token_count: response.usage.total_tokens });
+      // conversation_.push(response.choices[0].message);
 
-      newTimeStamps.push(unixToISO(response.created));
+      // newTimeStamps.push(unixToISO(response.created));
 
-      useStore.setState({ timestamps: newTimeStamps });
+      // useStore.setState({ timestamps: newTimeStamps });
     };
 
     const newKey = generateKeyV4()
@@ -119,7 +121,7 @@ const Chatbot = () => {
       uuid: newKey,
       title: chat_title === "none" ? shortChatTitle : chat_title,
       prompt: active_system_prompt_,
-      total_tokens: response.usage.total_tokens,
+      // total_tokens: response.usage.total_tokens,
       lastActive: newTimeStamps[newTimeStamps.length - 1],
       skywayVersion: version_
     };
@@ -187,7 +189,7 @@ const Chatbot = () => {
 
       conversation_.push(errorMessage);
     } else {
-      useStore.setState({ token_count: response.usage.total_tokens });
+      // useStore.setState({ token_count: response.usage.total_tokens });
       conversation_.push(response.choices[0].message);
       useStore.setState({ busy_ui: false })
       for (let i = 0; i < timestamps.length - 1; i++) {
@@ -207,7 +209,7 @@ const Chatbot = () => {
       uuid: newKey,
       title: chat_title,
       prompt: active_system_prompt_,
-      total_tokens: response.usage.total_tokens,
+      // total_tokens: response.usage.total_tokens,
       lastActive: timeArray[timeArray.length - 1],
       skywayVersion: version_
     };
@@ -303,7 +305,7 @@ const Chatbot = () => {
             timestamps: chats_[i].timestamps,
             chat_title: chats_[i].title,
             conversation: chats_[i].conversation,
-            token_count: chats_[i].total_tokens,
+            // token_count: chats_[i].total_tokens,
             prompt_save_status: activeChatInLibrary,
             busy_ui: false
           });
@@ -363,9 +365,14 @@ const Chatbot = () => {
             </React.Fragment>
           )
         })}
+        {/* <LeftBox>
+          <LeftChatBox>
+            <FormattedLeftResponse content={current_message} color_mode={color_mode} />
+          </LeftChatBox>
+        </LeftBox> */}
 
         <div ref={conversationScrollRef} />
-      </Middle>
+      </Middle >
 
       <Bottom>
         <Stack direction="column" spacing={1} alignItems="center">
