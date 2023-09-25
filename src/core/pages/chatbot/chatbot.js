@@ -46,7 +46,7 @@ const Chatbot = () => {
   const previous_uuid = useStore(state => state.previous_uuid);
   const color_mode = useStore(state => state.color_mode);
 
-  // const current_message = useStore(state => state.current_message);
+  const chatstream = useStore(state => state.chatstream);
 
   const version_ = useStore.getState().version
 
@@ -91,10 +91,10 @@ const Chatbot = () => {
     useStore.setState({
       timestamps: newTimeStamps,
       conversation: conversation_,
-      user_message_input: active_system_prompt_.prefill ? active_system_prompt_.prefill : ""
+      user_message_input: active_system_prompt_.prefill ? active_system_prompt_.prefill : "",
+      scroll_time: true,
+      chatstream: ""
     });
-
-    useStore.setState({ scroll_time: true });
 
     const response = await fetchChatCompletion(
       upstream,
@@ -102,38 +102,40 @@ const Chatbot = () => {
       active_system_prompt_.params
     );
 
-    if (response === "error") {
+    if (response === "error") { // won't work
       conversation_.push(errorMessage);
     } else {
-      // useStore.setState({ token_count: response.usage.total_tokens });
-      // conversation_.push(response.choices[0].message);
+      const chatstream_ = useStore.getState().chatstream;
 
-      // newTimeStamps.push(unixToISO(response.created));
+      const sendDate2 = new Date();
+      const sendDateISO2 = String(sendDate2.toISOString());
 
-      // useStore.setState({ timestamps: newTimeStamps });
+      conversation_.push({ role: "assistant", content: chatstream_ });
+
+      newTimeStamps.push(sendDateISO2);
+
+      useStore.setState({ timestamps: newTimeStamps });
+
+      const newKey = generateKeyV4()
+
+      const chat = {
+        conversation: conversation_,
+        timestamps: newTimeStamps,
+        uuid: newKey,
+        title: chat_title === "none" ? shortChatTitle : chat_title,
+        prompt: active_system_prompt_,
+        lastActive: newTimeStamps[newTimeStamps.length - 1],
+        skywayVersion: version_
+      };
+
+      chatSync(chat, previous_uuid, true);
+
+      useStore.setState({
+        previous_uuid: newKey,
+        scroll_time: true,
+        conversation: conversation_,
+      })
     };
-
-    const newKey = generateKeyV4()
-
-    const chat = {
-      conversation: conversation_,
-      timestamps: newTimeStamps,
-      uuid: newKey,
-      title: chat_title === "none" ? shortChatTitle : chat_title,
-      prompt: active_system_prompt_,
-      // total_tokens: response.usage.total_tokens,
-      lastActive: newTimeStamps[newTimeStamps.length - 1],
-      skywayVersion: version_
-    };
-
-    chatSync(chat, previous_uuid, true);
-
-    useStore.setState({
-      previous_uuid: newKey,
-      scroll_time: true,
-      conversation: conversation_,
-      busy_ui: false
-    })
   };
 
   // sends the user-chat message as a prompt 
@@ -141,7 +143,6 @@ const Chatbot = () => {
     const sendDate = new Date();
     const sendDateISO = String(sendDate.toISOString());
 
-    useStore.setState({ busy_ui: true })
     SubmitPromptAsync(sendDateISO);
   };
 
@@ -189,9 +190,8 @@ const Chatbot = () => {
 
       conversation_.push(errorMessage);
     } else {
-      // useStore.setState({ token_count: response.usage.total_tokens });
       conversation_.push(response.choices[0].message);
-      useStore.setState({ busy_ui: false })
+
       for (let i = 0; i < timestamps.length - 1; i++) {
         timeArray.push(timestamps[i]);
       };
@@ -209,7 +209,6 @@ const Chatbot = () => {
       uuid: newKey,
       title: chat_title,
       prompt: active_system_prompt_,
-      // total_tokens: response.usage.total_tokens,
       lastActive: timeArray[timeArray.length - 1],
       skywayVersion: version_
     };
@@ -224,7 +223,6 @@ const Chatbot = () => {
   };
 
   const ReSubmitPrompt = () => {
-    useStore.setState({ busy_ui: true })
     ResubmitPromptAsync();
   };
 
@@ -261,9 +259,7 @@ const Chatbot = () => {
         timestamps: [],
         chat_title: "none",
         conversation: [],
-        token_count: 0,
         current_chat: "none",
-        busy_ui: false,
         user_message_input: active_system_prompt_.prefill ? active_system_prompt_.prefill : ""
       });
       inputRef.current.focus();
@@ -305,9 +301,7 @@ const Chatbot = () => {
             timestamps: chats_[i].timestamps,
             chat_title: chats_[i].title,
             conversation: chats_[i].conversation,
-            // token_count: chats_[i].total_tokens,
             prompt_save_status: activeChatInLibrary,
-            busy_ui: false
           });
 
           inputRef.current.focus();
@@ -318,7 +312,6 @@ const Chatbot = () => {
 
   return (
     <>
-
       <Middle>
         {conversation.length > 0 && conversation.map((chat, key) => {
           return (
@@ -365,11 +358,11 @@ const Chatbot = () => {
             </React.Fragment>
           )
         })}
-        {/* <LeftBox>
+        {busy_ui && <LeftBox>
           <LeftChatBox>
-            <FormattedLeftResponse content={current_message} color_mode={color_mode} />
+            <FormattedLeftResponse content={chatstream} color_mode={color_mode} />
           </LeftChatBox>
-        </LeftBox> */}
+        </LeftBox>}
 
         <div ref={conversationScrollRef} />
       </Middle >

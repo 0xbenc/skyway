@@ -58,6 +58,8 @@ const HandleIPC = () => {
   useEffect(() => {
     window.electron.engine.on('openai-api-data', (_, data) => {
 
+      useStore.setState({ busy_ui: true });
+
       function parseAndAddData(dataString, cleanArray) {
         const trimmed = String(dataString).trim()
         const dataParts = trimmed.split('\n');
@@ -65,12 +67,14 @@ const HandleIPC = () => {
         for (let part of dataParts) {
           const jsonString = part.startsWith('data: ') ? part.replace('data: ', '') : part;
 
-          if (jsonString !== "" && jsonString !== "[DONE]") {
-            try {
-              const jsonObject = JSON.parse(jsonString);
-              cleanArray.push(jsonObject);
-            } catch (e) {
-              console.error('Error parsing JSON string:', e);
+          if (jsonString !== "[DONE]") {
+            if (jsonString !== "") {
+              try {
+                const jsonObject = JSON.parse(jsonString);
+                cleanArray.push(jsonObject);
+              } catch (e) {
+                console.error('Error parsing JSON string:', e);
+              }
             }
           }
         }
@@ -86,9 +90,15 @@ const HandleIPC = () => {
       }
 
       if (cleanString !== "undefined") {
-        const prevCurrentMessage = useStore.getState().current_message;
-        useStore.setState({ current_message: prevCurrentMessage + cleanString })
+        const prevCurrentMessage = useStore.getState().chatstream;
+        useStore.setState({ chatstream: prevCurrentMessage + cleanString })
       }
+    });
+  }, []);
+
+  useEffect(() => {
+    window.electron.engine.on('openai-api-final', (_, data) => {
+      useStore.setState({ busy_ui: false })
     });
   }, []);
 

@@ -86,10 +86,7 @@ export const useStore = create((set, get) => {
     switch_prompt_dialog_open: false, //
 
     //WIP state for chatstream
-    current_message: "",
-
-    // current conversation token count
-    token_count: 0,
+    chatstream: "",
 
     // tracks which prompt was used last
     last_prompt: 1,
@@ -101,7 +98,7 @@ export const useStore = create((set, get) => {
     chat_open: false,
 
     // stores all conversations, includes the system prompt that was used per chat
-    // conversation, timestamps, uuid, title, prompt, total_tokens, lastActive
+    // conversation, timestamps, uuid, title, prompt, lastActive
     chats: [],
 
     // uuid

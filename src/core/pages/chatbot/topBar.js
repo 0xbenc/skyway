@@ -21,7 +21,6 @@ import { eSet } from "../../utility/electronStore";
 // ----------------------------------------------------------------------
 
 const TopBar = () => {
-  const token_count = useStore(state => state.token_count);
   const prompt_save_status = useStore(state => state.prompt_save_status);
   const busy_ui = useStore(state => state.busy_ui);
   const active_system_prompt = useStore(state => state.active_system_prompt);
@@ -131,22 +130,6 @@ const TopBar = () => {
               </Stack>
             </OutlinePaper>
           </Stack>
-          <OutlinePaper>
-            <Stack direction="column" spacing={1} textAlign={"right"}>
-              {active_system_prompt.engine === "token limited" && <Typography variant="body1">
-                Token Limit
-              </Typography>}
-              {active_system_prompt.engine === "token limited" && <Typography variant="body1">
-                <b>{String(token_count)}/{active_system_prompt.limit}</b>
-              </Typography>}
-              {active_system_prompt.engine === "amnesia" && <Typography variant="body1">
-                Previous Tokens
-              </Typography>}
-              {active_system_prompt.engine === "amnesia" && <Typography variant="body1">
-                <b>{token_count}</b>
-              </Typography>}
-            </Stack>
-          </OutlinePaper>
         </Stack>
       </OutlinePaper>
     </Top>

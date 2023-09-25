@@ -58,7 +58,7 @@ const setUpMainInteractions = mainWindow => {
   });
 
   ipcMain.handle('dialog-open-filtered-file', (event, directory, filters) => openFilteredFile(mainWindow, event, directory, filters));
-  
+
   ipcMain.handle('openai-api', async (_, endpoint, data, key) => {
     const bearer = `Bearer ${key}`
     try {
@@ -72,16 +72,23 @@ const setUpMainInteractions = mainWindow => {
         },
         responseType: 'stream'
       });
-  
+
+      let result = '';
+
       response.data.on('data', (chunk) => {
         const decoder = new TextDecoder("utf-8");
         const dChunk = decoder.decode(chunk)
+        result += dChunk;
         mainWindow.webContents.send('openai-api-data', dChunk);
       });
-  
+
+      response.data.on('end', () => {
+        mainWindow.webContents.send('openai-api-final', "finished");
+      });
+
       return new Promise((resolve, reject) => {
         response.data.on('end', () => {
-          resolve('done');
+          resolve("finished");
         });
         response.data.on('error', reject);
       });
