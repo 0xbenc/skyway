@@ -44,7 +44,7 @@
     "@emotion/styled": "11.11.0",
     "@mui/icons-material": "5.14.6",
     "@mui/material": "5.14.6",
-    "axios": "1.4.0",
+    "axios": "1.6.0",
     "crypto-js": "4.1.1",
     "electron-squirrel-startup": "1.0.0",
     "electron-store": "8.1.0",
