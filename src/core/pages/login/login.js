@@ -59,6 +59,7 @@ const Login = () => {
       const _open_ai_api_keys = eGet("open_ai_api_keys")
       const last_prompt = eGet('last_prompt');
       const chats = eGet('chats');
+
       let dencChats;
 
       if (chats.length === 0) {

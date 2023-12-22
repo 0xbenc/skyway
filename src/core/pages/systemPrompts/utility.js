@@ -98,4 +98,4 @@ const ExportPrompt = (index) => {
   exporter(index);
 };
 
-export { deleteSystemPrompt, ImportPrompt, ExportPrompt }
+export { deleteSystemPrompt, ImportPrompt, ExportPrompt };

@@ -111,4 +111,4 @@ const Bottom = styled(Box)(({ theme }) => ({
   flexDirection: 'column-reverse'
 }));
 
-export { LeftBox, RightBox, LeftChatBox, RightChatBox, ChatsHolder, LeftCodeBorder, RightCodeBorder, ChatField, Top, Middle, Bottom }
+export { LeftBox, RightBox, LeftChatBox, RightChatBox, ChatsHolder, LeftCodeBorder, RightCodeBorder, ChatField, Top, Middle, Bottom };

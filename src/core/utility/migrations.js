@@ -82,4 +82,4 @@ const migration_1_3_0 = (store) => {
   store.set('version', '1.3.0');
 };
 
-export { migration_1_1_0, migration_1_2_0, migration_1_3_0 }
+export { migration_1_1_0, migration_1_2_0, migration_1_3_0 };

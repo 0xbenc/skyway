@@ -73,4 +73,4 @@ const decryptPrompts = (prompts, password) => {
   return dencPrompts;
 };
 
-export { encryptPrompts, decryptPrompts, decrypt, encrypt }
+export { encryptPrompts, decryptPrompts, decrypt, encrypt };

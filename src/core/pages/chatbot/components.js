@@ -62,4 +62,4 @@ const FormattedRightResponse = ({ content, color_mode }) => {
   </Box>
 };
 
-export { FormattedLeftResponse, FormattedRightResponse }
+export { FormattedLeftResponse, FormattedRightResponse };

@@ -8,4 +8,4 @@ const SeedPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(1),
 }));
 
-export { SeedPaper }
+export { SeedPaper };

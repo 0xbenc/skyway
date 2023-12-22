@@ -32,4 +32,4 @@ const cleanFileTitle = (str) => {
   return cleanedStr;
 };
 
-export { previewText, cleanFileTitle }
+export { previewText, cleanFileTitle };

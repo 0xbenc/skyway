@@ -6,4 +6,4 @@ const navigate = (page) => {
   useStore.setState({ page: page })
 };
 
-export { navigate }
+export { navigate };

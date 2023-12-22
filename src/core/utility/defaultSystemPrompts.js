@@ -35,5 +35,4 @@ const Prompts = [
   GPT4
 ];
 
-
 export { Prompts };
