@@ -74,7 +74,7 @@ const migration_1_3_0 = (store) => {
 
     store.set('system_prompts', system_prompts_new);
   } else {
-    store.set('color_mode', "light");
+    store.set('color_mode', "dark");
     store.set('open_ai_api_key', 0);
   };
 

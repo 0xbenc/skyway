@@ -10,7 +10,9 @@ import { decrypt, decryptPrompts, encryptPrompts, encrypt } from "../../utility/
 import { BasicBox, OutlinePaper } from "../../mui/reusable";
 import { SeedPaper } from "./styles";
 //
-import { FormControl, TextField, Button, Typography, Box, Stack } from "@mui/material";
+import { FormControl, TextField, Button, Typography, Box, Stack, Tooltip } from "@mui/material";
+//
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 // ----------------------------------------------------------------------
 
 const Login = () => {
@@ -124,6 +126,7 @@ const Login = () => {
     const cipherAPI = encrypt(apiInput, passwordInput).toString();
     const encPrompts = encryptPrompts(Prompts, passwordInput)
     const encPass = encrypt(passwordInput, seedKey).toString();
+    const currColor = useStore.getState().color_mode;
 
     eSet("recovery", encPass); //
     eSet('password_set', true); //
@@ -131,11 +134,12 @@ const Login = () => {
     eSet("system_prompts", encPrompts) //
     eSet("chats", []);
     eSet('open_ai_api_keys', [{ key: cipherAPI, name: "default" }]) //
+    eSet('color_mode', currColor)
 
     useStore.setState({
       password: passwordInput,
       system_prompts: Prompts,
-      color_mode: "light",
+      color_mode: "currColor",
       open_ai_api_keys: [{ key: apiInput, name: "default" }],
       open_ai_api_key: 0,
       active_system_prompt: Prompts[0],
@@ -236,9 +240,15 @@ const Login = () => {
 
         {showNewPassword && <OutlinePaper>
           <Stack direction="column" spacing={1}>
-            <Typography variant="h4">
-              Welcome! Create a Password to begin:
-            </Typography>
+            <Stack direction="row" spacing={1}>
+              <Typography variant="h4">
+                Welcome! Create a password to begin.
+              </Typography>
+              <Tooltip title="The password you create is used to encrypt your local chat data. It is never sent to the internet, or stored in plaintext.">
+                <HelpOutlineIcon size="small" />
+              </Tooltip>
+            </Stack>
+
             <Box>
               <FormControl>
                 <TextField
