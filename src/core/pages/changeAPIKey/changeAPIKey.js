@@ -189,6 +189,7 @@ const ChangeAPIKey = () => {
     console.log("API KEY: validating key")
 
     const value = await fetchChatCompletionConnectionTest();
+
     if (value === "success") {
       setNetStatus(true);
       setNetKey(key);

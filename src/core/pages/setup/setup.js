@@ -13,6 +13,7 @@ import { BasicBox, OutlinePaper, SeedPaper } from "../../mui/reusable";
 import { FormControl, TextField, Button, Typography, Box, Stack, Tooltip } from "@mui/material";
 //
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import { fetchChatCompletionConnectionTest } from "../../utility/fetchData";
 // ----------------------------------------------------------------------
 
 const Setup = () => {
@@ -54,7 +55,7 @@ const Setup = () => {
     setShowAPIInput(true)
   }
 
-  const clickAPI = () => {
+  const clickAPI = async () => {
     console.log("LOGIN: user has entered OpenAI API key")
     
     const randArray = generateRandomNumbers(0, 2047, 8);
@@ -74,10 +75,22 @@ const Setup = () => {
       seeds[randArray[5]], seeds[randArray[6]], seeds[randArray[7]]
     );
 
-    setSeedKey(key)
-    setSeedArray(randArray)
-    setShowAPIInput(false)
-    setShowSeed(true)
+    useStore.setState({
+      open_ai_api_keys: [{ key: apiInput, name: "default" }],
+      open_ai_api_key: 0
+    });
+
+    const resultValue = await fetchChatCompletionConnectionTest();
+
+    if (resultValue === "success") {
+      setSeedKey(key);
+      setSeedArray(randArray);
+      setShowAPIInput(false);
+      setShowSeed(true);
+    } else {
+      setAPIInput("");
+      useStore.getState().addNotification("Please enter a valid OpenAI API key");
+    };
   };
 
   const clickSeedPhrase = () => {
@@ -103,8 +116,6 @@ const Setup = () => {
       password: passwordInput,
       system_prompts: Prompts,
       color_mode: "currColor",
-      open_ai_api_keys: [{ key: apiInput, name: "default" }],
-      open_ai_api_key: 0,
       active_system_prompt: Prompts[0],
       last_prompt: 0,
       page: "chatbot",
