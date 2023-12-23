@@ -9,6 +9,7 @@ import { eSet } from "../../utility/electronStore";
 import { encryptPrompts, encrypt } from "../../utility/encryption";
 import { BasicBox, OutlinePaper, SeedPaper } from "../../mui/reusable";
 import { fetchChatCompletionConnectionTest } from "../../utility/fetchData";
+import { SeedContent } from "./seedContent";
 //
 import {
   FormControl,
@@ -56,14 +57,14 @@ const Setup = () => {
   };
 
   const clickNewPassword = () => {
-    console.log("LOGIN: user has created a password")
+    console.log("SETUP: user has created a password")
     useStore.setState({ password: passwordInput });
     setShowNewPassword(false)
     setShowAPIInput(true)
   }
 
   const clickAPI = async () => {
-    console.log("LOGIN: user has entered OpenAI API key")
+    console.log("SETUP: user has entered OpenAI API key")
 
     const randArray = generateRandomNumbers(0, 2047, 8);
 
@@ -73,11 +74,11 @@ const Setup = () => {
       randArray[6] + "x" + randArray[7]
     )
 
-    console.log("LOGIN: random numbers", randArray)
-    console.log("LOGIN: KEY", key)
+    console.log("SETUP: random numbers", randArray)
+    console.log("SETUP: KEY", key)
 
     console.log(
-      "LOGIN: seeds", seeds[randArray[0]], seeds[randArray[1]],
+      "SETUP: seeds", seeds[randArray[0]], seeds[randArray[1]],
       seeds[randArray[2]], seeds[randArray[3]], seeds[randArray[4]],
       seeds[randArray[5]], seeds[randArray[6]], seeds[randArray[7]]
     );
@@ -101,7 +102,7 @@ const Setup = () => {
   };
 
   const clickSeedPhrase = () => {
-    console.log("LOGIN: user has finished seed")
+    console.log("SETUP: user has finished seed")
     console.log("NAVIGATION: landing")
 
     const ciphertext = encrypt("skynet", passwordInput).toString();
@@ -109,7 +110,6 @@ const Setup = () => {
     const encPrompts = encryptPrompts(Prompts, passwordInput)
     const encPass = encrypt(passwordInput, seedKey).toString();
     const currColor = useStore.getState().color_mode;
-    console.log(currColor)
 
     eSet("recovery", encPass); //
     eSet('password_set', true); //
@@ -257,32 +257,7 @@ const Setup = () => {
         </OutlinePaper>}
 
         {showSeed && <>
-          <OutlinePaper>
-            <Stack direction="column" spacing={1}>
-              <Typography variant="h5">
-                Seed Phrase 101:
-              </Typography>
-              <Typography>
-                A seed phrase is a series of words that unlocks your Skyway data
-                and Skyway password. It works like a master password that
-                can help you recover your app and password if you ever forget.
-                To safely store your seed phrase, you should write it down on a
-                piece of paper and keep it in a secure place that only you know.
-              </Typography>
-            </Stack>
-          </OutlinePaper>
-
-          <OutlinePaper>
-            <Stack direction="row" spacing={1} alignItems={"center"}>
-              <Typography variant="h5">
-                WARNING!
-              </Typography>
-              <Typography>
-                Once you click away, you will never be able to retrieve this
-                seed phrase again.
-              </Typography>
-            </Stack>
-          </OutlinePaper>
+          <SeedContent />
 
           <OutlinePaper>
             <Stack direction="row" spacing={1} alignItems={"center"}>
