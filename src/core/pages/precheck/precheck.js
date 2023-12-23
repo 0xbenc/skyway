@@ -8,12 +8,12 @@ import { eGet } from "../../utility/electronStore";
 const Precheck = () => {
   const [localDataCheck, setLocalDataCheck] = useState(false);
 
-  useEffect(() => {
-    const getVersion = async () => {
-      const version = await window.electron.engine.version();
-      useStore.setState({ version: version })
-    }
+  const getVersion = async () => {
+    const version = await window.electron.engine.version();
+    useStore.setState({ version: version })
+  }
 
+  useEffect(() => {
     if (!localDataCheck) {
       const _password_set = eGet('password_set');
       getVersion();
@@ -35,7 +35,7 @@ const Precheck = () => {
 
       setLocalDataCheck(true)
     }
-  }, [localDataCheck])
+  }, [localDataCheck, getVersion])
 
   return null
 };
