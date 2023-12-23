@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 //
 import { useStore } from "../../zustand";
@@ -9,11 +8,19 @@ import { generateRandomNumbers } from "../../utility/number";
 import { eSet } from "../../utility/electronStore";
 import { encryptPrompts, encrypt } from "../../utility/encryption";
 import { BasicBox, OutlinePaper, SeedPaper } from "../../mui/reusable";
+import { fetchChatCompletionConnectionTest } from "../../utility/fetchData";
 //
-import { FormControl, TextField, Button, Typography, Box, Stack, Tooltip } from "@mui/material";
+import {
+  FormControl,
+  TextField,
+  Button,
+  Typography,
+  Box,
+  Stack,
+  Tooltip
+} from "@mui/material";
 //
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
-import { fetchChatCompletionConnectionTest } from "../../utility/fetchData";
 // ----------------------------------------------------------------------
 
 const Setup = () => {
@@ -57,9 +64,9 @@ const Setup = () => {
 
   const clickAPI = async () => {
     console.log("LOGIN: user has entered OpenAI API key")
-    
+
     const randArray = generateRandomNumbers(0, 2047, 8);
-    
+
     const key = String(
       randArray[0] + "x" + randArray[1] + "x" + randArray[2] + "x" +
       randArray[3] + "x" + randArray[4] + "x" + randArray[5] + "x" +
@@ -68,7 +75,7 @@ const Setup = () => {
 
     console.log("LOGIN: random numbers", randArray)
     console.log("LOGIN: KEY", key)
-    
+
     console.log(
       "LOGIN: seeds", seeds[randArray[0]], seeds[randArray[1]],
       seeds[randArray[2]], seeds[randArray[3]], seeds[randArray[4]],
@@ -167,7 +174,7 @@ const Setup = () => {
                   required={true}
                   type="password"
                   autoFocus
-                  onKeyPress={(ev) => {
+                  onKeyDown={(ev) => {
                     if (ev.key === 'Enter' && passwordMatch) {
                       clickNewPassword();
                       ev.preventDefault();
@@ -183,7 +190,7 @@ const Setup = () => {
                   onChange={handlePasswordMatchInput}
                   required={true}
                   type="password"
-                  onKeyPress={(ev) => {
+                  onKeyDown={(ev) => {
                     if (ev.key === 'Enter' && passwordMatch) {
                       clickNewPassword();
                       ev.preventDefault();
@@ -258,7 +265,7 @@ const Setup = () => {
               <Typography>
                 A seed phrase is a series of words that unlocks your Skyway data
                 and Skyway password. It works like a master password that
-                can help you recover your app and password if you ever forget. 
+                can help you recover your app and password if you ever forget.
                 To safely store your seed phrase, you should write it down on a
                 piece of paper and keep it in a secure place that only you know.
               </Typography>
