@@ -98,7 +98,7 @@ const Login = () => {
                   color="secondary"
                   value={passwordInput}
                   onChange={handlePasswordInput}
-                  onKeyPress={(ev) => {
+                  onKeyDown={(ev) => {
                     if (ev.key === 'Enter' && passwordInput !== "") {
                       clickSinglePassword();
                       ev.preventDefault();

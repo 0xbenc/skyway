@@ -236,7 +236,7 @@ const Setup = () => {
                   required={true}
                   type="password"
                   autoFocus
-                  onKeyPress={(ev) => {
+                  onKeyDown={(ev) => {
                     if (ev.key === 'Enter' && apiInput !== "") {
                       clickAPI();
                       ev.preventDefault();
