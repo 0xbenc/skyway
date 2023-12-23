@@ -9,6 +9,8 @@ import { NewSystemPromptPage } from "./newSystemPrompt";
 import { ChatbotPage } from "./chatbot";
 import { RecoveryPage } from "./recovery";
 import { ChangeAPIKeyPage } from "./changeAPIKey";
+import { PrecheckPage } from "./precheck";
+import { SetupPage } from "./setup";
 // ----------------------------------------------------------------------
 
 const HandlePages = () => {
@@ -16,6 +18,8 @@ const HandlePages = () => {
 
   return (
     <>
+      {page === "precheck" && <PrecheckPage />}
+      {page === "setup" && <SetupPage />}
       {page === "login" && <LoginPage />}
       {page === "recovery" && <RecoveryPage />}
       {page === "chatbot" && <ChatbotPage />}

@@ -6,11 +6,11 @@ export const useStore = create((set, get) => {
     // START SHARED //
 
     /* pages:
-      login, system_prompts, 
+      precheck, setup, login, system_prompts, 
       system_prompt, new_system_prompt, chatbot, 
       recovery, change_api_key
     */
-    page: "login",
+    page: "precheck",
 
     // system prompts object from electron-store
     system_prompts: [],
