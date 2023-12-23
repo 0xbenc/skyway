@@ -17,8 +17,9 @@ const OutlinePaper = styled(Paper)(({ theme }) => ({
 }));
 
 const SeedPaper = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.primary.main,
-  border: `1px solid ${theme.palette.secondary.inside}`,
+  backgroundColor: theme.palette.secondary.main,
+  border: `1px solid ${theme.palette.secondary.outside}`,
+  color: theme.palette.primary.main,
   padding: theme.spacing(1),
 }));
 

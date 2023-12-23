@@ -258,15 +258,9 @@ const Setup = () => {
               <Typography>
                 A seed phrase is a series of words that unlocks your Skyway data
                 and Skyway password. It works like a master password that
-                can help you recover your app and password if you ever forget
-                them or lose your device.
-              </Typography>
-              <Typography>
+                can help you recover your app and password if you ever forget. 
                 To safely store your seed phrase, you should write it down on a
                 piece of paper and keep it in a secure place that only you know.
-                You should not share your seed phrase with anyone or store it
-                online, as this could expose your app and password to hackers
-                or thieves.
               </Typography>
             </Stack>
           </OutlinePaper>
@@ -274,7 +268,7 @@ const Setup = () => {
           <OutlinePaper>
             <Stack direction="row" spacing={1} alignItems={"center"}>
               <Typography variant="h5">
-                WARNING:
+                WARNING!
               </Typography>
               <Typography>
                 Once you click away, you will never be able to retrieve this
@@ -284,7 +278,7 @@ const Setup = () => {
           </OutlinePaper>
 
           <OutlinePaper>
-            <Stack direction="row" spacing={1}>
+            <Stack direction="row" spacing={1} alignItems={"center"}>
               <Typography variant="h5">Your Seed Phrase:</Typography>
               <SeedPaper>
                 <Typography>
