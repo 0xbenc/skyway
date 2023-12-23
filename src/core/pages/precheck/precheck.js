@@ -8,36 +8,29 @@ import { eGet } from "../../utility/electronStore";
 const Precheck = () => {
   const [localDataCheck, setLocalDataCheck] = useState(false);
 
-  const getVersion = async () => {
-    const version = await window.electron.engine.version();
-    useStore.setState({ version: version })
-  }
-
   useEffect(() => {
     if (!localDataCheck) {
-      const _password_set = eGet('password_set');
-      getVersion();
+      setLocalDataCheck(true);
 
-      if (_password_set) {
-        console.log("PRECHECK: local data found, beginning login ")
-
-        const _color_mode = eGet("color_mode");
-
-        useStore.setState({
-          color_mode: _color_mode === "light" ? "light" : "dark",
-          page: "login"
-        });
-      } else {
-        console.log("PRECHECK: no local data found, beginning setup")
-
-        useStore.setState({ page: "setup" })
+      const getVersion = async () => {
+        const version = await window.electron.engine.version();
+        useStore.setState({ version: version });
       };
 
-      setLocalDataCheck(true)
-    }
-  }, [localDataCheck, getVersion])
+      const _password_set = eGet('password_set');
+      const color_mode = eGet("color_mode") === "light" ? "light" : "dark";
+      const nextPage = _password_set ? "login" : "setup"; 
 
-  return null
+      getVersion();
+
+      useStore.setState({
+        color_mode: color_mode,
+        page: nextPage
+      });
+    };
+  }, [localDataCheck]);
+
+  return null;
 };
 
 export { Precheck };
