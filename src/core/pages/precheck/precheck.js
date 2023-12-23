@@ -12,21 +12,19 @@ const Precheck = () => {
     if (!localDataCheck) {
       setLocalDataCheck(true);
 
-      const getVersion = async () => {
+      const begin = async (colorMode, nextPage) => {
         const version = await window.electron.engine.version();
-        useStore.setState({ version: version });
+        useStore.setState({
+          version: version,
+          color_mode: colorMode,
+          page: nextPage
+        });
       };
 
-      const _password_set = eGet('password_set');
-      const color_mode = eGet("color_mode") === "light" ? "light" : "dark";
-      const nextPage = _password_set ? "login" : "setup"; 
+      const colorMode = eGet("color_mode") === "light" ? "light" : "dark";
+      const nextPage = eGet('password_set') ? "login" : "setup";
 
-      getVersion();
-
-      useStore.setState({
-        color_mode: color_mode,
-        page: nextPage
-      });
+      begin(colorMode, nextPage);
     };
   }, [localDataCheck]);
 
