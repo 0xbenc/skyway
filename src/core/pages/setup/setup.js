@@ -212,7 +212,7 @@ const Setup = () => {
 
         {showAPI && <OutlinePaper>
           <Stack direction="column" spacing={3} >
-            <Stack direction="row" justifyContent="flex-start" alignItems="center">
+            <Stack direction="row" spacing={1}>
               <Typography variant="h5">
                 If you need an OpenAI API Key
               </Typography>
