@@ -25,7 +25,7 @@ const SwitchPromptDialog = () => {
   return (
     <>
       <Dialog fullWidth onClose={switchPromptClose} open={switch_prompt_dialog_open}>
-        <DialogTitle>Choose another prompt</DialogTitle>
+        <DialogTitle>Choose a prompt:</DialogTitle>
         <DialogContent>
           <Stack direction="row" spacing={1}>
             {system_prompts_.map((prompt, key) => {

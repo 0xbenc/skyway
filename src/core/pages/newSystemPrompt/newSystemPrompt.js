@@ -63,9 +63,9 @@ const NewSystemPrompt = () => {
     setModelAnchor(event.currentTarget);
   };
 
-  const handleChooseModel = (event) => {
+  const handleChooseModel = (model) => {
     setModelAnchor(null);
-    setModel(event.target.textContent)
+    setModel(model)
   };
 
   const handleCloseModel = () => {
@@ -82,16 +82,18 @@ const NewSystemPrompt = () => {
     if (event.target.textContent === "token limited") {
       switch (model) {
         case "gpt-3.5-turbo":
-          setLimit(4096)
+          setLimit(4096);
           break;
         case "gpt-4":
-          setLimit(8192)
+          setLimit(8192);
           break;
         case "gpt-4-32k":
-          setLimit(32768)
+          setLimit(32768);
+        case "gpt-4-1106-preview":
+          setLimit(128000);
           break;
         default:
-          setLimit(4096)
+          setLimit(4096);
           break;
       }
     } else {
@@ -301,9 +303,10 @@ const NewSystemPrompt = () => {
                     'aria-labelledby': 'basic-button',
                   }}
                 >
-                  <MenuItem value={"gpt-3.5-turbo"} onClick={handleChooseModel}>gpt-3.5-turbo</MenuItem>
-                  <MenuItem value={"gpt-4"} onClick={handleChooseModel}>gpt-4</MenuItem>
-                  <MenuItem value={"gpt-4-32k"} onClick={handleChooseModel}>gpt-4-32k</MenuItem>
+                  <MenuItem onClick={() => handleChooseModel("gpt-3.5-turbo")}>{"GPT 3.5 Turbo (4k)"}</MenuItem>
+                  <MenuItem onClick={() => handleChooseModel("gpt-4")}>{"GPT 4 (8k)"}</MenuItem>
+                  <MenuItem onClick={() => handleChooseModel("gpt-4-32k")}>{"GPT 4 (32k)"}</MenuItem>
+                  <MenuItem onClick={() => handleChooseModel("gpt-4-1106-preview")}>{"GPT 4 (128k)"}</MenuItem>
                 </Menu>
               </Stack>
             </Grid>
