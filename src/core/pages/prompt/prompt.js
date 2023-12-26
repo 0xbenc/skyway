@@ -67,21 +67,9 @@ const Prompt = () => {
 
   const handleChooseModel = (model) => {
     setModelAnchor(null);
-    setModel(model)
-  };
+    setModel(model);
 
-  const handleCloseModel = () => {
-    setModelAnchor(null);
-  };
-
-  const handleEngine = (event) => {
-    setEngineAnchor(event.currentTarget);
-  };
-
-  const handleChooseEngine = (event) => {
-    setEngineAnchor(null);
-    setEngine(event.target.textContent)
-    if (event.target.textContent === "token limited") {
+    if (engine === "token limited") {
       switch (model) {
         case "gpt-3.5-turbo":
           setLimit(4096);
@@ -104,6 +92,20 @@ const Prompt = () => {
     };
   };
 
+  const handleCloseModel = () => {
+    setModelAnchor(null);
+  };
+
+  const handleEngine = (event) => {
+    setEngineAnchor(event.currentTarget);
+  };
+
+  const handleChooseEngine = (event) => {
+    setEngineAnchor(null);
+    setEngine(event.target.textContent);
+    handleChooseModel(model);
+  };
+
   const handleCloseEngine = () => {
     setEngineAnchor(null);
   };
@@ -115,7 +117,7 @@ const Prompt = () => {
 
   const addPrompt = () => {
     if (newPrompt) {
-      console.log("ITS A NEW PROMPT")
+      console.log("ITS A NEW PROMPT", limit)
       const usedDate = new Date();
       const usedDateISO = String(usedDate.toISOString());
       const version_ = useStore.getState().version;
