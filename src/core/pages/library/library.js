@@ -23,13 +23,18 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import IosShareIcon from '@mui/icons-material/IosShare';
 // ----------------------------------------------------------------------
 
-const SystemPrompts = () => {
+const Library = () => {
   const system_prompts = useStore(state => state.system_prompts)
 
   const goSystemPromptPage = (index) => {
-    console.log("NAVIGATION: system_prompt", system_prompts[index].title)
-    useStore.setState({ page: "system_prompt", system_prompt_to_edit: index })
-  }
+    console.log("NAVIGATION: prompt", system_prompts[index].title);
+    useStore.setState({ page: "prompt", system_prompt_to_edit: index });
+  };
+
+  const goNewPrompt = () => {
+    console.log("NAVIGATION: prompt (new prompt)");
+    useStore.setState({ page: "prompt", system_prompt_to_edit: -1 });
+  };
 
   return (
     <BasicBox>
@@ -52,7 +57,7 @@ const SystemPrompts = () => {
                 <Button
                   variant="outlined"
                   color="secondary"
-                  onClick={() => { navigate("new_system_prompt") }}
+                  onClick={() => { goNewPrompt() }}
                 >
                   <b>Create</b>
                 </Button>
@@ -121,4 +126,4 @@ const SystemPrompts = () => {
   );
 };
 
-export { SystemPrompts };
+export { Library };

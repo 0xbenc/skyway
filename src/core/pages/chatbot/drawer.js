@@ -59,7 +59,7 @@ const ChatDrawer = () => {
   };
 
   const navSystemPrompts = () => {
-    navigate("system_prompts")
+    navigate("library")
   };
 
   const newChat = () => {

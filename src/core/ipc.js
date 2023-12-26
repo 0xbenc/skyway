@@ -2,7 +2,7 @@ import { useEffect } from "react";
 //
 import { useStore } from "./zustand";
 //
-import { switchColorMode } from "./utility/colorMode";
+import { switchColorMode } from "./utility/color";
 import { eSet } from "./utility/electronStore";
 import { encryptPrompts } from "./utility/encryption";
 // ----------------------------------------------------------------------
