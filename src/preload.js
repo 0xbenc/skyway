@@ -1,4 +1,5 @@
 const { contextBridge, ipcRenderer } = require('electron');
+// ----------------------------------------------------------------------
 
 contextBridge.exposeInMainWorld('electron', {
   store: {
@@ -31,5 +32,6 @@ contextBridge.exposeInMainWorld('electron', {
 });
 
 contextBridge.exposeInMainWorld('ipc', {
-  on: (channel, func) => ipcRenderer.on(channel, (event, ...args) => func(...args))
+  on: (channel, func) => ipcRenderer.on(channel, (event, ...args) => func(...args)),
+  off: (channel, func) => ipcRenderer.off(channel, (event, ...args) => func(...args))
 });

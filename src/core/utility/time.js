@@ -14,4 +14,4 @@ const unixToISO = (unixTime) => {
   return date.toISOString();
 };
 
-export { isoToHuman, unixToISO }
+export { isoToHuman, unixToISO };

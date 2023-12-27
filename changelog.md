@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.3.0
+
+- Chats are encrypted and stored locally
+- Chats can be imported and exported as JSON files
+- Package updates to crypto-js and electron to address vulnerabilities
+- UI / UX / Copy improvements to first time setup
+- Added support for GPT 4 Turbo (preview model)
+
 ## 1.2.0
 
 - Prompts can be imported and exported as JSON files

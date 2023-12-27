@@ -1,5 +1,6 @@
-const { default: generateKeyV4 } = require('./uuid');
+const { generateKeyV4 } = require('./uuid');
 // Uses require because the function is called by src/main.js
+// ----------------------------------------------------------------------
 
 const migration_1_1_0 = (store) => {
   const system_prompts = store.get("system_prompts");
@@ -61,4 +62,24 @@ const migration_1_2_0 = (store) => {
   store.set('version', '1.2.0');
 };
 
-export { migration_1_1_0, migration_1_2_0 }
+const migration_1_3_0 = (store) => {
+  const system_prompts = store.get("system_prompts");
+
+  if (system_prompts !== undefined) {
+    let system_prompts_new = [...system_prompts];
+
+    for (let i = 0; i < system_prompts.length; i++) {
+      system_prompts_new[i].skywayVersion = '1.3.0';
+    };
+
+    store.set('system_prompts', system_prompts_new);
+  } else {
+    store.set('color_mode', "dark");
+    store.set('open_ai_api_key', 0);
+  };
+
+  store.set('last_prompt', 1);
+  store.set('version', '1.3.0');
+};
+
+export { migration_1_1_0, migration_1_2_0, migration_1_3_0 };

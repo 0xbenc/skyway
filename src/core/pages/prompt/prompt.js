@@ -3,6 +3,10 @@ import React, { useState, useEffect } from "react";
 import { useStore } from "../../zustand";
 //
 import { encryptPrompts } from "../../utility/encryption";
+import { BasicBox, OutlinePaper } from "../../mui/reusable";
+import { eSet } from "../../utility/electronStore";
+import { Title } from "../../components/title";
+import { generateKeyV4 } from "../../utility/uuid";
 //
 import {
   Menu,
@@ -14,25 +18,19 @@ import {
   MenuItem,
   Stack
 } from "@mui/material";
-//
-import { BasicBox, OutlinePaper } from "../../mui/reusable";
-import { eSet } from "../../utility/electronStore";
-import Title from "../../components/title";
-import generateKeyV4 from "../../utility/uuid";
-
 // ----------------------------------------------------------------------
 
-const NewSystemPrompt = () => {
-  const [titleInput, setTitleInput] = useState("")
+const Prompt = () => {
+  const system_prompts_ = useStore.getState().system_prompts;
+  const system_prompt_to_edit = useStore.getState().system_prompt_to_edit;
+  const version_ = useStore.getState().version;
 
-  const [promptInput, setPromptInput] = useState("")
+  const [titleInput, setTitleInput] = useState("");
+  const [promptInput, setPromptInput] = useState("");
+  const [userInput, setUserInput] = useState("");
+  const [prefilInput, setPrefilInput] = useState("");
 
-  const [userInput, setUserInput] = useState("")
-
-  const [prefilInput, setPrefilInput] = useState('');
-
-  const [model, setModel] = useState("gpt-3.5-turbo")
-
+  const [model, setModel] = useState("gpt-3.5-turbo");
   const [engine, setEngine] = useState("token limited");
 
   const [ready, setReady] = useState(false);
@@ -44,6 +42,8 @@ const NewSystemPrompt = () => {
 
   const [engineAnchor, setEngineAnchor] = React.useState(null);
   const engineOpen = Boolean(engineAnchor);
+
+  const [newPrompt, setNewPrompt] = React.useState(false);
 
   const handleTitleInput = (event) => {
     setTitleInput(event.target.value);
@@ -65,9 +65,31 @@ const NewSystemPrompt = () => {
     setModelAnchor(event.currentTarget);
   };
 
-  const handleChooseModel = (event) => {
+  const handleChooseModel = (model) => {
     setModelAnchor(null);
-    setModel(event.target.textContent)
+    setModel(model);
+
+    if (engine === "token limited") {
+      switch (model) {
+        case "gpt-3.5-turbo":
+          setLimit(4096);
+          break;
+        case "gpt-4":
+          setLimit(8192);
+          break;
+        case "gpt-4-32k":
+          setLimit(32768);
+          break;
+        case "gpt-4-1106-preview":
+          setLimit(128000);
+          break;
+        default:
+          setLimit(4096);
+          break;
+      }
+    } else {
+      setLimit(0);
+    };
   };
 
   const handleCloseModel = () => {
@@ -80,25 +102,8 @@ const NewSystemPrompt = () => {
 
   const handleChooseEngine = (event) => {
     setEngineAnchor(null);
-    setEngine(event.target.textContent)
-    if (event.target.textContent === "token limited") {
-      switch (model) {
-        case "gpt-3.5-turbo":
-          setLimit(4096)
-          break;
-        case "gpt-4":
-          setLimit(8192)
-          break;
-        case "gpt-4-32k":
-          setLimit(32768)
-          break;
-        default:
-          setLimit(4096)
-          break;
-      }
-    } else {
-      setLimit(0)
-    }
+    setEngine(event.target.textContent);
+    handleChooseModel(model);
   };
 
   const handleCloseEngine = () => {
@@ -107,41 +112,71 @@ const NewSystemPrompt = () => {
 
   const cancel = () => {
     console.log("NAVIGATION: system_prompts")
-    useStore.setState({ page: "system_prompts" })
+    useStore.setState({ page: "library", system_prompt_to_edit: -1 })
   };
 
   const addPrompt = () => {
-    const system_prompts_ = useStore.getState().system_prompts;
-    const usedDate = new Date();
-    const usedDateISO = String(usedDate.toISOString());
+    if (newPrompt) {
+      console.log("ITS A NEW PROMPT", limit)
+      const usedDate = new Date();
+      const usedDateISO = String(usedDate.toISOString());
+      const version_ = useStore.getState().version;
 
-    system_prompts_.push({
-      title: titleInput,
-      prompt: promptInput,
-      params: {},
-      userInputLabel: userInput,
-      model: model,
-      engine: engine,
-      limit: limit,
-      prefill: prefilInput,
-      uuid: generateKeyV4(),
-      createdDate: usedDateISO,
-      importedDate: usedDateISO,
-      usedDate: usedDateISO,
-      skywayVersion: "1.2.0"
-    });
+      system_prompts_.push({
+        title: titleInput,
+        prompt: promptInput,
+        params: {},
+        userInputLabel: userInput,
+        model: model,
+        engine: engine,
+        limit: limit,
+        prefill: prefilInput,
+        uuid: generateKeyV4(),
+        createdDate: usedDateISO,
+        importedDate: usedDateISO,
+        usedDate: usedDateISO,
+        skywayVersion: version_
+      });
 
-    const password_ = useStore.getState().password;
+      const password_ = useStore.getState().password;
 
-    const encPrompts = encryptPrompts(system_prompts_, password_);
-    eSet("system_prompts", encPrompts);
+      const encPrompts = encryptPrompts(system_prompts_, password_);
+      eSet("system_prompts", encPrompts);
 
-    useStore.setState({ page: "system_prompts" })
+      useStore.setState({ page: "library" });
 
-    useStore.setState({
-      system_prompts: system_prompts_,
-      page: "system_prompts"
-    })
+      useStore.setState({
+        system_prompts: system_prompts_,
+        page: "library"
+      });
+    } else {
+      const importedDate = new Date();
+      const importedDateISO = String(importedDate.toISOString());
+
+      system_prompts_[system_prompt_to_edit].title = titleInput;
+      system_prompts_[system_prompt_to_edit].prompt = promptInput;
+      system_prompts_[system_prompt_to_edit].userInputLabel = userInput;
+      system_prompts_[system_prompt_to_edit].model = model;
+      system_prompts_[system_prompt_to_edit].engine = engine;
+      system_prompts_[system_prompt_to_edit].limit = limit;
+      system_prompts_[system_prompt_to_edit].prefill = prefilInput;
+      system_prompts_[system_prompt_to_edit].uuid = generateKeyV4();
+      system_prompts_[system_prompt_to_edit].importedDate = importedDateISO;
+      system_prompts_[system_prompt_to_edit].createdDate = importedDateISO;
+      system_prompts_[system_prompt_to_edit].usedDate = importedDateISO;
+      system_prompts_[system_prompt_to_edit].skywayVersion = version_
+
+      const password_ = useStore.getState().password;
+
+      const encPrompts = encryptPrompts(system_prompts_, password_);
+
+      eSet("library", encPrompts);
+
+      useStore.setState({
+        system_prompts: system_prompts_,
+        page: "library"
+      });
+    };
   };
 
   useEffect(() => {
@@ -159,6 +194,21 @@ const NewSystemPrompt = () => {
       setReady(false)
     };
   }, [titleInput, promptInput, userInput, model]);
+
+  useEffect(() => {
+    if (system_prompt_to_edit > -1) {
+      setNewPrompt(false);
+
+      setTitleInput(system_prompts_[system_prompt_to_edit].title);
+      setPromptInput(system_prompts_[system_prompt_to_edit].prompt);
+      setUserInput(system_prompts_[system_prompt_to_edit].userInputLabel);
+      setPrefilInput(system_prompts_[system_prompt_to_edit].prefill);
+      setModel(system_prompts_[system_prompt_to_edit].model);
+      setEngine(system_prompts_[system_prompt_to_edit].engine);
+    } else {
+      setNewPrompt(true);
+    };
+  }, [system_prompt_to_edit, system_prompts_]);
 
   return (
     <BasicBox>
@@ -191,7 +241,6 @@ const NewSystemPrompt = () => {
                     value={titleInput}
                     onChange={handleTitleInput}
                     required={true}
-                    autoFocus
                   />
                 </FormControl>
               </Stack>
@@ -302,9 +351,10 @@ const NewSystemPrompt = () => {
                     'aria-labelledby': 'basic-button',
                   }}
                 >
-                  <MenuItem value={"gpt-3.5-turbo"} onClick={handleChooseModel}>gpt-3.5-turbo</MenuItem>
-                  <MenuItem value={"gpt-4"} onClick={handleChooseModel}>gpt-4</MenuItem>
-                  <MenuItem value={"gpt-4-32k"} onClick={handleChooseModel}>gpt-4-32k</MenuItem>
+                  <MenuItem onClick={() => handleChooseModel("gpt-3.5-turbo")}>{"GPT 3.5 Turbo (4k)"}</MenuItem>
+                  <MenuItem onClick={() => handleChooseModel("gpt-4")}>{"GPT 4 (8k)"}</MenuItem>
+                  <MenuItem onClick={() => handleChooseModel("gpt-4-32k")}>{"GPT 4 (32k)"}</MenuItem>
+                  <MenuItem onClick={() => handleChooseModel("gpt-4-1106-preview")}>{"GPT 4 (128k)"}</MenuItem>
                 </Menu>
               </Stack>
             </Grid>
@@ -364,8 +414,8 @@ const NewSystemPrompt = () => {
           </Stack>
         </OutlinePaper>
       </Stack>
-    </BasicBox>
+    </BasicBox >
   );
 };
 
-export default NewSystemPrompt;
+export { Prompt };
