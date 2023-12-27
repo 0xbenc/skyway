@@ -2,6 +2,7 @@ import { styled } from '@mui/material/styles';
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
+// ----------------------------------------------------------------------
 
 const ChatField = styled(TextField)(({ theme }) => ({
   "& .MuiFilledInput-root": {
@@ -110,4 +111,4 @@ const Bottom = styled(Box)(({ theme }) => ({
   flexDirection: 'column-reverse'
 }));
 
-export { LeftBox, RightBox, LeftChatBox, RightChatBox, ChatsHolder, LeftCodeBorder, RightCodeBorder, ChatField, Top, Middle, Bottom }
+export { LeftBox, RightBox, LeftChatBox, RightChatBox, ChatsHolder, LeftCodeBorder, RightCodeBorder, ChatField, Top, Middle, Bottom };

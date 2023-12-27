@@ -1,5 +1,13 @@
 import CryptoJS from "crypto-js";
+// ----------------------------------------------------------------------
 
+/**
+ * Decrypts a string using AES with a given password.
+ * 
+ * @param {string} str - The string to decrypt.
+ * @param {string} password - The password to use in decryption.
+ * @returns {string} The decrypted string. If an error in decryption occurs, returns 'ERROR'.
+ */
 const decrypt = (str, password) => {
   try {
     const t = CryptoJS.AES.decrypt(str, password)
@@ -11,10 +19,25 @@ const decrypt = (str, password) => {
   };
 }
 
+/**
+ * Encrypts a string using AES with a given password.
+ * 
+ * @param {string} str - The string to encrypt.
+ * @param {string} password - The password to use for encryption.
+ * @returns {string} The encrypted string.
+ */
 const encrypt = (str, password) => {
   return CryptoJS.AES.encrypt(str, password).toString();
 };
 
+
+/**
+ * Encrypts the properties of an array of prompt objects using the 'encrypt' function.
+ * 
+ * @param {Object[]} prompts - An array of prompts to encrypt.
+ * @param {string} password - The password to use for encryption.
+ * @returns {Object[]} The array of encrypted prompts.
+ */ 
 const encryptPrompts = (prompts, password) => {
   const encPrompts = JSON.parse(JSON.stringify(prompts));
 
@@ -29,6 +52,13 @@ const encryptPrompts = (prompts, password) => {
   return encPrompts;
 };
 
+/**
+ * Decrypts the properties of an array of prompts objects using the 'decrypt' function.
+ * 
+ * @param {Object[]} prompts - An array of encrypted prompts to decrypt.
+ * @param {string} password - The password to use for decryption.
+ * @returns {Object[]} The array of decrypted prompts.
+ */
 const decryptPrompts = (prompts, password) => {
   const dencPrompts = JSON.parse(JSON.stringify(prompts));
 
@@ -43,4 +73,4 @@ const decryptPrompts = (prompts, password) => {
   return dencPrompts;
 };
 
-export { encryptPrompts, decryptPrompts, decrypt, encrypt }
+export { encryptPrompts, decryptPrompts, decrypt, encrypt };

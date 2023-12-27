@@ -2,12 +2,14 @@ import React, { useMemo } from 'react';
 //
 import { useStore } from './zustand';
 //
+import { light, dark } from "./mui/theme";
+import { HandlePages } from './pages';
+import { HandleIPC } from './ipc';
+import { HandleNotifications } from './notifications';
+//
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
-//
-import { light, dark } from "./mui/theme";
-import HandlePages from './pages';
-import HandleIPC from './ipc';
+// ----------------------------------------------------------------------
 
 const App = () => {
   const color_mode = useStore(state => state.color_mode);
@@ -23,8 +25,9 @@ const App = () => {
       <CssBaseline />
       <HandlePages />
       <HandleIPC />
+      <HandleNotifications />
     </ThemeProvider>
   );
 }
 
-export default App;
+export { App };

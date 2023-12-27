@@ -1,12 +1,12 @@
 import React from "react";
 //
-import { Login } from "./login";
+import { Setup } from "./setup";
 // ----------------------------------------------------------------------
 
-const LoginPage = () => {
+const SetupPage = () => {
   return (
-    <Login />
+    <Setup />
   );
 };
 
-export { LoginPage };
+export { SetupPage };

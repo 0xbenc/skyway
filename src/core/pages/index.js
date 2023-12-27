@@ -2,30 +2,31 @@ import React from "react";
 //
 import { useStore } from "../zustand";
 //
-import Login from "./login";
-import Landing from "./landing";
-import SystemPrompts from "./systemPrompts";
-import SystemPrompt from "./systemPrompt";
-import NewSystemPrompt from "./newSystemPrompt";
-import NewChat from "./newChat";
-import Recovery from "./recovery";
-import ChangeAPIKey from "./changeAPIKey";
+import { LoginPage } from "./login";
+import { LibraryPage } from "./library";
+import { ChatbotPage } from "./chatbot";
+import { RecoveryPage } from "./recovery";
+import { ChangeAPIKeyPage } from "./changeAPIKey";
+import { PrecheckPage } from "./precheck";
+import { SetupPage } from "./setup";
+import { PromptPage } from "./prompt";
+// ----------------------------------------------------------------------
 
 const HandlePages = () => {
   const page = useStore(state => state.page);
 
   return (
     <>
-      {page === "login" && <Login />}
-      {page === "landing" && <Landing />}
-      {page === "system_prompts" && <SystemPrompts />}
-      {page === "system_prompt" && <SystemPrompt />}
-      {page === "new_system_prompt" && <NewSystemPrompt />}
-      {page === "new_chat" && <NewChat />}
-      {page === "recovery" && <Recovery />}
-      {page === "change_api_key" && <ChangeAPIKey />}
+      {page === "precheck" && <PrecheckPage />}
+      {page === "setup" && <SetupPage />}
+      {page === "login" && <LoginPage />}
+      {page === "recovery" && <RecoveryPage />}
+      {page === "chatbot" && <ChatbotPage />}
+      {page === "change api key" && <ChangeAPIKeyPage />}
+      {page === "library" && <LibraryPage />}
+      {page === "prompt" && <PromptPage />}
     </>
   );
 };
 
-export default HandlePages;
+export { HandlePages };

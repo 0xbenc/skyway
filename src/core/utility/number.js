@@ -13,4 +13,4 @@ const generateRandomNumbers = (min, max, count) => {
   };
 };
 
-export { generateRandomNumbers }
+export { generateRandomNumbers };

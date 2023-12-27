@@ -1,54 +1,36 @@
-const { app, BrowserWindow, ipcMain, Menu, dialog } = require('electron');
-const path = require('path')
-const Store = require('electron-store');
+const { app, BrowserWindow, ipcMain, dialog, Menu } = require('electron');
+const path = require('path');
+const fs = require('fs').promises;
 const axios = require('axios');
-const fs = require('fs');
-const { migration_1_1_0, migration_1_2_0 } = require('./core/utility/migrations');
+const store = require('./tools/electron/store');
+const createMenuTemplate = require('./tools/electron/menu');
 
-//Helpers START
+const WINDOW_WIDTH = 1600;
+const WINDOW_HEIGHT = 900;
+
 const getFileName = (filePath) => {
   const lastSlashIndex = Math.max(filePath.lastIndexOf('/'), filePath.lastIndexOf('\\'));
   return filePath.substring(lastSlashIndex + 1);
 };
+
 const getFileExtension = (filePath) => {
   const lastPeriodIndex = filePath.lastIndexOf(".");
   return filePath.substring(lastPeriodIndex + 1);
 };
+
 const getFolderPath = (filePath) => {
   const lastSlashIndex = Math.max(filePath.lastIndexOf('/'), filePath.lastIndexOf('\\'));
   return filePath.substring(0, lastSlashIndex);
 };
 
-//Helpers END
-
-const store = new Store({
-  migrations: {
-    '<1.0.1': store => {
-      store.set('version', '1.0.0')
-    },
-    '1.0.1': store => {
-      store.set('version', '1.0.1')
-    },
-    '1.1.0': store => {
-      migration_1_1_0(store)
-    },
-    '1.1.1': store => {
-      store.set('version', '1.1.1')
-    },
-    '1.2.0': store => {
-      migration_1_2_0(store)
-    },
-  }
-});
-
 if (require('electron-squirrel-startup')) {
   app.quit();
-}
+};
 
 const createWindow = () => {
   const mainWindow = new BrowserWindow({
-    width: 1600,
-    height: 900,
+    width: WINDOW_WIDTH,
+    height: WINDOW_HEIGHT,
     autoHideMenuBar: true,
     icon: "./public/icons/icon.png",
     webPreferences: {
@@ -62,143 +44,86 @@ const createWindow = () => {
 
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
-  const template = [
-    {
-      label: 'File',
-      submenu: [
-        {
-          label: 'New Chat',
-          accelerator: 'Ctrl+N',
-          click: () => {
-            mainWindow.webContents.send("new chat");
-          }
-        },
-        {
-          role: 'quit'
-        }
-      ]
-    },
-    {
-      label: 'Edit',
-      submenu: [
-        { role: 'cut' },
-        { role: 'copy' },
-        { role: 'paste' },
-        { role: 'delete' },
-        { role: 'selectall' }
-      ]
-    },
-    {
-      label: 'View',
-      submenu: [
-        { role: 'reload' },
-        { role: 'forcereload' },
-        { role: 'toggledevtools' },
-        { type: 'separator' },
-        { role: 'resetzoom' },
-        { role: 'zoomin' },
-        { role: 'zoomout' },
-        { type: 'separator' },
-        { role: 'togglefullscreen' },
-        {
-          label: 'Toggle Color Mode',
-          accelerator: 'Ctrl+Shift+C',
-          click: () => {
-            mainWindow.webContents.send("toggle color");
-          }
-        }
-      ]
-    },
-  ];
+  Menu.setApplicationMenu(Menu.buildFromTemplate(createMenuTemplate(mainWindow)));
 
-  const menu = Menu.buildFromTemplate(template)
+  setUpMainInteractions(mainWindow);
+};
 
-  Menu.setApplicationMenu(menu)
-
+const setUpMainInteractions = mainWindow => {
   ipcMain.handle('dialog-choose-directory', async () => {
     const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, {
       properties: ['openDirectory']
     });
-    if (canceled) {
-      return;
-    } else {
-      return filePaths[0];
-    };
+    return canceled ? null : filePaths[0];
   });
 
-  ipcMain.handle('dialog-open-filtered-file', async (_, directory, filters) => {
-    const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, {
-      filters: filters,
-      properties: ['openFile'],
-      defaultPath: directory,
+  ipcMain.handle('dialog-open-filtered-file', (event, directory, filters) => openFilteredFile(mainWindow, event, directory, filters));
+  ipcMain.handle('openai-api', callOpenAI);
+  ipcMain.handle('version-get', () => app.getVersion());
+  ipcMain.on('store-get', (event, val) => { event.returnValue = store.get(val); });
+  ipcMain.on('store-set', (_, key, val) => { store.set(key, val); });
+  ipcMain.on('save-json', saveJson);
+};
+
+const openFilteredFile = async (mainWindow, _, directory, filters) => {
+  const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, {
+    filters: filters,
+    properties: ['openFile'],
+    defaultPath: directory,
+  });
+
+  if (canceled) {
+    return;
+  } else {
+    const filePath = filePaths[0];
+    // Use readFile and asynchronously handle the promise
+    const fileBuffer = await fs.readFile(filePath);
+    const encodedFile = `data:application/octet-stream;base64,${fileBuffer.toString('base64')}`;
+    const fileName = getFileName(filePath);
+    const fileExtension = getFileExtension(filePath);
+    const folderPath = getFolderPath(filePath);
+
+    const file = {
+      "data": encodedFile,
+      "fileExtension": fileExtension,
+      "fileName": fileName,
+      "filePath": filePaths[0],
+      "folderPath": folderPath
+    };
+    return file;
+  };
+};
+
+const callOpenAI = async (_, endpoint, data, key) => {
+  const bearer = `Bearer ${key}`
+  try {
+    const response = await axios.post('https://api.openai.com/' + endpoint, data, {
+      headers: {
+        'Authorization': bearer,
+        'Content-Type': 'application/json'
+      },
     })
-    if (canceled) {
-      return;
-    } else {
-      const filePath = filePaths[0];
-      const fileBuffer = fs.readFileSync(filePath);
-      const encodedFile = `data:application/octet-stream;base64,${fileBuffer.toString('base64')}`;
-      const fileName = getFileName(filePath);
-      const fileExtension = getFileExtension(filePath);
-      const folderPath = getFolderPath(filePath);
+    return response.data
+  } catch (error) {
+    console.error("API request error", error)
+    throw error
+  };
+};
 
-      const file = {
-        "data": encodedFile,
-        "fileExtension": fileExtension,
-        "fileName": fileName,
-        "filePath": filePaths[0],
-        "folderPath": folderPath,
-        "origin": "local" // local vs session (session is in RAM / temp, not in plastic folder)
-      };
-      return file
-    };
-  });
-
-  ipcMain.handle('openai-api', async (_, endpoint, data, key) => {
-    const bearer = `Bearer ${key}`
-    try {
-      const response = await axios.post('https://api.openai.com/' + endpoint, data, {
-        headers: {
-          'Authorization': bearer,
-          'Content-Type': 'application/json'
-        },
-      })
-      return response.data
-    } catch (error) {
-      console.error("API request error", error)
-      throw error
-    };
-  });
-
-  ipcMain.handle('version-get', () => {
-    return app.getVersion();
-  });
-
-  ipcMain.on('store-get', async (event, val) => {
-    event.returnValue = store.get(val);
-  });
-
-  ipcMain.on('store-set', async (_, key, val) => {
-    store.set(key, val);
-  });
-
-  ipcMain.on('save-json', (_, args) => {
+const saveJson = (_, args) => {
+  if (args.dir) {  // Only proceed if dir is not undefined
     fs.writeFile(`${args.dir}/${args.filename}.json`, args.jsonstr, (err) => {
       if (err) throw err;
     });
-  });
+  };
 };
 
-app.on('ready', createWindow);
+app.whenReady().then(createWindow);
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
+  if (process.platform !== 'darwin') app.quit();
 });
 
 app.on('activate', () => {
-  if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow();
-  }
+  if (BrowserWindow.getAllWindows().length === 0) createWindow();
 });

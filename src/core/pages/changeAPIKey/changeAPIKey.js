@@ -3,6 +3,10 @@ import React, { useState } from "react";
 import { useStore } from "../../zustand";
 //
 import { encrypt } from "../../utility/encryption";
+import { BasicBox, OutlinePaper } from "../../mui/reusable";
+import { eSet } from "../../utility/electronStore";
+import { Title } from "../../components/title";
+import { fetchChatCompletionConnectionTest } from "../../utility/fetchData";
 //
 import {
   Typography,
@@ -24,12 +28,6 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CloudDoneIcon from '@mui/icons-material/CloudDone';
 import CloudOffIcon from '@mui/icons-material/CloudOff';
 import CloudSyncIcon from '@mui/icons-material/CloudSync';
-//
-import { BasicBox, OutlinePaper } from "../../mui/reusable";
-import { eSet } from "../../utility/electronStore";
-import Title from "../../components/title";
-import { fetchChatCompletionConnectionTest } from "../../utility/fetchData";
-
 // ----------------------------------------------------------------------
 
 const ChangeAPIKey = () => {
@@ -191,14 +189,17 @@ const ChangeAPIKey = () => {
     console.log("API KEY: validating key")
 
     const value = await fetchChatCompletionConnectionTest();
+
     if (value === "success") {
       setNetStatus(true);
       setNetKey(key);
       console.log("API KEY: key is valid")
+      useStore.getState().addNotification("API Key Successfully Connected")
     } else {
       setNetStatus(false);
       setNetKey(key);
       console.log("API KEY: ERROR: key is not valid")
+      useStore.getState().addNotification("API Key Connection Failure")
     };
   };
 
@@ -346,4 +347,4 @@ const ChangeAPIKey = () => {
   );
 };
 
-export default ChangeAPIKey;
+export { ChangeAPIKey };

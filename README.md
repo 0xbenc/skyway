@@ -224,7 +224,7 @@ See the Skyway [Code of Conduct](./CODE_OF_CONDUCT.md).
 
 ## Contributing to Skyway
 
-If you wish to write issues or develop features for Skyway, see [here](./CONTRIBUTING.md).
+If you wish to write issues or develop features for Skyway, see [here](./CONTRIBUTING.md)!
 
 ## Contributors
 
