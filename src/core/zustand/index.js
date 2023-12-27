@@ -36,7 +36,7 @@ export const useStore = create((set, get) => {
     addNotification: (messageText) => set({ notification_message: messageText, notification_alarm: true }),
 
     // true if not a release build
-    dev_mode: true,
+    dev_mode: false,
 
     // END SHARED //
 
