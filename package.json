@@ -10,7 +10,8 @@
     "makeLinuxARM": "electron-forge make --arch=arm64 --platform=linux",
     "makeMac": "electron-forge make --arch=x64 --platform=darwin",
     "makeMacARM": "electron-forge make --arch=arm64 --platform=darwin",
-    "makeWindows": "electron-forge make --arch=x64 --platform=win32"
+    "makeWindows": "electron-forge make --arch=x64 --platform=win32",
+    "makeWindowsARM": "electron-forge make --arch=arm64 --platform=win32"
   },
   "keywords": [],
   "author": {
