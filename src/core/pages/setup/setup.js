@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import bcrypt from "bcryptjs-react";
 //
 import { useStore } from "../../zustand";
 //
@@ -105,7 +106,12 @@ const Setup = () => {
     console.log("SETUP: user has finished seed")
     console.log("NAVIGATION: landing")
 
-    const ciphertext = encrypt("skynet", passwordInput).toString();
+    // TEEHEE bcrypt changes start here
+
+    var salt = bcrypt.genSaltSync(16);
+    var hash = bcrypt.hashSync(passwordInput, salt);
+
+    // const ciphertext = encrypt("skynet", passwordInput).toString();
     const cipherAPI = encrypt(apiInput, passwordInput).toString();
     const encPrompts = encryptPrompts(Prompts, passwordInput)
     const encPass = encrypt(passwordInput, seedKey).toString();
@@ -113,7 +119,7 @@ const Setup = () => {
 
     eSet("recovery", encPass); //
     eSet('password_set', true); //
-    eSet("integrity_check", ciphertext) //
+    eSet("integrity_check", hash) //
     eSet("system_prompts", encPrompts) //
     eSet("chats", []);
     eSet('open_ai_api_keys', [{ key: cipherAPI, name: "default" }]) //

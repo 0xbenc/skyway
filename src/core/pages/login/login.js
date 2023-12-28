@@ -1,8 +1,9 @@
 import React, { useState } from "react";
+import bcrypt from "bcryptjs-react";
 //
 import { useStore } from "../../zustand";
 //
-import { eGet } from "../../utility/electronStore";
+import { eGet, eSet } from "../../utility/electronStore";
 import { decrypt, decryptPrompts } from "../../utility/encryption";
 import { BasicBox, OutlinePaper } from "../../mui/reusable";
 //
@@ -26,11 +27,27 @@ const Login = () => {
   };
 
   const clickSinglePassword = () => {
-    const _integrity_check = eGet('integrity_check')
+    const _integrity_check = eGet('integrity_check');
+    const _migration_1_3_1_bcrypt = eGet('migration_1_3_1_bcrypt');
 
-    const integrity_check = decrypt(_integrity_check, passwordInput);
+    let outcome = false;
 
-    if (integrity_check === "skynet") {
+    // Handles the switch from storing AES check of "skynet" to proper blowfish with salt
+    if (_migration_1_3_1_bcrypt) {
+      const integrity_check = decrypt(_integrity_check, passwordInput);
+
+      if (integrity_check === "skynet") {
+        var salt = bcrypt.genSaltSync(16);
+        var hash = bcrypt.hashSync(passwordInput, salt);
+        eSet("integrity_check", hash);
+        eSet("migration_1_3_1_bcrypt", false);
+        outcome = true;
+      };
+    } else {
+      outcome = bcrypt.compareSync(passwordInput, _integrity_check);
+    };
+
+    if (outcome) {
       const _system_prompts = eGet("system_prompts")
       const _open_ai_api_key = eGet("open_ai_api_key")
       const _open_ai_api_keys = eGet("open_ai_api_keys")

@@ -9,3 +9,4 @@
 - open_ai_api_key - open ai key
 - last_prompt - last prompt used, index
 - chats - encrypted array of chats, see zustand for construction
+- migration_1_3_1_bcrypt - only true when migrating 1.3.0 to 1.3.1

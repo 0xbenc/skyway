@@ -1,9 +1,10 @@
 import React, { useState } from "react";
+import bcrypt from "bcryptjs-react";
 //
 import { seeds } from "../../utility/seeds";
 import { navigate } from "../../utility/navigatePage";
 import { decrypt } from "../../utility/encryption";
-import { BasicBox, OutlinePaper } from "../../mui/reusable";
+import { BasicBox, OutlinePaper, SeedPaper } from "../../mui/reusable";
 import { eGet } from "../../utility/electronStore";
 //
 import { Typography, FormControl, TextField, Button, Stack } from "@mui/material";
@@ -34,19 +35,19 @@ const Recovery = () => {
       };
     };
 
-    const _recovery = eGet("recovery")
-    const _integrity_check = eGet("integrity_check")
+    const _recovery = eGet("recovery");
+    const _integrity_check = eGet("integrity_check");
+    const recovery = decrypt(_recovery, key);
 
-    const recovery = decrypt(_recovery, key)
-    const integrity_check = decrypt(_integrity_check, recovery)
+    const outcome = bcrypt.compareSync(recovery, _integrity_check);
 
-    if (integrity_check === "skynet") {
-      setPasswordOutput(recovery)
-      setBad(false)
+    if (outcome) {
+      setPasswordOutput(recovery);
+      setBad(false);
     } else {
-      setBad(true)
-      setPasswordOutput("")
-    }
+      setBad(true);
+      setPasswordOutput("");
+    };
   };
 
   return (
@@ -88,9 +89,17 @@ const Recovery = () => {
           </Stack>
         </OutlinePaper>
         {(bad || passwordOutput !== "") && <OutlinePaper>
-          {passwordOutput !== "" && <Typography variant="body">
-            Password: {passwordOutput}
-          </Typography>}
+          {passwordOutput !== "" && <Stack direction="row" spacing={1} alignItems={"center"}>
+            <Typography variant="body">
+              Your Password is:
+            </Typography>
+            <SeedPaper>
+              <Typography>
+                {passwordOutput}
+              </Typography>
+            </SeedPaper>
+          </Stack>}
+
           {bad && <Typography variant="body">
             Incorrect Seed Phrase
           </Typography>}
@@ -99,7 +108,7 @@ const Recovery = () => {
           <Button
             color={"secondary"}
             variant="outlined"
-            onClick={() => {navigate("login")}}
+            onClick={() => { navigate("login") }}
             fullWidth={false}
           >
             Return to Login

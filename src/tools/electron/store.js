@@ -1,5 +1,5 @@
 const Store = require('electron-store');
-const { migration_1_1_0, migration_1_2_0, migration_1_3_0 } = require('../../core/utility/migrations');
+const { migration_1_1_0, migration_1_2_0, migration_1_3_0, migration_1_3_1 } = require('../../core/utility/migrations');
 
 const store = new Store({
   migrations: {
@@ -20,6 +20,9 @@ const store = new Store({
     },
     '1.3.0': store => {
       migration_1_3_0(store)
+    },
+    '1.3.1': store => {
+      migration_1_3_1(store)
     },
   }
 });
