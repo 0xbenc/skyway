@@ -44,7 +44,7 @@
   "dependencies": {
     "@emotion/styled": "11.11.0",
     "@mui/icons-material": "5.15.1",
-    "@mui/material": "5.15.1",
+    "@mui/material": "5.15.2",
     "axios": "1.6.2",
     "crypto-js": "4.2.0",
     "electron-squirrel-startup": "1.0.0",
