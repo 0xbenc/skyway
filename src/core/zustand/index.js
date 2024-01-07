@@ -6,9 +6,9 @@ export const useStore = create((set, get) => {
     // START SHARED //
 
     /* pages:
-      precheck, setup, login, system_prompts, 
-      system_prompt, new_system_prompt, chatbot, 
-      recovery, change_api_key
+      precheck, setup, login,
+      recovery, chatbot, change api key
+      library, prompt, credits 
     */
     page: "precheck",
 

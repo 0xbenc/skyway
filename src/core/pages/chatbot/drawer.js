@@ -23,6 +23,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import IosShareIcon from "@mui/icons-material/IosShare";
 import FileOpenIcon from "@mui/icons-material/FileOpen";
+import AttributionIcon from "@mui/icons-material/Attribution";
 // ----------------------------------------------------------------------
 
 const ChatDrawer = () => {
@@ -56,6 +57,10 @@ const ChatDrawer = () => {
 
   const navAPIKey = () => {
     navigate("change api key");
+  };
+
+  const navCredits = () => {
+    navigate("credits");
   };
 
   const navSystemPrompts = () => {
@@ -129,6 +134,14 @@ const ChatDrawer = () => {
                 <HttpsIcon />
               </ListItemIcon>
               <ListItemText primary={"Edit API Keys"} />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton onClick={navCredits}>
+              <ListItemIcon>
+                <AttributionIcon />
+              </ListItemIcon>
+              <ListItemText primary={"Attribution"} />
             </ListItemButton>
           </ListItem>
         </List>

@@ -10,6 +10,7 @@ import { ChangeAPIKeyPage } from "./changeAPIKey";
 import { PrecheckPage } from "./precheck";
 import { SetupPage } from "./setup";
 import { PromptPage } from "./prompt";
+import { CreditsPage } from "./credits";
 // ----------------------------------------------------------------------
 
 const HandlePages = () => {
@@ -25,6 +26,7 @@ const HandlePages = () => {
       {page === "change api key" && <ChangeAPIKeyPage />}
       {page === "library" && <LibraryPage />}
       {page === "prompt" && <PromptPage />}
+      {page === "credits" && <CreditsPage />}
     </>
   );
 };
