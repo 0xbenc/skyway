@@ -106,7 +106,7 @@ const Setup = () => {
     console.log("SETUP: user has finished seed")
     console.log("NAVIGATION: landing")
 
-    var salt = bcrypt.genSaltSync(12);
+    var salt = bcrypt.genSaltSync(14);
     var hash = bcrypt.hashSync(passwordInput, salt);
 
     const cipherAPI = encrypt(apiInput, passwordInput).toString();
