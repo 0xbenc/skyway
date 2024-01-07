@@ -106,12 +106,9 @@ const Setup = () => {
     console.log("SETUP: user has finished seed")
     console.log("NAVIGATION: landing")
 
-    // TEEHEE bcrypt changes start here
-
-    var salt = bcrypt.genSaltSync(16);
+    var salt = bcrypt.genSaltSync(12);
     var hash = bcrypt.hashSync(passwordInput, salt);
 
-    // const ciphertext = encrypt("skynet", passwordInput).toString();
     const cipherAPI = encrypt(apiInput, passwordInput).toString();
     const encPrompts = encryptPrompts(Prompts, passwordInput)
     const encPass = encrypt(passwordInput, seedKey).toString();

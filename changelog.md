@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.3.1
+
+- Password encyption uses a bcrypt blowfish + salt setup. 
+  - Includes a migration for previous versions to use same password
+
 ## 1.3.0
 
 - Chats are encrypted and stored locally
