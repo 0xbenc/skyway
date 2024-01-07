@@ -7,7 +7,10 @@ import { eGet, eSet } from "../../utility/electronStore";
 import { decrypt, decryptPrompts } from "../../utility/encryption";
 import { BasicBox, OutlinePaper } from "../../mui/reusable";
 //
-import { FormControl, TextField, Button, Typography, Stack, CircularProgress } from "@mui/material";
+import { FormControl, TextField, Button, Typography, Stack, CircularProgress, IconButton, Tooltip } from "@mui/material";
+// ----------------------------------------------------------------------
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 // ----------------------------------------------------------------------
 
 const Login = () => {
@@ -18,6 +21,8 @@ const Login = () => {
   // UI Triggers
   const [badPassword, setBadPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const [showPassword, setShowPassword] = useState(false);
 
   const [storeAccessTime, setStoreAccessTime] = useState(false);
   const [passwordCheckTime, setPasswordCheckTime] = useState(false);
@@ -146,22 +151,27 @@ const Login = () => {
                   onKeyDown={(ev) => {
                     if (ev.key === 'Enter' && passwordInput !== "") {
                       clickSinglePassword();
-                    }
+                    };
                   }}
                   required={true}
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   autoFocus
                 />
+                {!loading && <Tooltip title="toggle password visibility">
+                  <IconButton onClick={() => setShowPassword(!showPassword)}>
+                    {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                  </IconButton>
+                </Tooltip>}
                 {loading && <CircularProgress size="2rem" color="secondary" />}
-                {!loading && <Button
-                  color={"secondary"}
-                  variant="outlined"
-                  disabled={passwordInput === ""}
-                  onClick={clickSinglePassword}
-                >
-                  Login
-                </Button>}
               </Stack>
+              {!loading && <Button
+                color={"secondary"}
+                variant="outlined"
+                disabled={passwordInput === ""}
+                onClick={clickSinglePassword}
+              >
+                Login
+              </Button>}
               {badPassword && <Button
                 color={"secondary"}
                 variant="outlined"
