@@ -6,6 +6,7 @@
   - Includes a migration for previous versions to use same password
 - UI Adjustments
   - Login
+- Adopted ESLint + Pretter
 
 ## 1.3.0
 
