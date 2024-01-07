@@ -18,10 +18,13 @@ const Login = () => {
   // UI Triggers
   const [badPassword, setBadPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [iCheck, setICheck] = useState("");
-  const [inBetween, setInBetween] = useState(false);
+
+  const [storeAccessTime, setStoreAccessTime] = useState(false);
+  const [passwordCheckTime, setPasswordCheckTime] = useState(false);
+
+  // From electron store
+  const [integrityCheck, setIntegrityCheck] = useState("");
   const [hasMigrated, setHasMigrated] = useState(false);
-  const [encTime, setEncTime] = useState(false);
 
   // Input
   const [passwordInput, setPasswordInput] = useState("");
@@ -34,30 +37,30 @@ const Login = () => {
   const clickSinglePassword = () => {
     setBadPassword(false);
     setLoading(true);
-    setInBetween(true);
+    setStoreAccessTime(true);
   };
 
   useEffect(() => {
-    if (inBetween) {
-      setInBetween(false);
+    if (storeAccessTime) {
+      setStoreAccessTime(false);
 
       const _integrity_check = eGet('integrity_check');
       const _migration_1_3_1_bcrypt = eGet('migration_1_3_1_bcrypt');
 
-      setICheck(_integrity_check);
+      setIntegrityCheck(_integrity_check);
       setHasMigrated(_migration_1_3_1_bcrypt);
 
-      setEncTime(true);
+      setPasswordCheckTime(true);
     }
-  }, [inBetween])
+  }, [storeAccessTime]);
 
   useEffect(() => {
-    if (encTime) {
+    if (passwordCheckTime) {
       let outcome = false;
 
       // Handles the switch from storing AES check of "skynet" to proper blowfish with salt
       if (hasMigrated) {
-        const integrity_check = decrypt(iCheck, passwordInput);
+        const integrity_check = decrypt(integrityCheck, passwordInput);
 
         if (integrity_check === "skynet") {
           var salt = bcrypt.genSaltSync(16);
@@ -67,7 +70,7 @@ const Login = () => {
           outcome = true;
         };
       } else {
-        outcome = bcrypt.compareSync(passwordInput, iCheck);
+        outcome = bcrypt.compareSync(passwordInput, integrityCheck);
       };
 
       if (outcome) {
@@ -106,13 +109,13 @@ const Login = () => {
       } else {
         console.log("LOGIN: ERROR: password decryption unsuccessful");
         setBadPassword(true);
-        setEncTime(false);
+        setPasswordCheckTime(false);
         setLoading(false);
         setPasswordInput("");
         useStore.getState().addNotification("Incorrect Password");
       };
     }
-  }, [encTime, iCheck, hasMigrated])
+  }, [passwordCheckTime, integrityCheck, hasMigrated]);
 
   return (
     <BasicBox>
