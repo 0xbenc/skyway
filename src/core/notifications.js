@@ -27,6 +27,12 @@ const Notify = ({ notificationAlarm, notificationMessage, colorMode }) => {
   return null;
 };
 
+Notify.propTypes = {
+  notificationAlarm: PropTypes.bool.isRequired,
+  notificationMessage: PropTypes.string.isRequired,
+  colorMode: PropTypes.string.isRequired,
+};
+
 const HandleNotifications = () => {
   const notification_alarm = useStore((state) => state.notification_alarm);
   const notification_message = useStore((state) => state.notification_message);
@@ -45,12 +51,6 @@ const HandleNotifications = () => {
       />
     </SnackbarProvider>
   );
-};
-
-Notify.propTypes = {
-  notificationAlarm: PropTypes.bool.isRequired,
-  notificationMessage: PropTypes.string.isRequired,
-  colorMode: PropTypes.string.isRequired,
 };
 
 export { HandleNotifications };
