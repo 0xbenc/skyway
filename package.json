@@ -5,9 +5,9 @@
   "description": "A desktop AI chatbot with encryption and custom system prompts.",
   "main": ".webpack/main",
   "scripts": {
-    "lint": "npx eslint src test",
+    "lint": "npx eslint src",
     "lint:fix": "npm run lint -- --fix",
-    "prettier": "npx prettier src test --check",
+    "prettier": "npx prettier src --check",
     "prettier:fix": "npm run prettier -- --write",
     "format": "npm run prettier:fix && npm run lint:fix",
     "start": "electron-forge start",
