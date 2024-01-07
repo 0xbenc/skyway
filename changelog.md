@@ -6,7 +6,7 @@
   - Includes a migration for previous versions to use same password
 - UI Adjustments
   - Login
-- Adopted ESLint + Pretter
+- Adopted ESLint + Prettier + prop types
 - Attribution Page
 
 ## 1.3.0
