@@ -1,5 +1,5 @@
 import React from "react";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 //
 import { navigate } from "../utility/navigatePage";
 import { OutlinePaper } from "../mui/reusable";

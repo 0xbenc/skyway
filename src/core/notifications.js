@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from "react";
 import { SnackbarProvider, useSnackbar } from "notistack";
 import { useStore } from "./zustand";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 const Notify = ({ notificationAlarm, notificationMessage, colorMode }) => {
   const { enqueueSnackbar } = useSnackbar();

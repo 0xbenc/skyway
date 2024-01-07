@@ -7,7 +7,7 @@ import {
   materialDark,
   materialLight,
 } from "react-syntax-highlighter/dist/esm/styles/prism";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 //
 import { Box } from "@mui/material";
 // ----------------------------------------------------------------------
