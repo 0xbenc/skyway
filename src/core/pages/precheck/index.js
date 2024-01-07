@@ -4,9 +4,7 @@ import { Precheck } from "./precheck";
 // ----------------------------------------------------------------------
 
 const PrecheckPage = () => {
-  return (
-    <Precheck />
-  );
+  return <Precheck />;
 };
 
 export { PrecheckPage };

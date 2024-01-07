@@ -1,7 +1,7 @@
-import { useStore } from '../../zustand';
+import { useStore } from "../../zustand";
 import { eSet } from "../../utility/electronStore";
 import { encrypt, encryptPrompts } from "../../utility/encryption";
-import { cleanFileTitle } from '../../utility/string';
+import { cleanFileTitle } from "../../utility/string";
 // ----------------------------------------------------------------------
 
 /**
@@ -23,11 +23,11 @@ const chatSync = (chat, oldUUID, chatIsActive) => {
     const index = chats.findIndex((item) => item.uuid === oldUUID);
 
     if (index !== -1) {
-      updatedChats = chats.map((item, i) => i === index ? chat : item);
+      updatedChats = chats.map((item, i) => (i === index ? chat : item));
     } else {
       updatedChats.push(chat);
-    };
-  };
+    }
+  }
 
   const updatedChatsString = JSON.stringify([...updatedChats]);
   const updatedChatsEncryptedString = encrypt(updatedChatsString, password);
@@ -35,7 +35,7 @@ const chatSync = (chat, oldUUID, chatIsActive) => {
   if (chatIsActive) useStore.setState({ current_chat: chat.uuid });
 
   useStore.setState({ chats: updatedChats });
-  eSet('chats', updatedChatsEncryptedString);
+  eSet("chats", updatedChatsEncryptedString);
 };
 
 const chatDelete = (uuid) => {
@@ -46,13 +46,13 @@ const chatDelete = (uuid) => {
 
   if (index !== -1) {
     updatedChats.splice(index, 1);
-  };
+  }
 
   const updatedChatsString = JSON.stringify([...updatedChats]);
   const updatedChatsEncryptedString = encrypt(updatedChatsString, password);
 
   useStore.setState({ chats: updatedChats });
-  eSet('chats', updatedChatsEncryptedString);
+  eSet("chats", updatedChatsEncryptedString);
 };
 
 const promptSelect = (index, system_prompts) => {
@@ -68,8 +68,8 @@ const promptSelect = (index, system_prompts) => {
 
   console.log("NAVIGATION: chatbot", system_prompts[index].title, index);
 
-  eSet('system_prompts', encPrompts); // TODO verify this step is logically needed
-  eSet('last_prompt', index);
+  eSet("system_prompts", encPrompts); // TODO verify this step is logically needed
+  eSet("last_prompt", index);
 
   useStore.getState().chat_drawer_toggle;
 
@@ -79,16 +79,18 @@ const promptSelect = (index, system_prompts) => {
     active_system_prompt: system_prompts[index],
     chat_drawer_open: false,
     last_prompt: index,
-    chat_reset: true
+    chat_reset: true,
   });
 };
 
 const ImportChat = () => {
-  const chats = useStore.getState().chats
+  const chats = useStore.getState().chats;
 
-  window.electron.engine.dialog_open_filtered_file(
-    "",
-    [{ name: "Skyway Chats", extensions: ['json'] }]).then(result => {
+  window.electron.engine
+    .dialog_open_filtered_file("", [
+      { name: "Skyway Chats", extensions: ["json"] },
+    ])
+    .then((result) => {
       if (result !== undefined) {
         let base64Data = result.data.split(",")[1];
         let potentialChat = JSON.parse(atob(base64Data));
@@ -98,12 +100,12 @@ const ImportChat = () => {
         for (let i = 0; i < chats.length; i++) {
           if (potentialChat.uuid === chats[i].uuid) {
             matches = true;
-          };
-        };
+          }
+        }
 
         if (!matches) {
           chatSync(potentialChat, "none", false);
-          useStore.setState({ chat_reset: true })
+          useStore.setState({ chat_reset: true });
           useStore.getState().addNotification("Chat added to Library");
         } else {
           useStore.getState().addNotification("Chat already in Library");
@@ -117,36 +119,36 @@ const ExportChat = (uuid) => {
   const exporter = async (uuid) => {
     const dir = await window.electron.engine.dialog_choose_directory();
     if (!dir) {
-      return;  // Cancelled directory choice, exit exporter function
+      return; // Cancelled directory choice, exit exporter function
     }
 
     let indexMatch = -1;
 
     for (let i = 0; i < chats.length; i++) {
       if (uuid === chats[i].uuid) {
-        indexMatch = i
-      };
-    };
+        indexMatch = i;
+      }
+    }
 
     if (indexMatch > -1) {
       const chatsCopy = [...chats];
-      
+
       let chatCopy = chatsCopy[indexMatch];
       chatCopy.skywayType = "chat";
-      
+
       const jsonstr = JSON.stringify(chatCopy);
-      
+
       const title = chatCopy.title;
       const cleanTitle = cleanFileTitle(title);
-      
+
       const args = {
         dir: dir,
         jsonstr: jsonstr,
-        filename: cleanTitle
+        filename: cleanTitle,
       };
 
-      window.electron.engine.send('save-json', args);
-    };
+      window.electron.engine.send("save-json", args);
+    }
   };
 
   exporter(uuid);

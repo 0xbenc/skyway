@@ -4,10 +4,7 @@ import { ChangeAPIKey } from "./changeAPIKey";
 // ----------------------------------------------------------------------
 
 const ChangeAPIKeyPage = () => {
-
-  return (
-    <ChangeAPIKey />
-  );
+  return <ChangeAPIKey />;
 };
 
 export { ChangeAPIKeyPage };

@@ -17,22 +17,22 @@ import {
   Box,
   IconButton,
   Chip,
-  Tooltip
+  Tooltip,
 } from "@mui/material";
 //
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import LaunchIcon from '@mui/icons-material/Launch';
-import CancelIcon from '@mui/icons-material/Cancel';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import CloudDoneIcon from '@mui/icons-material/CloudDone';
-import CloudOffIcon from '@mui/icons-material/CloudOff';
-import CloudSyncIcon from '@mui/icons-material/CloudSync';
+import LaunchIcon from "@mui/icons-material/Launch";
+import CancelIcon from "@mui/icons-material/Cancel";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import CloudDoneIcon from "@mui/icons-material/CloudDone";
+import CloudOffIcon from "@mui/icons-material/CloudOff";
+import CloudSyncIcon from "@mui/icons-material/CloudSync";
 // ----------------------------------------------------------------------
 
 const ChangeAPIKey = () => {
-  const open_ai_api_key = useStore(state => state.open_ai_api_key);
-  const open_ai_api_keys = useStore(state => state.open_ai_api_keys);
+  const open_ai_api_key = useStore((state) => state.open_ai_api_key);
+  const open_ai_api_keys = useStore((state) => state.open_ai_api_keys);
 
   const [editKey, setEditKey] = useState(-1);
 
@@ -77,25 +77,25 @@ const ChangeAPIKey = () => {
         newArr.push(open_ai_api_keys[i]);
         newArrEnc.push({
           name: open_ai_api_keys[i].name,
-          key: encrypt(open_ai_api_keys[i].key, password_)
+          key: encrypt(open_ai_api_keys[i].key, password_),
         });
-      };
-    };
+      }
+    }
 
     useStore.setState({ open_ai_api_keys: newArr, open_ai_api_key: 0 });
     eSet("open_ai_api_keys", newArrEnc);
     eSet("open_ai_api_key", 0);
     clearNetStatus();
 
-    console.log("API KEY: deleted key")
+    console.log("API KEY: deleted key");
   };
 
   const selectKey = (key) => {
-    useStore.setState({ open_ai_api_key: key })
-    eSet("open_ai_api_key", key)
+    useStore.setState({ open_ai_api_key: key });
+    eSet("open_ai_api_key", key);
     clearNetStatus();
 
-    console.log("API KEY: selected key")
+    console.log("API KEY: selected key");
   };
 
   const addKey = () => {
@@ -108,19 +108,19 @@ const ChangeAPIKey = () => {
       newArr.push(open_ai_api_keys[i]);
       newArrEnc.push({
         name: open_ai_api_keys[i].name,
-        key: encrypt(open_ai_api_keys[i].key, password_)
-      })
-    };
+        key: encrypt(open_ai_api_keys[i].key, password_),
+      });
+    }
 
     newArr.push({ name: nameInput, key: keyInput });
     newArrEnc.push({
       name: nameInput,
-      key: encrypt(keyInput, password_)
+      key: encrypt(keyInput, password_),
     });
 
     useStore.setState({
       open_ai_api_keys: newArr,
-      open_ai_api_key: newArr.length - 1
+      open_ai_api_key: newArr.length - 1,
     });
 
     eSet("open_ai_api_keys", newArrEnc);
@@ -132,13 +132,13 @@ const ChangeAPIKey = () => {
     setEditKeyInput("");
     clearNetStatus();
 
-    console.log("API KEY: added key")
+    console.log("API KEY: added key");
   };
 
   const openEditKey = (key) => {
     setEditKey(key);
-    setEditNameInput(open_ai_api_keys[key].name)
-    setEditKeyInput(open_ai_api_keys[key].key)
+    setEditNameInput(open_ai_api_keys[key].name);
+    setEditKeyInput(open_ai_api_keys[key].key);
     clearNetStatus();
   };
 
@@ -156,21 +156,21 @@ const ChangeAPIKey = () => {
 
     for (let i = 0; i < open_ai_api_keys.length; i++) {
       if (i !== key) {
-        newArr.push(open_ai_api_keys[i])
+        newArr.push(open_ai_api_keys[i]);
         newArrEnc.push({
           name: open_ai_api_keys[i].name,
-          key: encrypt(open_ai_api_keys[i].key, password_)
-        })
+          key: encrypt(open_ai_api_keys[i].key, password_),
+        });
       } else {
         newArr.push({ name: editNameInput, key: editKeyInput });
         newArrEnc.push({
           name: editNameInput,
-          key: encrypt(editKeyInput, password_)
+          key: encrypt(editKeyInput, password_),
         });
       }
     }
 
-    useStore.setState({ open_ai_api_keys: newArr, });
+    useStore.setState({ open_ai_api_keys: newArr });
 
     eSet("open_ai_api_keys", newArrEnc);
 
@@ -181,26 +181,26 @@ const ChangeAPIKey = () => {
     setEditKey(-1);
     clearNetStatus();
 
-    console.log("API KEY: adjusted key")
+    console.log("API KEY: adjusted key");
   };
 
   const checkConnection = async (key) => {
     selectKey(key);
-    console.log("API KEY: validating key")
+    console.log("API KEY: validating key");
 
     const value = await fetchChatCompletionConnectionTest();
 
     if (value === "success") {
       setNetStatus(true);
       setNetKey(key);
-      console.log("API KEY: key is valid")
-      useStore.getState().addNotification("API Key Successfully Connected")
+      console.log("API KEY: key is valid");
+      useStore.getState().addNotification("API Key Successfully Connected");
     } else {
       setNetStatus(false);
       setNetKey(key);
-      console.log("API KEY: ERROR: key is not valid")
-      useStore.getState().addNotification("API Key Connection Failure")
-    };
+      console.log("API KEY: ERROR: key is not valid");
+      useStore.getState().addNotification("API Key Connection Failure");
+    }
   };
 
   return (
@@ -256,94 +256,132 @@ const ChangeAPIKey = () => {
               return (
                 <OutlinePaper key={key}>
                   <Stack direction="row" spacing={1}>
-                    {key !== editKey && <>
-                      <Typography variant="h6">{chat.name}</Typography>
-                      <OutlinePaper>
-                        <Typography variant="body1">{passwordStyle(chat.key)}</Typography>
-                      </OutlinePaper>
-                      {key > 0 && <Tooltip title="Delete">
-                        <Box>
-                          <IconButton onClick={() => { deleteKey(key) }}>
-                            <DeleteIcon />
-                          </IconButton>
-                        </Box>
-                      </Tooltip>}
-                      <Tooltip title="Edit">
-                        <Box>
-                          <IconButton onClick={() => { openEditKey(key) }}>
-                            <EditIcon />
-                          </IconButton>
-                        </Box>
-                      </Tooltip>
-                      {key !== open_ai_api_key && <Tooltip title="Select">
-                        <IconButton onClick={() => { selectKey(key) }}>
-                          <LaunchIcon />
-                        </IconButton>
-                      </Tooltip>}
-                      {netKey !== key && <Tooltip title="Validate">
-                        <Box>
-                          <IconButton onClick={() => { checkConnection(key) }}>
-                            <CloudSyncIcon />
-                          </IconButton>
-                        </Box>
-                      </Tooltip>}
-                      {netKey === key && netStatus && <Tooltip title="Valid Key">
-                        <Box display="flex" alignItems="center">
-                          <CloudDoneIcon />
-                        </Box>
-                      </Tooltip>}
-                      {netKey === key && !netStatus && <Tooltip title="Invalid Key">
-                        <Box display="flex" alignItems="center">
-                          <CloudOffIcon />
-                        </Box>
-                      </Tooltip>}
-                      {key === open_ai_api_key && <Box display="flex" alignItems="center">
-                        <Chip label="selected" />
-                      </Box>}
-                    </>}
-                    {key === editKey && <>
-                      <FormControl>
-                        <Stack direction="row" spacing={1}>
-                          <TextField
-                            id="user-input3"
-                            label="Name"
-                            variant="filled"
-                            color="secondary"
-                            value={editNameInput}
-                            onChange={handleEditNameInput}
-                            required={true}
-                            fullWidth={true}
-                          />
-                          <TextField
-                            id="user-input4"
-                            label="OpenAI API Key"
-                            variant="filled"
-                            color="secondary"
-                            value={editKeyInput}
-                            onChange={handleEditKeyInput}
-                            required={true}
-                            fullWidth={true}
-                          />
-                          <IconButton onClick={closeEditKey}>
-                            <CancelIcon />
-                          </IconButton>
-                          <IconButton
-                            onClick={() => { saveEditKey(key) }}
-                            disabled={editNameInput === "" || editKeyInput === ""}
-                          >
-                            <CheckCircleIcon />
-                          </IconButton>
-                        </Stack>
-                      </FormControl>
-                    </>}
+                    {key !== editKey && (
+                      <>
+                        <Typography variant="h6">{chat.name}</Typography>
+                        <OutlinePaper>
+                          <Typography variant="body1">
+                            {passwordStyle(chat.key)}
+                          </Typography>
+                        </OutlinePaper>
+                        {key > 0 && (
+                          <Tooltip title="Delete">
+                            <Box>
+                              <IconButton
+                                onClick={() => {
+                                  deleteKey(key);
+                                }}
+                              >
+                                <DeleteIcon />
+                              </IconButton>
+                            </Box>
+                          </Tooltip>
+                        )}
+                        <Tooltip title="Edit">
+                          <Box>
+                            <IconButton
+                              onClick={() => {
+                                openEditKey(key);
+                              }}
+                            >
+                              <EditIcon />
+                            </IconButton>
+                          </Box>
+                        </Tooltip>
+                        {key !== open_ai_api_key && (
+                          <Tooltip title="Select">
+                            <IconButton
+                              onClick={() => {
+                                selectKey(key);
+                              }}
+                            >
+                              <LaunchIcon />
+                            </IconButton>
+                          </Tooltip>
+                        )}
+                        {netKey !== key && (
+                          <Tooltip title="Validate">
+                            <Box>
+                              <IconButton
+                                onClick={() => {
+                                  checkConnection(key);
+                                }}
+                              >
+                                <CloudSyncIcon />
+                              </IconButton>
+                            </Box>
+                          </Tooltip>
+                        )}
+                        {netKey === key && netStatus && (
+                          <Tooltip title="Valid Key">
+                            <Box display="flex" alignItems="center">
+                              <CloudDoneIcon />
+                            </Box>
+                          </Tooltip>
+                        )}
+                        {netKey === key && !netStatus && (
+                          <Tooltip title="Invalid Key">
+                            <Box display="flex" alignItems="center">
+                              <CloudOffIcon />
+                            </Box>
+                          </Tooltip>
+                        )}
+                        {key === open_ai_api_key && (
+                          <Box display="flex" alignItems="center">
+                            <Chip label="selected" />
+                          </Box>
+                        )}
+                      </>
+                    )}
+                    {key === editKey && (
+                      <>
+                        <FormControl>
+                          <Stack direction="row" spacing={1}>
+                            <TextField
+                              id="user-input3"
+                              label="Name"
+                              variant="filled"
+                              color="secondary"
+                              value={editNameInput}
+                              onChange={handleEditNameInput}
+                              required={true}
+                              fullWidth={true}
+                            />
+                            <TextField
+                              id="user-input4"
+                              label="OpenAI API Key"
+                              variant="filled"
+                              color="secondary"
+                              value={editKeyInput}
+                              onChange={handleEditKeyInput}
+                              required={true}
+                              fullWidth={true}
+                            />
+                            <IconButton onClick={closeEditKey}>
+                              <CancelIcon />
+                            </IconButton>
+                            <IconButton
+                              onClick={() => {
+                                saveEditKey(key);
+                              }}
+                              disabled={
+                                editNameInput === "" || editKeyInput === ""
+                              }
+                            >
+                              <CheckCircleIcon />
+                            </IconButton>
+                          </Stack>
+                        </FormControl>
+                      </>
+                    )}
                   </Stack>
                 </OutlinePaper>
-              )
+              );
             })}
           </Stack>
         </OutlinePaper>
-      </Stack >
-    </BasicBox >
+      </Stack>
+    </BasicBox>
   );
 };
 

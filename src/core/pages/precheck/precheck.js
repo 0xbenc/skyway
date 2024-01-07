@@ -17,15 +17,15 @@ const Precheck = () => {
         useStore.setState({
           version: version,
           color_mode: colorMode,
-          page: nextPage
+          page: nextPage,
         });
       };
 
       const colorMode = eGet("color_mode") === "light" ? "light" : "dark";
-      const nextPage = eGet('password_set') ? "login" : "setup";
+      const nextPage = eGet("password_set") ? "login" : "setup";
 
       begin(colorMode, nextPage);
-    };
+    }
   }, [localDataCheck]);
 
   return null;

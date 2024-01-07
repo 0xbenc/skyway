@@ -11,7 +11,7 @@ const GPT35Turbo = {
   createdDate: "2023-08-02T13:03:43.668Z",
   importedDate: "2023-08-02T13:03:43.668Z",
   usedDate: "2023-08-02T13:03:43.668Z",
-  skywayVersion: "1.3.0"
+  skywayVersion: "1.3.0",
 };
 
 const GPT4 = {
@@ -27,12 +27,9 @@ const GPT4 = {
   createdDate: "2023-08-02T13:03:43.668Z",
   importedDate: "2023-08-02T13:03:43.668Z",
   usedDate: "2023-08-02T13:03:43.668Z",
-  skywayVersion: "1.3.0"
+  skywayVersion: "1.3.0",
 };
 
-const Prompts = [
-  GPT35Turbo,
-  GPT4
-];
+const Prompts = [GPT35Turbo, GPT4];
 
 export { Prompts };

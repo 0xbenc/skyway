@@ -7,10 +7,10 @@ const generateRandomNumbers = (min, max, count) => {
   }
 
   if (count === 1) {
-    return randomNumbers[0]
+    return randomNumbers[0];
   } else {
-    return randomNumbers
-  };
+    return randomNumbers;
+  }
 };
 
 export { generateRandomNumbers };

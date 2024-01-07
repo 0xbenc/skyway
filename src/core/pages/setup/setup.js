@@ -84,7 +84,7 @@ const Setup = () => {
         "x" +
         randArray[6] +
         "x" +
-        randArray[7]
+        randArray[7],
     );
 
     console.log("SETUP: random numbers", randArray);
@@ -99,7 +99,7 @@ const Setup = () => {
       seeds[randArray[4]],
       seeds[randArray[5]],
       seeds[randArray[6]],
-      seeds[randArray[7]]
+      seeds[randArray[7]],
     );
 
     useStore.setState({

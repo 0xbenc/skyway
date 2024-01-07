@@ -4,9 +4,7 @@ import { Prompt } from "./prompt";
 // ----------------------------------------------------------------------
 
 const PromptPage = () => {
-  return (
-    <Prompt />
-  );
+  return <Prompt />;
 };
 
 export { PromptPage };

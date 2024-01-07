@@ -1,10 +1,10 @@
-import React from "react"
+import React from "react";
 //
 import { Library } from "./library";
 // ----------------------------------------------------------------------
 
 const LibraryPage = () => {
-  return <Library />
+  return <Library />;
 };
 
 export { LibraryPage };

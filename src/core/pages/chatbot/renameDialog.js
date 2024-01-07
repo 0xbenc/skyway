@@ -5,19 +5,26 @@ import { useStore } from "../../zustand";
 import { chatSync } from "./utility";
 //
 import { Button } from "@mui/material";
-import { Dialog, DialogTitle, FormControl, TextField, DialogContent, DialogActions } from "@mui/material";
+import {
+  Dialog,
+  DialogTitle,
+  FormControl,
+  TextField,
+  DialogContent,
+  DialogActions,
+} from "@mui/material";
 // ----------------------------------------------------------------------
 
 const RenameDialog = () => {
-  const chats = useStore(state => state.chats);
-  const rename_dialog_open = useStore(state => state.rename_dialog_open);
-  const rename_dialog_input = useStore(state => state.rename_dialog_input);
-  const rename_dialog_index = useStore(state => state.rename_dialog_index);
+  const chats = useStore((state) => state.chats);
+  const rename_dialog_open = useStore((state) => state.rename_dialog_open);
+  const rename_dialog_input = useStore((state) => state.rename_dialog_input);
+  const rename_dialog_index = useStore((state) => state.rename_dialog_index);
 
   const handleRenameDialogCloseOut = () => {
     useStore.setState({
       rename_dialog_input: "",
-      rename_dialog_open: false
+      rename_dialog_open: false,
     });
   };
 
@@ -29,18 +36,22 @@ const RenameDialog = () => {
     chatSync(
       newChats[rename_dialog_index],
       newChats[rename_dialog_index].uuid,
-      false
+      false,
     );
 
     useStore.setState({ rename_dialog_open: false });
   };
 
   const handleRenameDialogInput = (e) => {
-    useStore.setState({ rename_dialog_input: e.target.value })
+    useStore.setState({ rename_dialog_input: e.target.value });
   };
 
   return (
-    <Dialog fullWidth onClose={handleRenameDialogCloseOut} open={rename_dialog_open}>
+    <Dialog
+      fullWidth
+      onClose={handleRenameDialogCloseOut}
+      open={rename_dialog_open}
+    >
       <DialogTitle>Rename your chat</DialogTitle>
       <DialogContent>
         <FormControl fullWidth>
@@ -52,8 +63,7 @@ const RenameDialog = () => {
             onChange={handleRenameDialogInput}
             required={true}
             fullWidth
-          >
-          </TextField>
+          ></TextField>
         </FormControl>
       </DialogContent>
       <DialogActions>

@@ -15,16 +15,16 @@ import {
   Chip,
   Stack,
   Tooltip,
-  IconButton
+  IconButton,
 } from "@mui/material";
 //
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import IosShareIcon from '@mui/icons-material/IosShare';
+import IosShareIcon from "@mui/icons-material/IosShare";
 // ----------------------------------------------------------------------
 
 const Library = () => {
-  const system_prompts = useStore(state => state.system_prompts)
+  const system_prompts = useStore((state) => state.system_prompts);
 
   const goSystemPromptPage = (index) => {
     console.log("NAVIGATION: prompt", system_prompts[index].title);
@@ -44,11 +44,12 @@ const Library = () => {
         <OutlinePaper>
           <Grid
             spacing={1}
-            container sx={{
+            container
+            sx={{
               justifyContent: "left",
               alignItems: "left",
               textAlign: "left",
-              verticalAlign: "center"
+              verticalAlign: "center",
             }}
             direction={"row"}
           >
@@ -57,7 +58,9 @@ const Library = () => {
                 <Button
                   variant="outlined"
                   color="secondary"
-                  onClick={() => { goNewPrompt() }}
+                  onClick={() => {
+                    goNewPrompt();
+                  }}
                 >
                   <b>Create</b>
                 </Button>
@@ -77,9 +80,7 @@ const Library = () => {
                   <OutlinePaper>
                     <Grid container>
                       <Grid item sm={12}>
-                        <Typography variant="h4">
-                          {prompt.title}
-                        </Typography>
+                        <Typography variant="h4">{prompt.title}</Typography>
                       </Grid>
 
                       <Grid item sm={12}>
@@ -92,32 +93,50 @@ const Library = () => {
 
                       <Grid item sm={12}>
                         <Chip label={prompt.model} sx={{ marginBottom: 1 }} />
-                        <Chip label={prompt.engine} variant="outlined" sx={{ marginBottom: 1, marginLeft: 1 }} />
+                        <Chip
+                          label={prompt.engine}
+                          variant="outlined"
+                          sx={{ marginBottom: 1, marginLeft: 1 }}
+                        />
                       </Grid>
 
-                      {key > 1 && <Grid item sm={12}>
-                        <Stack direction="row">
-                          <Tooltip title="Edit System Prompt">
-                            <IconButton onClick={() => { goSystemPromptPage(key) }}>
-                              <EditIcon />
-                            </IconButton>
-                          </Tooltip>
-                          <Tooltip title="Export System Prompt">
-                            <IconButton onClick={() => { ExportPrompt(key) }}>
-                              <IosShareIcon />
-                            </IconButton>
-                          </Tooltip>
-                          <Tooltip title="Delete System Prompt">
-                            <IconButton onClick={() => { deleteSystemPrompt(key) }}>
-                              <DeleteIcon />
-                            </IconButton>
-                          </Tooltip>
-                        </Stack>
-                      </Grid>}
+                      {key > 1 && (
+                        <Grid item sm={12}>
+                          <Stack direction="row">
+                            <Tooltip title="Edit System Prompt">
+                              <IconButton
+                                onClick={() => {
+                                  goSystemPromptPage(key);
+                                }}
+                              >
+                                <EditIcon />
+                              </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Export System Prompt">
+                              <IconButton
+                                onClick={() => {
+                                  ExportPrompt(key);
+                                }}
+                              >
+                                <IosShareIcon />
+                              </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Delete System Prompt">
+                              <IconButton
+                                onClick={() => {
+                                  deleteSystemPrompt(key);
+                                }}
+                              >
+                                <DeleteIcon />
+                              </IconButton>
+                            </Tooltip>
+                          </Stack>
+                        </Grid>
+                      )}
                     </Grid>
                   </OutlinePaper>
                 </Grid>
-              )
+              );
             })}
           </Grid>
         </OutlinePaper>
