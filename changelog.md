@@ -7,6 +7,7 @@
 - UI Adjustments
   - Login
 - Adopted ESLint + Pretter
+- Attribution Page
 
 ## 1.3.0
 
