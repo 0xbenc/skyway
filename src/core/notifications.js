@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo } from "react";
 import { SnackbarProvider, useSnackbar } from "notistack";
 import { useStore } from "./zustand";
+import PropTypes from 'prop-types';
 
 const Notify = ({ notificationAlarm, notificationMessage, colorMode }) => {
   const { enqueueSnackbar } = useSnackbar();
@@ -44,6 +45,12 @@ const HandleNotifications = () => {
       />
     </SnackbarProvider>
   );
+};
+
+Notify.propTypes = {
+  notificationAlarm: PropTypes.bool.isRequired,
+  notificationMessage: PropTypes.string.isRequired,
+  colorMode: PropTypes.string.isRequired,
 };
 
 export { HandleNotifications };
