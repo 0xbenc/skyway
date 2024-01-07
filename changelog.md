@@ -4,6 +4,8 @@
 
 - Password encyption uses a bcrypt blowfish + salt setup. 
   - Includes a migration for previous versions to use same password
+- UI Adjustments
+  - Login
 
 ## 1.3.0
 
