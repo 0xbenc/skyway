@@ -13,7 +13,7 @@ import { PromptPage } from "./prompt";
 // ----------------------------------------------------------------------
 
 const HandlePages = () => {
-  const page = useStore(state => state.page);
+  const page = useStore((state) => state.page);
 
   return (
     <>

@@ -5,6 +5,11 @@
   "description": "A desktop AI chatbot with encryption and custom system prompts.",
   "main": ".webpack/main",
   "scripts": {
+    "lint": "npx eslint src test",
+    "lint:fix": "npm run lint -- --fix",
+    "prettier": "npx prettier src test --check",
+    "prettier:fix": "npm run prettier -- --write",
+    "format": "npm run prettier:fix && npm run lint:fix",
     "start": "electron-forge start",
     "makeLinux": "electron-forge make --arch=x64 --platform=linux",
     "makeLinuxARM": "electron-forge make --arch=arm64 --platform=linux",
@@ -37,7 +42,11 @@
     "css-loader": "6.8.1",
     "dotenv-webpack": "8.0.1",
     "electron": "28.0.0",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-react": "^7.33.2",
     "node-loader": "2.0.0",
+    "prettier": "3.1.1",
     "style-loader": "3.3.3",
     "svg-url-loader": "8.0.0"
   },

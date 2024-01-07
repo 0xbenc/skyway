@@ -4,9 +4,7 @@ import { Setup } from "./setup";
 // ----------------------------------------------------------------------
 
 const SetupPage = () => {
-  return (
-    <Setup />
-  );
+  return <Setup />;
 };
 
 export { SetupPage };
