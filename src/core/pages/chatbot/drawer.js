@@ -98,7 +98,7 @@ const ChatDrawer = () => {
           <Divider />
           <ListItem disablePadding>
             <ListItemButton onClick={newChat}>
-              <ListItemIcon>
+              <ListItemIcon sx={{ minWidth: 'auto', marginRight: theme => theme.spacing(2), justifyContent: 'center' }}>
                 <ChatIcon />
               </ListItemIcon>
               <ListItemText primary={"New Chat"} />
@@ -106,7 +106,7 @@ const ChatDrawer = () => {
           </ListItem>
           <ListItem disablePadding>
             <ListItemButton onClick={ImportChat}>
-              <ListItemIcon>
+              <ListItemIcon sx={{ minWidth: 'auto', marginRight: theme => theme.spacing(2), justifyContent: 'center' }}>
                 <FileOpenIcon />
               </ListItemIcon>
               <ListItemText primary={"Import Chat"} />
@@ -114,7 +114,7 @@ const ChatDrawer = () => {
           </ListItem>
           <ListItem disablePadding>
             <ListItemButton onClick={switchPromptOpen}>
-              <ListItemIcon>
+              <ListItemIcon sx={{ minWidth: 'auto', marginRight: theme => theme.spacing(2), justifyContent: 'center' }}>
                 <SwapHorizIcon />
               </ListItemIcon>
               <ListItemText primary={"Change Prompt"} />
@@ -122,7 +122,7 @@ const ChatDrawer = () => {
           </ListItem>
           <ListItem disablePadding>
             <ListItemButton onClick={navSystemPrompts}>
-              <ListItemIcon>
+              <ListItemIcon sx={{ minWidth: 'auto', marginRight: theme => theme.spacing(2), justifyContent: 'center' }}>
                 <RateReviewIcon />
               </ListItemIcon>
               <ListItemText primary={"Prompt Library"} />
@@ -130,7 +130,7 @@ const ChatDrawer = () => {
           </ListItem>
           <ListItem disablePadding>
             <ListItemButton onClick={navAPIKey}>
-              <ListItemIcon>
+              <ListItemIcon sx={{ minWidth: 'auto', marginRight: theme => theme.spacing(2), justifyContent: 'center' }}>
                 <HttpsIcon />
               </ListItemIcon>
               <ListItemText primary={"Edit API Keys"} />
@@ -138,7 +138,7 @@ const ChatDrawer = () => {
           </ListItem>
           <ListItem disablePadding>
             <ListItemButton onClick={navCredits}>
-              <ListItemIcon>
+              <ListItemIcon sx={{ minWidth: 'auto', marginRight: theme => theme.spacing(2), justifyContent: 'center' }}>
                 <AttributionIcon />
               </ListItemIcon>
               <ListItemText primary={"Attribution"} />
