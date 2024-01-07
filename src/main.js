@@ -48,6 +48,7 @@ const createWindow = () => {
     },
   });
 
+  // eslint-disable-next-line
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
   Menu.setApplicationMenu(

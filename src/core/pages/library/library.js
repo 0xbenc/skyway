@@ -3,7 +3,6 @@ import React from "react";
 import { useStore } from "../../zustand";
 //
 import { previewText } from "../../utility/string";
-import { navigate } from "../../utility/navigatePage";
 import { BasicBox, OutlinePaper } from "../../mui/reusable";
 import { ExportPrompt, deleteSystemPrompt, ImportPrompt } from "./utility";
 import { Title } from "../../components/title";
