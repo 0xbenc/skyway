@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 //
-import { useStore } from "../../zustand";
+import { useStore } from '../../zustand';
 //
-import { encryptPrompts } from "../../utility/encryption";
-import { BasicBox, OutlinePaper } from "../../mui/reusable";
-import { eSet } from "../../utility/electronStore";
-import { Title } from "../../components/title";
-import { generateKeyV4 } from "../../utility/uuid";
+import { encryptPrompts } from '../../utility/encryption';
+import { BasicBox, OutlinePaper } from '../../mui/reusable';
+import { eSet } from '../../utility/electronStore';
+import { Title } from '../../components/title';
+import { generateKeyV4 } from '../../utility/uuid';
 //
 import {
   Menu,
@@ -17,7 +17,7 @@ import {
   Typography,
   MenuItem,
   Stack,
-} from "@mui/material";
+} from '@mui/material';
 // ----------------------------------------------------------------------
 
 const Prompt = () => {
@@ -25,13 +25,13 @@ const Prompt = () => {
   const system_prompt_to_edit = useStore.getState().system_prompt_to_edit;
   const version_ = useStore.getState().version;
 
-  const [titleInput, setTitleInput] = useState("");
-  const [promptInput, setPromptInput] = useState("");
-  const [userInput, setUserInput] = useState("");
-  const [prefilInput, setPrefilInput] = useState("");
+  const [titleInput, setTitleInput] = useState('');
+  const [promptInput, setPromptInput] = useState('');
+  const [userInput, setUserInput] = useState('');
+  const [prefilInput, setPrefilInput] = useState('');
 
-  const [model, setModel] = useState("gpt-3.5-turbo");
-  const [engine, setEngine] = useState("token limited");
+  const [model, setModel] = useState('gpt-3.5-turbo');
+  const [engine, setEngine] = useState('token limited');
 
   const [ready, setReady] = useState(false);
 
@@ -69,18 +69,18 @@ const Prompt = () => {
     setModelAnchor(null);
     setModel(model);
 
-    if (engine === "token limited") {
+    if (engine === 'token limited') {
       switch (model) {
-        case "gpt-3.5-turbo":
+        case 'gpt-3.5-turbo':
           setLimit(4096);
           break;
-        case "gpt-4":
+        case 'gpt-4':
           setLimit(8192);
           break;
-        case "gpt-4-32k":
+        case 'gpt-4-32k':
           setLimit(32768);
           break;
-        case "gpt-4-1106-preview":
+        case 'gpt-4-1106-preview':
           setLimit(128000);
           break;
         default:
@@ -111,13 +111,13 @@ const Prompt = () => {
   };
 
   const cancel = () => {
-    console.log("NAVIGATION: system_prompts");
-    useStore.setState({ page: "library", system_prompt_to_edit: -1 });
+    console.log('NAVIGATION: system_prompts');
+    useStore.setState({ page: 'library', system_prompt_to_edit: -1 });
   };
 
   const addPrompt = () => {
     if (newPrompt) {
-      console.log("ITS A NEW PROMPT", limit);
+      console.log('ITS A NEW PROMPT', limit);
       const usedDate = new Date();
       const usedDateISO = String(usedDate.toISOString());
       const version_ = useStore.getState().version;
@@ -141,13 +141,13 @@ const Prompt = () => {
       const password_ = useStore.getState().password;
 
       const encPrompts = encryptPrompts(system_prompts_, password_);
-      eSet("system_prompts", encPrompts);
+      eSet('system_prompts', encPrompts);
 
-      useStore.setState({ page: "library" });
+      useStore.setState({ page: 'library' });
 
       useStore.setState({
         system_prompts: system_prompts_,
-        page: "library",
+        page: 'library',
       });
     } else {
       const importedDate = new Date();
@@ -170,24 +170,24 @@ const Prompt = () => {
 
       const encPrompts = encryptPrompts(system_prompts_, password_);
 
-      eSet("library", encPrompts);
+      eSet('library', encPrompts);
 
       useStore.setState({
         system_prompts: system_prompts_,
-        page: "library",
+        page: 'library',
       });
     }
   };
 
   useEffect(() => {
     if (
-      titleInput !== "" &&
-      promptInput !== "" &&
-      userInput !== "" &&
-      model !== "" &&
-      model !== "NONE" &&
-      engine !== "" &&
-      engine !== "NONE"
+      titleInput !== '' &&
+      promptInput !== '' &&
+      userInput !== '' &&
+      model !== '' &&
+      model !== 'NONE' &&
+      engine !== '' &&
+      engine !== 'NONE'
     ) {
       setReady(true);
     } else {
@@ -213,19 +213,19 @@ const Prompt = () => {
   return (
     <BasicBox>
       <Stack spacing={1}>
-        <Title value={"System Prompts"} />
+        <Title value={'System Prompts'} />
 
         <OutlinePaper>
           <Grid
             spacing={1}
             container
             sx={{
-              justifyContent: "left",
-              alignItems: "left",
-              textAlign: "left",
-              verticalAlign: "center",
+              justifyContent: 'left',
+              alignItems: 'left',
+              textAlign: 'left',
+              verticalAlign: 'center',
             }}
-            direction={"row"}
+            direction={'row'}
           >
             <Grid item sm={6}>
               <Stack direction="row" spacing={1}>
@@ -314,12 +314,12 @@ const Prompt = () => {
             spacing={1}
             container
             sx={{
-              justifyContent: "left",
-              alignItems: "left",
-              textAlign: "left",
-              verticalAlign: "center",
+              justifyContent: 'left',
+              alignItems: 'left',
+              textAlign: 'left',
+              verticalAlign: 'center',
             }}
-            direction={"row"}
+            direction={'row'}
           >
             <Grid item sm={6}>
               <Stack direction="row" spacing={1}>
@@ -327,9 +327,9 @@ const Prompt = () => {
 
                 <Button
                   id="basic-button"
-                  aria-controls={modelOpen ? "basic-menu" : undefined}
+                  aria-controls={modelOpen ? 'basic-menu' : undefined}
                   aria-haspopup="true"
-                  aria-expanded={modelOpen ? "true" : undefined}
+                  aria-expanded={modelOpen ? 'true' : undefined}
                   onClick={handleModel}
                   variant="outlined"
                   color="secondary"
@@ -342,22 +342,22 @@ const Prompt = () => {
                   open={modelOpen}
                   onClose={handleCloseModel}
                   MenuListProps={{
-                    "aria-labelledby": "basic-button",
+                    'aria-labelledby': 'basic-button',
                   }}
                 >
-                  <MenuItem onClick={() => handleChooseModel("gpt-3.5-turbo")}>
-                    {"GPT 3.5 Turbo (4k)"}
+                  <MenuItem onClick={() => handleChooseModel('gpt-3.5-turbo')}>
+                    {'GPT 3.5 Turbo (4k)'}
                   </MenuItem>
-                  <MenuItem onClick={() => handleChooseModel("gpt-4")}>
-                    {"GPT 4 (8k)"}
+                  <MenuItem onClick={() => handleChooseModel('gpt-4')}>
+                    {'GPT 4 (8k)'}
                   </MenuItem>
-                  <MenuItem onClick={() => handleChooseModel("gpt-4-32k")}>
-                    {"GPT 4 (32k)"}
+                  <MenuItem onClick={() => handleChooseModel('gpt-4-32k')}>
+                    {'GPT 4 (32k)'}
                   </MenuItem>
                   <MenuItem
-                    onClick={() => handleChooseModel("gpt-4-1106-preview")}
+                    onClick={() => handleChooseModel('gpt-4-1106-preview')}
                   >
-                    {"GPT 4 (128k)"}
+                    {'GPT 4 (128k)'}
                   </MenuItem>
                 </Menu>
               </Stack>
@@ -369,9 +369,9 @@ const Prompt = () => {
 
                 <Button
                   id="basic-button"
-                  aria-controls={engineOpen ? "basic-menu" : undefined}
+                  aria-controls={engineOpen ? 'basic-menu' : undefined}
                   aria-haspopup="true"
-                  aria-expanded={engineOpen ? "true" : undefined}
+                  aria-expanded={engineOpen ? 'true' : undefined}
                   onClick={handleEngine}
                   variant="outlined"
                   color="secondary"
@@ -384,16 +384,16 @@ const Prompt = () => {
                   open={engineOpen}
                   onClose={handleCloseEngine}
                   MenuListProps={{
-                    "aria-labelledby": "basic-button",
+                    'aria-labelledby': 'basic-button',
                   }}
                 >
                   <MenuItem
-                    value={"token limited"}
+                    value={'token limited'}
                     onClick={handleChooseEngine}
                   >
                     token limited
                   </MenuItem>
-                  <MenuItem value={"amnesia"} onClick={handleChooseEngine}>
+                  <MenuItem value={'amnesia'} onClick={handleChooseEngine}>
                     amnesia
                   </MenuItem>
                 </Menu>

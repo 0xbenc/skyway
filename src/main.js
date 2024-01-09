@@ -1,35 +1,35 @@
-const { app, BrowserWindow, ipcMain, dialog, Menu } = require("electron");
-const path = require("path");
-const fs = require("fs").promises;
-const axios = require("axios");
-const store = require("./tools/electron/store");
-const createMenuTemplate = require("./tools/electron/menu");
+const { app, BrowserWindow, ipcMain, dialog, Menu } = require('electron');
+const path = require('path');
+const fs = require('fs').promises;
+const axios = require('axios');
+const store = require('./tools/electron/store');
+const createMenuTemplate = require('./tools/electron/menu');
 
 const WINDOW_WIDTH = 1600;
 const WINDOW_HEIGHT = 900;
 
 const getFileName = (filePath) => {
   const lastSlashIndex = Math.max(
-    filePath.lastIndexOf("/"),
-    filePath.lastIndexOf("\\"),
+    filePath.lastIndexOf('/'),
+    filePath.lastIndexOf('\\'),
   );
   return filePath.substring(lastSlashIndex + 1);
 };
 
 const getFileExtension = (filePath) => {
-  const lastPeriodIndex = filePath.lastIndexOf(".");
+  const lastPeriodIndex = filePath.lastIndexOf('.');
   return filePath.substring(lastPeriodIndex + 1);
 };
 
 const getFolderPath = (filePath) => {
   const lastSlashIndex = Math.max(
-    filePath.lastIndexOf("/"),
-    filePath.lastIndexOf("\\"),
+    filePath.lastIndexOf('/'),
+    filePath.lastIndexOf('\\'),
   );
   return filePath.substring(0, lastSlashIndex);
 };
 
-if (require("electron-squirrel-startup")) {
+if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
@@ -38,9 +38,9 @@ const createWindow = () => {
     width: WINDOW_WIDTH,
     height: WINDOW_HEIGHT,
     autoHideMenuBar: true,
-    icon: "./public/icons/icon.png",
+    icon: './public/icons/icon.png',
     webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
+      preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: false,
       enableRemoteModule: false,
       contextIsolation: true,
@@ -59,31 +59,31 @@ const createWindow = () => {
 };
 
 const setUpMainInteractions = (mainWindow) => {
-  ipcMain.handle("dialog-choose-directory", async () => {
+  ipcMain.handle('dialog-choose-directory', async () => {
     const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, {
-      properties: ["openDirectory"],
+      properties: ['openDirectory'],
     });
     return canceled ? null : filePaths[0];
   });
 
-  ipcMain.handle("dialog-open-filtered-file", (event, directory, filters) =>
+  ipcMain.handle('dialog-open-filtered-file', (event, directory, filters) =>
     openFilteredFile(mainWindow, event, directory, filters),
   );
-  ipcMain.handle("openai-api", callOpenAI);
-  ipcMain.handle("version-get", () => app.getVersion());
-  ipcMain.on("store-get", (event, val) => {
+  ipcMain.handle('openai-api', callOpenAI);
+  ipcMain.handle('version-get', () => app.getVersion());
+  ipcMain.on('store-get', (event, val) => {
     event.returnValue = store.get(val);
   });
-  ipcMain.on("store-set", (_, key, val) => {
+  ipcMain.on('store-set', (_, key, val) => {
     store.set(key, val);
   });
-  ipcMain.on("save-json", saveJson);
+  ipcMain.on('save-json', saveJson);
 };
 
 const openFilteredFile = async (mainWindow, _, directory, filters) => {
   const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, {
     filters: filters,
-    properties: ["openFile"],
+    properties: ['openFile'],
     defaultPath: directory,
   });
 
@@ -94,7 +94,7 @@ const openFilteredFile = async (mainWindow, _, directory, filters) => {
     // Use readFile and asynchronously handle the promise
     const fileBuffer = await fs.readFile(filePath);
     const encodedFile = `data:application/octet-stream;base64,${fileBuffer.toString(
-      "base64",
+      'base64',
     )}`;
     const fileName = getFileName(filePath);
     const fileExtension = getFileExtension(filePath);
@@ -115,18 +115,18 @@ const callOpenAI = async (_, endpoint, data, key) => {
   const bearer = `Bearer ${key}`;
   try {
     const response = await axios.post(
-      "https://api.openai.com/" + endpoint,
+      'https://api.openai.com/' + endpoint,
       data,
       {
         headers: {
           Authorization: bearer,
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
       },
     );
     return response.data;
   } catch (error) {
-    console.error("API request error", error);
+    console.error('API request error', error);
     throw error;
   }
 };
@@ -142,10 +142,10 @@ const saveJson = (_, args) => {
 
 app.whenReady().then(createWindow);
 
-app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") app.quit();
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') app.quit();
 });
 
-app.on("activate", () => {
+app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) createWindow();
 });

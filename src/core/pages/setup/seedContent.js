@@ -1,8 +1,8 @@
-import React from "react";
+import React from 'react';
 //
-import { OutlinePaper } from "../../mui/reusable";
+import { OutlinePaper } from '../../mui/reusable';
 //
-import { Typography, Stack } from "@mui/material";
+import { Typography, Stack } from '@mui/material';
 // ----------------------------------------------------------------------
 
 const SeedContent = () => {
@@ -22,7 +22,7 @@ const SeedContent = () => {
       </OutlinePaper>
 
       <OutlinePaper>
-        <Stack direction="row" spacing={1} alignItems={"center"}>
+        <Stack direction="row" spacing={1} alignItems={'center'}>
           <Typography variant="h5">WARNING!</Typography>
           <Typography>
             Once you click away, you will never be able to retrieve this seed

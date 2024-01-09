@@ -1,10 +1,10 @@
-import { useEffect } from "react";
+import { useEffect } from 'react';
 //
-import { useStore } from "./zustand";
+import { useStore } from './zustand';
 //
-import { switchColorMode } from "./utility/color";
-import { eSet } from "./utility/electronStore";
-import { encryptPrompts } from "./utility/encryption";
+import { switchColorMode } from './utility/color';
+import { eSet } from './utility/electronStore';
+import { encryptPrompts } from './utility/encryption';
 // ----------------------------------------------------------------------
 
 const HandleIPC = () => {
@@ -14,7 +14,7 @@ const HandleIPC = () => {
         useStore.getState();
 
       if (system_prompts.length) {
-        if (page === "chatbot") {
+        if (page === 'chatbot') {
           useStore.setState({ chat_reset: true });
         } else {
           const usedDate = new Date();
@@ -26,21 +26,21 @@ const HandleIPC = () => {
 
           const encPrompts = encryptPrompts(systems, password);
 
-          eSet("system_prompts", encPrompts);
+          eSet('system_prompts', encPrompts);
 
           useStore.setState({
             system_prompts: systems,
             active_system_prompt: system_prompts[last_prompt],
-            page: "chatbot",
+            page: 'chatbot',
           });
         }
       }
     };
 
-    window.ipc.on("new chat", newChatListener);
+    window.ipc.on('new chat', newChatListener);
 
     return () => {
-      window.ipc.off("new chat", newChatListener);
+      window.ipc.off('new chat', newChatListener);
     };
   }, []);
 
@@ -49,10 +49,10 @@ const HandleIPC = () => {
       switchColorMode();
     };
 
-    window.ipc.on("toggle color", toggleColorListener);
+    window.ipc.on('toggle color', toggleColorListener);
 
     return () => {
-      window.ipc.off("toggle color", toggleColorListener);
+      window.ipc.off('toggle color', toggleColorListener);
     };
   }, []);
 

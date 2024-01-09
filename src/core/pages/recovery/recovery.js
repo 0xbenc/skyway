@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import bcrypt from "bcryptjs-react";
+import React, { useState } from 'react';
+import bcrypt from 'bcryptjs-react';
 //
-import { seeds } from "../../utility/seeds";
-import { navigate } from "../../utility/navigatePage";
-import { decrypt } from "../../utility/encryption";
-import { BasicBox, OutlinePaper, SeedPaper } from "../../mui/reusable";
-import { eGet } from "../../utility/electronStore";
+import { seeds } from '../../utility/seeds';
+import { navigate } from '../../utility/navigatePage';
+import { decrypt } from '../../utility/encryption';
+import { BasicBox, OutlinePaper, SeedPaper } from '../../mui/reusable';
+import { eGet } from '../../utility/electronStore';
 //
 import {
   Typography,
@@ -13,22 +13,22 @@ import {
   TextField,
   Button,
   Stack,
-} from "@mui/material";
+} from '@mui/material';
 // ----------------------------------------------------------------------
 
 const Recovery = () => {
-  const [passwordInput, setPasswordInput] = useState("");
-  const [passwordOutput, setPasswordOutput] = useState("");
-  const [bad, setBad] = useState("");
+  const [passwordInput, setPasswordInput] = useState('');
+  const [passwordOutput, setPasswordOutput] = useState('');
+  const [bad, setBad] = useState('');
 
   const handlePasswordInput = (event) => {
     setPasswordInput(event.target.value);
   };
 
   const convertKey = () => {
-    const splitKey = String(passwordInput).split(" ");
+    const splitKey = String(passwordInput).split(' ');
     const nums = [];
-    let key = "";
+    let key = '';
 
     for (let i = 0; i < splitKey.length; i++) {
       nums.push(seeds.indexOf(splitKey[i]));
@@ -37,12 +37,12 @@ const Recovery = () => {
     for (let e = 0; e < nums.length; e++) {
       key += nums[e];
       if (e !== nums.length - 1) {
-        key += "x";
+        key += 'x';
       }
     }
 
-    const _recovery = eGet("recovery");
-    const _integrity_check = eGet("integrity_check");
+    const _recovery = eGet('recovery');
+    const _integrity_check = eGet('integrity_check');
     const recovery = decrypt(_recovery, key);
 
     const outcome = bcrypt.compareSync(recovery, _integrity_check);
@@ -52,7 +52,7 @@ const Recovery = () => {
       setBad(false);
     } else {
       setBad(true);
-      setPasswordOutput("");
+      setPasswordOutput('');
     }
   };
 
@@ -83,9 +83,9 @@ const Recovery = () => {
                   fullWidth={true}
                 />
                 <Button
-                  color={"secondary"}
+                  color={'secondary'}
                   variant="outlined"
-                  disabled={passwordInput === ""}
+                  disabled={passwordInput === ''}
                   onClick={convertKey}
                   fullWidth={false}
                 >
@@ -95,10 +95,10 @@ const Recovery = () => {
             </FormControl>
           </Stack>
         </OutlinePaper>
-        {(bad || passwordOutput !== "") && (
+        {(bad || passwordOutput !== '') && (
           <OutlinePaper>
-            {passwordOutput !== "" && (
-              <Stack direction="row" spacing={1} alignItems={"center"}>
+            {passwordOutput !== '' && (
+              <Stack direction="row" spacing={1} alignItems={'center'}>
                 <Typography variant="body">Your Password is:</Typography>
                 <SeedPaper>
                   <Typography>{passwordOutput}</Typography>
@@ -113,10 +113,10 @@ const Recovery = () => {
         )}
         <OutlinePaper>
           <Button
-            color={"secondary"}
+            color={'secondary'}
             variant="outlined"
             onClick={() => {
-              navigate("login");
+              navigate('login');
             }}
             fullWidth={false}
           >

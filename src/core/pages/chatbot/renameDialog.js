@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react';
 //
-import { useStore } from "../../zustand";
+import { useStore } from '../../zustand';
 //
-import { chatSync } from "./utility";
+import { chatSync } from './utility';
 //
-import { Button } from "@mui/material";
+import { Button } from '@mui/material';
 import {
   Dialog,
   DialogTitle,
@@ -12,7 +12,7 @@ import {
   TextField,
   DialogContent,
   DialogActions,
-} from "@mui/material";
+} from '@mui/material';
 // ----------------------------------------------------------------------
 
 const RenameDialog = () => {
@@ -23,7 +23,7 @@ const RenameDialog = () => {
 
   const handleRenameDialogCloseOut = () => {
     useStore.setState({
-      rename_dialog_input: "",
+      rename_dialog_input: '',
       rename_dialog_open: false,
     });
   };

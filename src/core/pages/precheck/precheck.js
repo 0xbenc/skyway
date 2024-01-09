@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 //
-import { useStore } from "../../zustand";
+import { useStore } from '../../zustand';
 //
-import { eGet } from "../../utility/electronStore";
+import { eGet } from '../../utility/electronStore';
 // ----------------------------------------------------------------------
 
 const Precheck = () => {
@@ -21,8 +21,8 @@ const Precheck = () => {
         });
       };
 
-      const colorMode = eGet("color_mode") === "light" ? "light" : "dark";
-      const nextPage = eGet("password_set") ? "login" : "setup";
+      const colorMode = eGet('color_mode') === 'light' ? 'light' : 'dark';
+      const nextPage = eGet('password_set') ? 'login' : 'setup';
 
       begin(colorMode, nextPage);
     }

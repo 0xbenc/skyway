@@ -1,47 +1,47 @@
 const createMenuTemplate = (mainWindow) => [
   {
-    label: "File",
+    label: 'File',
     submenu: [
       {
-        label: "New Chat",
-        accelerator: process.platform === "darwin" ? "Cmd+N" : "Ctrl+N",
+        label: 'New Chat',
+        accelerator: process.platform === 'darwin' ? 'Cmd+N' : 'Ctrl+N',
         click: () => {
-          mainWindow.webContents.send("new chat");
+          mainWindow.webContents.send('new chat');
         },
       },
       {
-        role: "quit",
+        role: 'quit',
       },
     ],
   },
   {
-    label: "Edit",
+    label: 'Edit',
     submenu: [
-      { role: "cut" },
-      { role: "copy" },
-      { role: "paste" },
-      { role: "delete" },
-      { role: "selectall" },
+      { role: 'cut' },
+      { role: 'copy' },
+      { role: 'paste' },
+      { role: 'delete' },
+      { role: 'selectall' },
     ],
   },
   {
-    label: "View",
+    label: 'View',
     submenu: [
-      { role: "reload" },
-      { role: "forcereload" },
-      { role: "toggledevtools" },
-      { type: "separator" },
-      { role: "resetzoom" },
-      { role: "zoomin" },
-      { role: "zoomout" },
-      { type: "separator" },
-      { role: "togglefullscreen" },
+      { role: 'reload' },
+      { role: 'forcereload' },
+      { role: 'toggledevtools' },
+      { type: 'separator' },
+      { role: 'resetzoom' },
+      { role: 'zoomin' },
+      { role: 'zoomout' },
+      { type: 'separator' },
+      { role: 'togglefullscreen' },
       {
-        label: "Toggle Color Mode",
+        label: 'Toggle Color Mode',
         accelerator:
-          process.platform === "darwin" ? "Cmd+Shift+C" : "Ctrl+Shift+C",
+          process.platform === 'darwin' ? 'Cmd+Shift+C' : 'Ctrl+Shift+C',
         click: () => {
-          mainWindow.webContents.send("toggle color");
+          mainWindow.webContents.send('toggle color');
         },
       },
     ],

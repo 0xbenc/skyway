@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 //
-import { Recovery } from "./recovery";
+import { Recovery } from './recovery';
 // ----------------------------------------------------------------------
 
 const RecoveryPage = () => {

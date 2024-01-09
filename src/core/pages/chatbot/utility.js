@@ -1,7 +1,7 @@
-import { useStore } from "../../zustand";
-import { eSet } from "../../utility/electronStore";
-import { encrypt, encryptPrompts } from "../../utility/encryption";
-import { cleanFileTitle } from "../../utility/string";
+import { useStore } from '../../zustand';
+import { eSet } from '../../utility/electronStore';
+import { encrypt, encryptPrompts } from '../../utility/encryption';
+import { cleanFileTitle } from '../../utility/string';
 // ----------------------------------------------------------------------
 
 /**
@@ -17,7 +17,7 @@ const chatSync = (chat, oldUUID, chatIsActive) => {
   const { chats, password } = useStore.getState();
   let updatedChats = [...chats];
 
-  if (oldUUID === "none") {
+  if (oldUUID === 'none') {
     updatedChats.push(chat);
   } else {
     const index = chats.findIndex((item) => item.uuid === oldUUID);
@@ -35,7 +35,7 @@ const chatSync = (chat, oldUUID, chatIsActive) => {
   if (chatIsActive) useStore.setState({ current_chat: chat.uuid });
 
   useStore.setState({ chats: updatedChats });
-  eSet("chats", updatedChatsEncryptedString);
+  eSet('chats', updatedChatsEncryptedString);
 };
 
 const chatDelete = (uuid) => {
@@ -52,7 +52,7 @@ const chatDelete = (uuid) => {
   const updatedChatsEncryptedString = encrypt(updatedChatsString, password);
 
   useStore.setState({ chats: updatedChats });
-  eSet("chats", updatedChatsEncryptedString);
+  eSet('chats', updatedChatsEncryptedString);
 };
 
 const promptSelect = (index, system_prompts) => {
@@ -66,10 +66,10 @@ const promptSelect = (index, system_prompts) => {
 
   const encPrompts = encryptPrompts(systems, password_);
 
-  console.log("NAVIGATION: chatbot", system_prompts[index].title, index);
+  console.log('NAVIGATION: chatbot', system_prompts[index].title, index);
 
-  eSet("system_prompts", encPrompts); // TODO verify this step is logically needed
-  eSet("last_prompt", index);
+  eSet('system_prompts', encPrompts); // TODO verify this step is logically needed
+  eSet('last_prompt', index);
 
   useStore.getState().chat_drawer_toggle;
 
@@ -87,12 +87,12 @@ const ImportChat = () => {
   const chats = useStore.getState().chats;
 
   window.electron.engine
-    .dialog_open_filtered_file("", [
-      { name: "Skyway Chats", extensions: ["json"] },
+    .dialog_open_filtered_file('', [
+      { name: 'Skyway Chats', extensions: ['json'] },
     ])
     .then((result) => {
       if (result !== undefined) {
-        let base64Data = result.data.split(",")[1];
+        let base64Data = result.data.split(',')[1];
         let potentialChat = JSON.parse(atob(base64Data));
 
         let matches = false;
@@ -104,11 +104,11 @@ const ImportChat = () => {
         }
 
         if (!matches) {
-          chatSync(potentialChat, "none", false);
+          chatSync(potentialChat, 'none', false);
           useStore.setState({ chat_reset: true });
-          useStore.getState().addNotification("Chat added to Library");
+          useStore.getState().addNotification('Chat added to Library');
         } else {
-          useStore.getState().addNotification("Chat already in Library");
+          useStore.getState().addNotification('Chat already in Library');
         }
       }
     });
@@ -134,7 +134,7 @@ const ExportChat = (uuid) => {
       const chatsCopy = [...chats];
 
       let chatCopy = chatsCopy[indexMatch];
-      chatCopy.skywayType = "chat";
+      chatCopy.skywayType = 'chat';
 
       const jsonstr = JSON.stringify(chatCopy);
 
@@ -147,7 +147,7 @@ const ExportChat = (uuid) => {
         filename: cleanTitle,
       };
 
-      window.electron.engine.send("save-json", args);
+      window.electron.engine.send('save-json', args);
     }
   };
 

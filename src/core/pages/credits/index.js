@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 //
-import { Credits } from "./credits";
+import { Credits } from './credits';
 // ----------------------------------------------------------------------
 
 const CreditsPage = () => {

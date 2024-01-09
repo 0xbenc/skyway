@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 //
-import { useStore } from "../../zustand";
+import { useStore } from '../../zustand';
 //
-import { encrypt } from "../../utility/encryption";
-import { BasicBox, OutlinePaper } from "../../mui/reusable";
-import { eSet } from "../../utility/electronStore";
-import { Title } from "../../components/title";
-import { fetchChatCompletionConnectionTest } from "../../utility/fetchData";
+import { encrypt } from '../../utility/encryption';
+import { BasicBox, OutlinePaper } from '../../mui/reusable';
+import { eSet } from '../../utility/electronStore';
+import { Title } from '../../components/title';
+import { fetchChatCompletionConnectionTest } from '../../utility/fetchData';
 //
 import {
   Typography,
@@ -18,16 +18,16 @@ import {
   IconButton,
   Chip,
   Tooltip,
-} from "@mui/material";
+} from '@mui/material';
 //
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import LaunchIcon from "@mui/icons-material/Launch";
-import CancelIcon from "@mui/icons-material/Cancel";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import CloudDoneIcon from "@mui/icons-material/CloudDone";
-import CloudOffIcon from "@mui/icons-material/CloudOff";
-import CloudSyncIcon from "@mui/icons-material/CloudSync";
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import LaunchIcon from '@mui/icons-material/Launch';
+import CancelIcon from '@mui/icons-material/Cancel';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CloudDoneIcon from '@mui/icons-material/CloudDone';
+import CloudOffIcon from '@mui/icons-material/CloudOff';
+import CloudSyncIcon from '@mui/icons-material/CloudSync';
 // ----------------------------------------------------------------------
 
 const ChangeAPIKey = () => {
@@ -36,22 +36,22 @@ const ChangeAPIKey = () => {
 
   const [editKey, setEditKey] = useState(-1);
 
-  const [keyInput, setKeyInput] = useState("");
+  const [keyInput, setKeyInput] = useState('');
   const handleKeyInput = (event) => {
     setKeyInput(event.target.value);
   };
 
-  const [nameInput, setNameInput] = useState("");
+  const [nameInput, setNameInput] = useState('');
   const handleNameInput = (event) => {
     setNameInput(event.target.value);
   };
 
-  const [editKeyInput, setEditKeyInput] = useState("");
+  const [editKeyInput, setEditKeyInput] = useState('');
   const handleEditKeyInput = (event) => {
     setEditKeyInput(event.target.value);
   };
 
-  const [editNameInput, setEditNameInput] = useState("");
+  const [editNameInput, setEditNameInput] = useState('');
   const handleEditNameInput = (event) => {
     setEditNameInput(event.target.value);
   };
@@ -64,7 +64,7 @@ const ChangeAPIKey = () => {
     setNetStatus(-1);
   };
 
-  const passwordStyle = (input) => "*".repeat(String(input).length);
+  const passwordStyle = (input) => '*'.repeat(String(input).length);
 
   const deleteKey = (key) => {
     const password_ = useStore.getState().password;
@@ -83,19 +83,19 @@ const ChangeAPIKey = () => {
     }
 
     useStore.setState({ open_ai_api_keys: newArr, open_ai_api_key: 0 });
-    eSet("open_ai_api_keys", newArrEnc);
-    eSet("open_ai_api_key", 0);
+    eSet('open_ai_api_keys', newArrEnc);
+    eSet('open_ai_api_key', 0);
     clearNetStatus();
 
-    console.log("API KEY: deleted key");
+    console.log('API KEY: deleted key');
   };
 
   const selectKey = (key) => {
     useStore.setState({ open_ai_api_key: key });
-    eSet("open_ai_api_key", key);
+    eSet('open_ai_api_key', key);
     clearNetStatus();
 
-    console.log("API KEY: selected key");
+    console.log('API KEY: selected key');
   };
 
   const addKey = () => {
@@ -123,16 +123,16 @@ const ChangeAPIKey = () => {
       open_ai_api_key: newArr.length - 1,
     });
 
-    eSet("open_ai_api_keys", newArrEnc);
-    eSet("open_ai_api_key", newArr.length - 1);
+    eSet('open_ai_api_keys', newArrEnc);
+    eSet('open_ai_api_key', newArr.length - 1);
 
-    setNameInput("");
-    setKeyInput("");
-    setEditNameInput("");
-    setEditKeyInput("");
+    setNameInput('');
+    setKeyInput('');
+    setEditNameInput('');
+    setEditKeyInput('');
     clearNetStatus();
 
-    console.log("API KEY: added key");
+    console.log('API KEY: added key');
   };
 
   const openEditKey = (key) => {
@@ -144,8 +144,8 @@ const ChangeAPIKey = () => {
 
   const closeEditKey = () => {
     setEditKey(-1);
-    setEditKeyInput("");
-    setEditNameInput("");
+    setEditKeyInput('');
+    setEditNameInput('');
   };
 
   const saveEditKey = (key) => {
@@ -172,41 +172,41 @@ const ChangeAPIKey = () => {
 
     useStore.setState({ open_ai_api_keys: newArr });
 
-    eSet("open_ai_api_keys", newArrEnc);
+    eSet('open_ai_api_keys', newArrEnc);
 
-    setNameInput("");
-    setKeyInput("");
-    setEditNameInput("");
-    setEditKeyInput("");
+    setNameInput('');
+    setKeyInput('');
+    setEditNameInput('');
+    setEditKeyInput('');
     setEditKey(-1);
     clearNetStatus();
 
-    console.log("API KEY: adjusted key");
+    console.log('API KEY: adjusted key');
   };
 
   const checkConnection = async (key) => {
     selectKey(key);
-    console.log("API KEY: validating key");
+    console.log('API KEY: validating key');
 
     const value = await fetchChatCompletionConnectionTest();
 
-    if (value === "success") {
+    if (value === 'success') {
       setNetStatus(true);
       setNetKey(key);
-      console.log("API KEY: key is valid");
-      useStore.getState().addNotification("API Key Successfully Connected");
+      console.log('API KEY: key is valid');
+      useStore.getState().addNotification('API Key Successfully Connected');
     } else {
       setNetStatus(false);
       setNetKey(key);
-      console.log("API KEY: ERROR: key is not valid");
-      useStore.getState().addNotification("API Key Connection Failure");
+      console.log('API KEY: ERROR: key is not valid');
+      useStore.getState().addNotification('API Key Connection Failure');
     }
   };
 
   return (
     <BasicBox>
       <Stack direction="column" spacing={1}>
-        <Title value={"Change API Key"} />
+        <Title value={'Change API Key'} />
 
         <OutlinePaper>
           <Stack direction="column" spacing={1}>
@@ -235,9 +235,9 @@ const ChangeAPIKey = () => {
                   fullWidth={true}
                 />
                 <Button
-                  color={"secondary"}
+                  color={'secondary'}
                   variant="outlined"
-                  disabled={keyInput === "" || nameInput === ""}
+                  disabled={keyInput === '' || nameInput === ''}
                   onClick={addKey}
                   fullWidth={false}
                 >
@@ -365,7 +365,7 @@ const ChangeAPIKey = () => {
                                 saveEditKey(key);
                               }}
                               disabled={
-                                editNameInput === "" || editKeyInput === ""
+                                editNameInput === '' || editKeyInput === ''
                               }
                             >
                               <CheckCircleIcon />

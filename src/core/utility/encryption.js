@@ -1,4 +1,4 @@
-import CryptoJS from "crypto-js";
+import CryptoJS from 'crypto-js';
 // ----------------------------------------------------------------------
 
 /**
@@ -14,8 +14,8 @@ const decrypt = (str, password) => {
     const t1 = t.toString(CryptoJS.enc.Utf8);
     return t1;
   } catch (error) {
-    console.log("ERROR: bad decryption");
-    return "ERROR";
+    console.log('ERROR: bad decryption');
+    return 'ERROR';
   }
 };
 

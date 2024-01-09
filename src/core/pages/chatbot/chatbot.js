@@ -1,12 +1,12 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from 'react';
 //
-import { CopyToClipboard } from "react-copy-to-clipboard";
-import { useStore } from "../../zustand";
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { useStore } from '../../zustand';
 //
-import { fetchChatCompletion } from "../../utility/fetchData";
-import { isoToHuman, unixToISO } from "../../utility/time";
-import { error } from "../../utility/error";
-import { generateKeyV4 } from "../../utility/uuid";
+import { fetchChatCompletion } from '../../utility/fetchData';
+import { isoToHuman, unixToISO } from '../../utility/time';
+import { error } from '../../utility/error';
+import { generateKeyV4 } from '../../utility/uuid';
 import {
   LeftBox,
   RightBox,
@@ -15,9 +15,9 @@ import {
   ChatField,
   Middle,
   Bottom,
-} from "./styles";
-import { FormattedLeftResponse, FormattedRightResponse } from "./components";
-import { chatSync } from "./utility";
+} from './styles';
+import { FormattedLeftResponse, FormattedRightResponse } from './components';
+import { chatSync } from './utility';
 //
 import {
   FormControl,
@@ -27,12 +27,12 @@ import {
   Box,
   Stack,
   Divider,
-} from "@mui/material";
+} from '@mui/material';
 //
-import RefreshIcon from "@mui/icons-material/Refresh";
-import SendIcon from "@mui/icons-material/Send";
-import EditIcon from "@mui/icons-material/Edit";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import RefreshIcon from '@mui/icons-material/Refresh';
+import SendIcon from '@mui/icons-material/Send';
+import EditIcon from '@mui/icons-material/Edit';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 // ----------------------------------------------------------------------
 
 const Chatbot = () => {
@@ -57,7 +57,7 @@ const Chatbot = () => {
   const version_ = useStore.getState().version;
 
   const errorMessage = {
-    role: "assistant",
+    role: 'assistant',
     content: error,
   };
 
@@ -70,17 +70,17 @@ const Chatbot = () => {
 
     const conversation_ = [...conversation];
     const activeSystemPrompt_ = {
-      role: "system",
+      role: 'system',
       content: active_system_prompt_.prompt,
     };
-    const userPrompt_ = { role: "user", content: user_message_input };
+    const userPrompt_ = { role: 'user', content: user_message_input };
 
     const shortChatTitle =
       user_message_input.length > 31
         ? `${String(user_message_input).substring(0, 31)}...`
         : String(user_message_input).substring(0, 31);
 
-    if (chat_title === "none") {
+    if (chat_title === 'none') {
       useStore.setState({ chat_title: shortChatTitle });
     }
 
@@ -94,7 +94,7 @@ const Chatbot = () => {
 
     conversation_.push(userPrompt_);
 
-    if (active_system_prompt_.engine === "amnesia") {
+    if (active_system_prompt_.engine === 'amnesia') {
       upstream = [activeSystemPrompt_, userPrompt_];
     } else {
       upstream = [...conversation_];
@@ -105,7 +105,7 @@ const Chatbot = () => {
       conversation: conversation_,
       user_message_input: active_system_prompt_.prefill
         ? active_system_prompt_.prefill
-        : "",
+        : '',
     });
 
     useStore.setState({ scroll_time: true });
@@ -116,7 +116,7 @@ const Chatbot = () => {
       active_system_prompt_.params,
     );
 
-    if (response === "error") {
+    if (response === 'error') {
       conversation_.push(errorMessage);
     } else {
       useStore.setState({ token_count: response.usage.total_tokens });
@@ -133,7 +133,7 @@ const Chatbot = () => {
       conversation: conversation_,
       timestamps: newTimeStamps,
       uuid: newKey,
-      title: chat_title === "none" ? shortChatTitle : chat_title,
+      title: chat_title === 'none' ? shortChatTitle : chat_title,
       prompt: active_system_prompt_,
       total_tokens: response.usage.total_tokens,
       lastActive: newTimeStamps[newTimeStamps.length - 1],
@@ -190,9 +190,9 @@ const Chatbot = () => {
     conversation.pop();
     conversation_.pop();
 
-    if (active_system_prompt_.engine === "amnesia") {
+    if (active_system_prompt_.engine === 'amnesia') {
       upstream = [
-        { role: "system", content: active_system_prompt_.prompt },
+        { role: 'system', content: active_system_prompt_.prompt },
         conversation_[conversation_.length - 1],
       ];
     } else {
@@ -207,8 +207,8 @@ const Chatbot = () => {
 
     let timeArray = [];
 
-    if (response === "error") {
-      useStore.setState({ user_message_input: "" });
+    if (response === 'error') {
+      useStore.setState({ user_message_input: '' });
 
       conversation_.push(errorMessage);
     } else {
@@ -253,10 +253,10 @@ const Chatbot = () => {
 
   // enables pressing 'Enter' to send message
   const handleKeyDown = (event) => {
-    if (event.key === "Enter" && !event.shiftKey) {
+    if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
 
-      if (user_message_input !== "") SubmitPrompt();
+      if (user_message_input !== '') SubmitPrompt();
     }
   };
 
@@ -264,7 +264,7 @@ const Chatbot = () => {
   useEffect(() => {
     if (scroll_time) {
       useStore.setState({ scroll_time: false });
-      conversationScrollRef.current.scrollIntoView({ behaviour: "smooth" });
+      conversationScrollRef.current.scrollIntoView({ behaviour: 'smooth' });
     }
   }, [scroll_time]);
 
@@ -280,16 +280,16 @@ const Chatbot = () => {
     if (!justOnce) {
       setJustOnce(true);
       useStore.setState({
-        previous_uuid: "none",
+        previous_uuid: 'none',
         timestamps: [],
-        chat_title: "none",
+        chat_title: 'none',
         conversation: [],
         token_count: 0,
-        current_chat: "none",
+        current_chat: 'none',
         busy_ui: false,
         user_message_input: active_system_prompt_.prefill
           ? active_system_prompt_.prefill
-          : "",
+          : '',
       });
       inputRef.current.focus();
     }
@@ -324,7 +324,7 @@ const Chatbot = () => {
           useStore.setState({
             user_message_input: active_system_prompt_.prefill
               ? active_system_prompt_.prefill
-              : "",
+              : '',
           });
 
           useStore.setState({
@@ -350,9 +350,9 @@ const Chatbot = () => {
           conversation.map((chat, key) => {
             return (
               <React.Fragment key={key}>
-                {chat.role !== "system" && (
+                {chat.role !== 'system' && (
                   <>
-                    {chat.role === "assistant" ? (
+                    {chat.role === 'assistant' ? (
                       <LeftBox>
                         <LeftChatBox>
                           <FormattedLeftResponse
@@ -426,7 +426,7 @@ const Chatbot = () => {
 
       <Bottom>
         <Stack direction="column" spacing={1} alignItems="center">
-          <Box sx={{ width: "82%" }}>
+          <Box sx={{ width: '82%' }}>
             <Stack direction="row" spacing={1} alignItems="bottom">
               <FormControl fullWidth>
                 <ChatField

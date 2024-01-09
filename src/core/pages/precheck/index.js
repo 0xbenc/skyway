@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 //
-import { Precheck } from "./precheck";
+import { Precheck } from './precheck';
 // ----------------------------------------------------------------------
 
 const PrecheckPage = () => {

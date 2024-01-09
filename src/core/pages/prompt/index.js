@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 //
-import { Prompt } from "./prompt";
+import { Prompt } from './prompt';
 // ----------------------------------------------------------------------
 
 const PromptPage = () => {
