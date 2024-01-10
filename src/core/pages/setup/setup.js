@@ -43,6 +43,7 @@ const Setup = () => {
 
   const [seedKey, setSeedKey] = useState('');
   const [seedArray, setSeedArray] = useState('');
+  const [hash, setHash] = useState('');
 
   // Helpers
   const handlePasswordInput = (event) => {
@@ -59,7 +60,13 @@ const Setup = () => {
 
   const clickNewPassword = () => {
     console.log('SETUP: user has created a password');
+    
+    const salt = bcrypt.genSaltSync(14);
+    const newHash = bcrypt.hashSync(passwordInput, salt);
+    
     useStore.setState({ password: passwordInput });
+    
+    setHash(newHash);
     setShowNewPassword(false);
     setShowAPIInput(true);
   };
@@ -126,20 +133,17 @@ const Setup = () => {
     console.log('SETUP: user has finished seed');
     console.log('NAVIGATION: landing');
 
-    var salt = bcrypt.genSaltSync(14);
-    var hash = bcrypt.hashSync(passwordInput, salt);
-
     const cipherAPI = encrypt(apiInput, passwordInput).toString();
     const encPrompts = encryptPrompts(Prompts, passwordInput);
     const encPass = encrypt(passwordInput, seedKey).toString();
     const currColor = useStore.getState().color_mode;
 
-    eSet('recovery', encPass); //
-    eSet('password_set', true); //
-    eSet('integrity_check', hash); //
-    eSet('system_prompts', encPrompts); //
+    eSet('recovery', encPass); 
+    eSet('password_set', true); 
+    eSet('integrity_check', hash); 
+    eSet('system_prompts', encPrompts);
     eSet('chats', []);
-    eSet('open_ai_api_keys', [{ key: cipherAPI, name: 'default' }]); //
+    eSet('open_ai_api_keys', [{ key: cipherAPI, name: 'default' }]);
     eSet('color_mode', currColor);
 
     useStore.setState({
