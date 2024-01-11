@@ -75,12 +75,18 @@ const FormattedRightResponse = ({ content, color_mode }) => {
 };
 
 FormattedLeftResponse.propTypes = {
-  content: PropTypes.object.isRequired,
+  content: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object
+  ]).isRequired,
   color_mode: PropTypes.string.isRequired,
 };
 
 FormattedRightResponse.propTypes = {
-  content: PropTypes.object.isRequired,
+  content: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object
+  ]).isRequired,
   color_mode: PropTypes.string.isRequired,
 };
 
