@@ -1,11 +1,11 @@
-import React from 'react';
+import React from "react";
 //
-import { useStore } from '../../zustand';
+import { useStore } from "../../zustand";
 //
-import { previewText } from '../../utility/string';
-import { BasicBox, OutlinePaper } from '../../mui/reusable';
-import { ExportPrompt, deleteSystemPrompt, ImportPrompt } from './utility';
-import { Title } from '../../components/title';
+import { previewText } from "../../utility/string";
+import { BasicBox, OutlinePaper } from "../../mui/reusable";
+import { ExportPrompt, deleteSystemPrompt, ImportPrompt } from "./utility";
+import { Title } from "../../components/title";
 //
 import {
   Grid,
@@ -15,45 +15,45 @@ import {
   Stack,
   Tooltip,
   IconButton,
-} from '@mui/material';
+} from "@mui/material";
 //
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import IosShareIcon from '@mui/icons-material/IosShare';
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import IosShareIcon from "@mui/icons-material/IosShare";
 // ----------------------------------------------------------------------
 
 const Library = () => {
   const system_prompts = useStore((state) => state.system_prompts);
 
   const goSystemPromptPage = (index) => {
-    console.log('NAVIGATION: prompt', system_prompts[index].title);
-    useStore.setState({ page: 'prompt', system_prompt_to_edit: index });
+    console.log("NAVIGATION: prompt", system_prompts[index].title);
+    useStore.setState({ page: "prompt", system_prompt_to_edit: index });
   };
 
   const goNewPrompt = () => {
-    console.log('NAVIGATION: prompt (new prompt)');
-    useStore.setState({ page: 'prompt', system_prompt_to_edit: -1 });
+    console.log("NAVIGATION: prompt (new prompt)");
+    useStore.setState({ page: "prompt", system_prompt_to_edit: -1 });
   };
 
   return (
     <BasicBox>
       <Stack spacing={1}>
-        <Title value={'System Prompts'} />
+        <Title value={"System Prompts"} />
 
         <OutlinePaper>
           <Grid
             spacing={1}
             container
             sx={{
-              justifyContent: 'left',
-              alignItems: 'left',
-              textAlign: 'left',
-              verticalAlign: 'center',
+              justifyContent: "left",
+              alignItems: "left",
+              textAlign: "left",
+              verticalAlign: "center",
             }}
-            direction={'row'}
+            direction={"row"}
           >
             <Grid item sm={12}>
-              <Stack direction={'row'} spacing={1}>
+              <Stack direction={"row"} spacing={1}>
                 <Button
                   variant="outlined"
                   color="secondary"

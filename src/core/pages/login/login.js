@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import bcrypt from 'bcryptjs-react';
+import React, { useEffect, useState } from "react";
+import bcrypt from "bcryptjs-react";
 //
-import { useStore } from '../../zustand';
+import { useStore } from "../../zustand";
 //
-import { eGet, eSet } from '../../utility/electronStore';
-import { decrypt, decryptPrompts } from '../../utility/encryption';
-import { BasicBox, OutlinePaper } from '../../mui/reusable';
+import { eGet, eSet } from "../../utility/electronStore";
+import { decrypt, decryptPrompts } from "../../utility/encryption";
+import { BasicBox, OutlinePaper } from "../../mui/reusable";
 //
 import {
   FormControl,
@@ -16,10 +16,10 @@ import {
   CircularProgress,
   IconButton,
   Tooltip,
-} from '@mui/material';
+} from "@mui/material";
 // ----------------------------------------------------------------------
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 // ----------------------------------------------------------------------
 
 const Login = () => {
@@ -37,11 +37,11 @@ const Login = () => {
   const [passwordCheckTime, setPasswordCheckTime] = useState(false);
 
   // From electron store
-  const [integrityCheck, setIntegrityCheck] = useState('');
+  const [integrityCheck, setIntegrityCheck] = useState("");
   const [hasMigrated, setHasMigrated] = useState(false);
 
   // Input
-  const [passwordInput, setPasswordInput] = useState('');
+  const [passwordInput, setPasswordInput] = useState("");
 
   // Helpers
   const handlePasswordInput = (event) => {
@@ -58,8 +58,8 @@ const Login = () => {
     if (storeAccessTime) {
       setStoreAccessTime(false);
 
-      const _integrity_check = eGet('integrity_check');
-      const _migration_1_3_1_bcrypt = eGet('migration_1_3_1_bcrypt');
+      const _integrity_check = eGet("integrity_check");
+      const _migration_1_3_1_bcrypt = eGet("migration_1_3_1_bcrypt");
 
       setIntegrityCheck(_integrity_check);
       setHasMigrated(_migration_1_3_1_bcrypt);
@@ -76,11 +76,11 @@ const Login = () => {
       if (hasMigrated) {
         const integrity_check = decrypt(integrityCheck, passwordInput);
 
-        if (integrity_check === 'skynet') {
+        if (integrity_check === "skynet") {
           var salt = bcrypt.genSaltSync(16);
           var hash = bcrypt.hashSync(passwordInput, salt);
-          eSet('integrity_check', hash);
-          eSet('migration_1_3_1_bcrypt', false);
+          eSet("integrity_check", hash);
+          eSet("migration_1_3_1_bcrypt", false);
           outcome = true;
         }
       } else {
@@ -88,11 +88,11 @@ const Login = () => {
       }
 
       if (outcome) {
-        const _system_prompts = eGet('system_prompts');
-        const _open_ai_api_key = eGet('open_ai_api_key');
-        const _open_ai_api_keys = eGet('open_ai_api_keys');
-        const last_prompt = eGet('last_prompt');
-        const chats = eGet('chats');
+        const _system_prompts = eGet("system_prompts");
+        const _open_ai_api_key = eGet("open_ai_api_key");
+        const _open_ai_api_keys = eGet("open_ai_api_keys");
+        const last_prompt = eGet("last_prompt");
+        const chats = eGet("chats");
 
         let dencChats;
 
@@ -120,16 +120,16 @@ const Login = () => {
           password: passwordInput,
           last_prompt: last_prompt,
           active_system_prompt: dencPrompts[last_prompt],
-          page: 'chatbot',
+          page: "chatbot",
           chats: dencChats ? dencChats : [],
         });
       } else {
-        console.log('LOGIN: ERROR: password decryption unsuccessful');
+        console.log("LOGIN: ERROR: password decryption unsuccessful");
         setBadPassword(true);
         setPasswordCheckTime(false);
         setLoading(false);
-        setPasswordInput('');
-        useStore.getState().addNotification('Incorrect Password');
+        setPasswordInput("");
+        useStore.getState().addNotification("Incorrect Password");
       }
     }
   }, [passwordCheckTime, integrityCheck, hasMigrated]);
@@ -140,7 +140,7 @@ const Login = () => {
         <OutlinePaper>
           <Typography variant="h1">Skyway</Typography>
           <Typography variant="body1">
-            v{version} {dev_mode_ ? 'pre-release' : ''}
+            v{version} {dev_mode_ ? "pre-release" : ""}
           </Typography>
         </OutlinePaper>
 
@@ -157,12 +157,12 @@ const Login = () => {
                   value={passwordInput}
                   onChange={handlePasswordInput}
                   onKeyDown={(ev) => {
-                    if (ev.key === 'Enter' && passwordInput !== '') {
+                    if (ev.key === "Enter" && passwordInput !== "") {
                       clickSinglePassword();
                     }
                   }}
                   required={true}
-                  type={showPassword ? 'text' : 'password'}
+                  type={showPassword ? "text" : "password"}
                   autoFocus
                 />
                 {!loading && (
@@ -180,9 +180,9 @@ const Login = () => {
               </Stack>
               {!loading && (
                 <Button
-                  color={'secondary'}
+                  color={"secondary"}
                   variant="outlined"
-                  disabled={passwordInput === ''}
+                  disabled={passwordInput === ""}
                   onClick={clickSinglePassword}
                 >
                   Login
@@ -190,10 +190,10 @@ const Login = () => {
               )}
               {badPassword && (
                 <Button
-                  color={'secondary'}
+                  color={"secondary"}
                   variant="outlined"
                   onClick={() => {
-                    useStore.setState({ page: 'recovery' });
+                    useStore.setState({ page: "recovery" });
                   }}
                 >
                   Recover Password

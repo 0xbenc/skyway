@@ -1,18 +1,18 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
 //
-import { useStore } from '../../zustand';
+import { useStore } from "../../zustand";
 //
-import { Top } from './styles';
-import { OutlinePaper } from '../../mui/reusable';
+import { Top } from "./styles";
+import { OutlinePaper } from "../../mui/reusable";
 //
-import { IconButton, Typography, Box, Stack } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import { Tooltip } from '@mui/material';
+import { IconButton, Typography, Box, Stack } from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import { Tooltip } from "@mui/material";
 //
-import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
-import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
-import { encryptPrompts } from '../../utility/encryption';
-import { eSet } from '../../utility/electronStore';
+import BookmarkAddIcon from "@mui/icons-material/BookmarkAdd";
+import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
+import { encryptPrompts } from "../../utility/encryption";
+import { eSet } from "../../utility/electronStore";
 // ----------------------------------------------------------------------
 
 const TopBar = () => {
@@ -27,8 +27,8 @@ const TopBar = () => {
 
   const toggleChatDrawer = (event) => {
     if (
-      event.type === 'keydown' &&
-      (event.key === 'Tab' || event.key === 'Shift')
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
     )
       return;
 
@@ -69,12 +69,12 @@ const TopBar = () => {
                     <b>{active_system_prompt.title}</b>
                   </Typography>
                   {prompt_save_status && (
-                    <Tooltip title={'Prompt is in your library'}>
+                    <Tooltip title={"Prompt is in your library"}>
                       <BookmarkAddedIcon size="small" />
                     </Tooltip>
                   )}
                   {!prompt_save_status && (
-                    <Tooltip title={'Click to add prompt to your library'}>
+                    <Tooltip title={"Click to add prompt to your library"}>
                       <span>
                         <BookmarkAddIcon
                           size="small"
@@ -99,12 +99,12 @@ const TopBar = () => {
                               password_,
                             );
 
-                            eSet('system_prompts', encPrompts);
+                            eSet("system_prompts", encPrompts);
 
                             useStore
                               .getState()
                               .addNotification(
-                                'System Prompt added to Library',
+                                "System Prompt added to Library",
                               );
                             useStore.setState({
                               system_prompts: newPrompts,
@@ -145,21 +145,21 @@ const TopBar = () => {
             </OutlinePaper>
           </Stack>
           <OutlinePaper>
-            <Stack direction="column" spacing={1} textAlign={'right'}>
-              {active_system_prompt.engine === 'token limited' && (
+            <Stack direction="column" spacing={1} textAlign={"right"}>
+              {active_system_prompt.engine === "token limited" && (
                 <Typography variant="body1">Total Tokens</Typography>
               )}
-              {active_system_prompt.engine === 'token limited' && (
+              {active_system_prompt.engine === "token limited" && (
                 <Typography variant="body1">
                   <b>
                     {String(token_count)}/{active_system_prompt.limit}
                   </b>
                 </Typography>
               )}
-              {active_system_prompt.engine === 'amnesia' && (
+              {active_system_prompt.engine === "amnesia" && (
                 <Typography variant="body1">Previous Tokens</Typography>
               )}
-              {active_system_prompt.engine === 'amnesia' && (
+              {active_system_prompt.engine === "amnesia" && (
                 <Typography variant="body1">
                   <b>{token_count}</b>
                 </Typography>

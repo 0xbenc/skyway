@@ -1,13 +1,13 @@
-import * as React from 'react';
+import * as React from "react";
 //
-import { createRoot } from 'react-dom/client';
+import { createRoot } from "react-dom/client";
 //
-import { App } from './app';
+import { App } from "./app";
 //
-import { StyledEngineProvider } from '@mui/material/styles';
+import { StyledEngineProvider } from "@mui/material/styles";
 // ----------------------------------------------------------------------
 
-const container = document.getElementById('skyway');
+const container = document.getElementById("skyway");
 const root = createRoot(container);
 
 root.render(

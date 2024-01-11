@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+import { create } from "zustand";
 // ----------------------------------------------------------------------
 
 export const useStore = create((set, get) => {
@@ -10,29 +10,29 @@ export const useStore = create((set, get) => {
       recovery, chatbot, change api key
       library, prompt, credits 
     */
-    page: 'precheck',
+    page: "precheck",
 
     // system prompts object from electron-store
     system_prompts: [],
 
     // gets the app version from an IPC handler during login page
-    version: '-1',
+    version: "-1",
 
     // MUI 5 theme color mode
-    color_mode: 'dark',
+    color_mode: "dark",
 
     // decrypted OpenAI API Key active
-    open_ai_api_key: 'missing',
+    open_ai_api_key: "missing",
 
     // decrypted password
-    password: 'missing',
+    password: "missing",
 
     //used to disable UI elements
     busy_ui: false,
 
     // powers notistack
     notification_alarm: false,
-    notification_message: '',
+    notification_message: "",
     addNotification: (messageText) =>
       set({ notification_message: messageText, notification_alarm: true }),
 
@@ -66,21 +66,21 @@ export const useStore = create((set, get) => {
 
     rename_dialog_open: false,
 
-    rename_dialog_input: '',
+    rename_dialog_input: "",
 
     rename_dialog_index: -1,
 
-    user_message_input: '',
+    user_message_input: "",
 
     conversation: [],
 
     scroll_time: false,
 
-    chat_title: '',
+    chat_title: "",
 
     timestamps: [],
 
-    previous_uuid: 'none',
+    previous_uuid: "none",
 
     switch_prompt_dialog_open: false, //
 
@@ -101,7 +101,7 @@ export const useStore = create((set, get) => {
     chats: [],
 
     // uuid
-    current_chat: 'none',
+    current_chat: "none",
 
     // true if the prompt of the current conversation is saved in the library
     prompt_save_status: true,

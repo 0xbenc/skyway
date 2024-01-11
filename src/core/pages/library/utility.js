@@ -1,8 +1,8 @@
-import { useStore } from '../../zustand';
+import { useStore } from "../../zustand";
 //
-import { encryptPrompts } from '../../utility/encryption';
-import { eSet } from '../../utility/electronStore';
-import { cleanFileTitle } from '../../utility/string';
+import { encryptPrompts } from "../../utility/encryption";
+import { eSet } from "../../utility/electronStore";
+import { cleanFileTitle } from "../../utility/string";
 // ----------------------------------------------------------------------
 
 const deleteSystemPrompt = (index) => {
@@ -19,9 +19,9 @@ const deleteSystemPrompt = (index) => {
 
   const encPrompts = encryptPrompts(newPrompts, password_);
 
-  eSet('system_prompts', encPrompts);
+  eSet("system_prompts", encPrompts);
 
-  useStore.getState().addNotification('System Prompt deleted from Library');
+  useStore.getState().addNotification("System Prompt deleted from Library");
   useStore.setState({ system_prompts: newPrompts });
 };
 
@@ -29,12 +29,12 @@ const ImportPrompt = () => {
   const system_prompts = useStore.getState().system_prompts;
 
   window.electron.engine
-    .dialog_open_filtered_file('', [
-      { name: 'Skyway Prompts', extensions: ['json'] },
+    .dialog_open_filtered_file("", [
+      { name: "Skyway Prompts", extensions: ["json"] },
     ])
     .then((result) => {
       if (result !== undefined) {
-        let base64Data = result.data.split(',')[1];
+        let base64Data = result.data.split(",")[1];
         let potentialPrompt = JSON.parse(atob(base64Data));
 
         let matches = false;
@@ -59,14 +59,14 @@ const ImportPrompt = () => {
 
           const encPrompts = encryptPrompts(newPrompts, password_);
 
-          eSet('system_prompts', encPrompts);
+          eSet("system_prompts", encPrompts);
 
           useStore.setState({ system_prompts: newPrompts });
-          useStore.getState().addNotification('System Prompt added to Library');
+          useStore.getState().addNotification("System Prompt added to Library");
         } else {
           useStore
             .getState()
-            .addNotification('System Prompt already in Library');
+            .addNotification("System Prompt already in Library");
         }
       }
     });
@@ -84,7 +84,7 @@ const ExportPrompt = (index) => {
     const chatsCopy = [...system_prompts];
 
     let chatCopy = chatsCopy[index];
-    chatCopy.skywayType = 'prompt';
+    chatCopy.skywayType = "prompt";
 
     const jsonstr = JSON.stringify(chatCopy);
 
@@ -96,7 +96,7 @@ const ExportPrompt = (index) => {
       filename: cleanTitle,
     };
 
-    window.electron.engine.send('save-json', args);
+    window.electron.engine.send("save-json", args);
   };
 
   exporter(index);

@@ -1,15 +1,15 @@
-import React, { useEffect, useMemo } from 'react';
-import { SnackbarProvider, useSnackbar } from 'notistack';
-import { useStore } from './zustand';
-import PropTypes from 'prop-types';
+import React, { useEffect, useMemo } from "react";
+import { SnackbarProvider, useSnackbar } from "notistack";
+import { useStore } from "./zustand";
+import PropTypes from "prop-types";
 
 const Notify = ({ notificationAlarm, notificationMessage, colorMode }) => {
   const { enqueueSnackbar } = useSnackbar();
 
   const style = useMemo(
     () => ({
-      backgroundColor: colorMode === 'light' ? '#CCCCCC' : '#333333',
-      color: colorMode === 'light' ? '#111111' : '#EEEEEE',
+      backgroundColor: colorMode === "light" ? "#CCCCCC" : "#333333",
+      color: colorMode === "light" ? "#111111" : "#EEEEEE",
     }),
     [colorMode],
   );
@@ -19,7 +19,7 @@ const Notify = ({ notificationAlarm, notificationMessage, colorMode }) => {
       enqueueSnackbar(notificationMessage, { style });
       useStore.setState({
         notification_alarm: false,
-        notification_message: '',
+        notification_message: "",
       });
     }
   }, [notificationMessage, notificationAlarm, style]);

@@ -1,12 +1,12 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 //
-import { navigate } from '../utility/navigatePage';
-import { OutlinePaper } from '../mui/reusable';
+import { navigate } from "../utility/navigatePage";
+import { OutlinePaper } from "../mui/reusable";
 //
-import { Typography, Stack, Box, IconButton } from '@mui/material';
+import { Typography, Stack, Box, IconButton } from "@mui/material";
 //
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 // ----------------------------------------------------------------------
 
 const Title = ({ value }) => {
@@ -17,7 +17,7 @@ const Title = ({ value }) => {
           <IconButton
             aria-label="close"
             onClick={() => {
-              navigate('chatbot');
+              navigate("chatbot");
             }}
             size="large"
           >

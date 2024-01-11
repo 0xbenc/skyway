@@ -1,17 +1,17 @@
-import React from 'react';
+import React from "react";
 //
-import { useStore } from '../../zustand';
+import { useStore } from "../../zustand";
 //
-import { OutlinePaper } from '../../mui/reusable';
-import { promptSelect } from './utility';
+import { OutlinePaper } from "../../mui/reusable";
+import { promptSelect } from "./utility";
 //
-import { Typography, Stack, Button, Divider } from '@mui/material';
+import { Typography, Stack, Button, Divider } from "@mui/material";
 import {
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
-} from '@mui/material';
+} from "@mui/material";
 // ----------------------------------------------------------------------
 
 const SwitchPromptDialog = () => {
@@ -41,7 +41,7 @@ const SwitchPromptDialog = () => {
                   onClick={() => {
                     promptSelect(key, system_prompts_);
                   }}
-                  sx={{ cursor: 'pointer' }}
+                  sx={{ cursor: "pointer" }}
                 >
                   <Typography variant="h6">{prompt.title}</Typography>
                   <Divider />

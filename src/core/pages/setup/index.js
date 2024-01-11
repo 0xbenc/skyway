@@ -1,6 +1,6 @@
-import React from 'react';
+import React from "react";
 //
-import { Setup } from './setup';
+import { Setup } from "./setup";
 // ----------------------------------------------------------------------
 
 const SetupPage = () => {

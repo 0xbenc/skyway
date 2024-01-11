@@ -8,7 +8,7 @@
  */
 const previewText = (str, len) => {
   return `${String(str).substring(0, len)}${
-    String(str).length < len ? '' : '...'
+    String(str).length < len ? "" : "..."
   }`;
 };
 
@@ -23,11 +23,11 @@ const previewText = (str, len) => {
 const cleanFileTitle = (str) => {
   let cleanedStr = str
     .trim()
-    .replace(/\s/g, '_')
+    .replace(/\s/g, "_")
     .toLowerCase()
-    .replace(/[^a-z0-9_]/g, '_');
+    .replace(/[^a-z0-9_]/g, "_");
 
-  if (cleanedStr.endsWith('_')) {
+  if (cleanedStr.endsWith("_")) {
     cleanedStr = cleanedStr.slice(0, -1);
   }
 

@@ -1,29 +1,29 @@
-import React from 'react';
+import React from "react";
 //
-import { useStore } from '../../zustand';
+import { useStore } from "../../zustand";
 //
-import { navigate } from '../../utility/navigatePage';
-import { ExportChat, ImportChat, chatDelete } from './utility';
-import { isoToHuman } from '../../utility/time';
+import { navigate } from "../../utility/navigatePage";
+import { ExportChat, ImportChat, chatDelete } from "./utility";
+import { isoToHuman } from "../../utility/time";
 //
-import { IconButton, Box, Drawer } from '@mui/material';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Divider from '@mui/material/Divider';
-import { Tooltip, Grid } from '@mui/material';
+import { IconButton, Box, Drawer } from "@mui/material";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import Divider from "@mui/material/Divider";
+import { Tooltip, Grid } from "@mui/material";
 //
-import HttpsIcon from '@mui/icons-material/Https';
-import ChatIcon from '@mui/icons-material/Chat';
-import RateReviewIcon from '@mui/icons-material/RateReview';
-import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import IosShareIcon from '@mui/icons-material/IosShare';
-import FileOpenIcon from '@mui/icons-material/FileOpen';
-import AttributionIcon from '@mui/icons-material/Attribution';
+import HttpsIcon from "@mui/icons-material/Https";
+import ChatIcon from "@mui/icons-material/Chat";
+import RateReviewIcon from "@mui/icons-material/RateReview";
+import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import IosShareIcon from "@mui/icons-material/IosShare";
+import FileOpenIcon from "@mui/icons-material/FileOpen";
+import AttributionIcon from "@mui/icons-material/Attribution";
 // ----------------------------------------------------------------------
 
 const ChatDrawer = () => {
@@ -47,8 +47,8 @@ const ChatDrawer = () => {
 
   const toggleChatDrawer = (event) => {
     if (
-      event.type === 'keydown' &&
-      (event.key === 'Tab' || event.key === 'Shift')
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
     )
       return;
 
@@ -56,15 +56,15 @@ const ChatDrawer = () => {
   };
 
   const navAPIKey = () => {
-    navigate('change api key');
+    navigate("change api key");
   };
 
   const navCredits = () => {
-    navigate('credits');
+    navigate("credits");
   };
 
   const navSystemPrompts = () => {
-    navigate('library');
+    navigate("library");
   };
 
   const newChat = () => {
@@ -77,13 +77,13 @@ const ChatDrawer = () => {
   };
 
   return (
-    <Drawer anchor={'left'} open={chat_drawer_open} onClose={toggleChatDrawer}>
+    <Drawer anchor={"left"} open={chat_drawer_open} onClose={toggleChatDrawer}>
       <Box
         sx={{
-          width: '33vw',
-          display: 'flex', // Added: Using Flex container
-          flexDirection: 'column', // Added: Flex direction set to column
-          overflow: 'hidden',
+          width: "33vw",
+          display: "flex", // Added: Using Flex container
+          flexDirection: "column", // Added: Flex direction set to column
+          overflow: "hidden",
         }}
         role="presentation"
         onClick={toggleChatDrawer}
@@ -92,7 +92,7 @@ const ChatDrawer = () => {
         <List>
           <ListItem>
             <ListItemText
-              primary={`Skyway v${version_} ${dev_mode_ ? 'pre-release' : ''}`}
+              primary={`Skyway v${version_} ${dev_mode_ ? "pre-release" : ""}`}
             />
           </ListItem>
           <Divider />
@@ -100,84 +100,84 @@ const ChatDrawer = () => {
             <ListItemButton onClick={newChat}>
               <ListItemIcon
                 sx={{
-                  minWidth: 'auto',
+                  minWidth: "auto",
                   marginRight: (theme) => theme.spacing(2),
-                  justifyContent: 'center',
+                  justifyContent: "center",
                 }}
               >
                 <ChatIcon />
               </ListItemIcon>
-              <ListItemText primary={'New Chat'} />
+              <ListItemText primary={"New Chat"} />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
             <ListItemButton onClick={ImportChat}>
               <ListItemIcon
                 sx={{
-                  minWidth: 'auto',
+                  minWidth: "auto",
                   marginRight: (theme) => theme.spacing(2),
-                  justifyContent: 'center',
+                  justifyContent: "center",
                 }}
               >
                 <FileOpenIcon />
               </ListItemIcon>
-              <ListItemText primary={'Import Chat'} />
+              <ListItemText primary={"Import Chat"} />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
             <ListItemButton onClick={switchPromptOpen}>
               <ListItemIcon
                 sx={{
-                  minWidth: 'auto',
+                  minWidth: "auto",
                   marginRight: (theme) => theme.spacing(2),
-                  justifyContent: 'center',
+                  justifyContent: "center",
                 }}
               >
                 <SwapHorizIcon />
               </ListItemIcon>
-              <ListItemText primary={'Change Prompt'} />
+              <ListItemText primary={"Change Prompt"} />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
             <ListItemButton onClick={navSystemPrompts}>
               <ListItemIcon
                 sx={{
-                  minWidth: 'auto',
+                  minWidth: "auto",
                   marginRight: (theme) => theme.spacing(2),
-                  justifyContent: 'center',
+                  justifyContent: "center",
                 }}
               >
                 <RateReviewIcon />
               </ListItemIcon>
-              <ListItemText primary={'Prompt Library'} />
+              <ListItemText primary={"Prompt Library"} />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
             <ListItemButton onClick={navAPIKey}>
               <ListItemIcon
                 sx={{
-                  minWidth: 'auto',
+                  minWidth: "auto",
                   marginRight: (theme) => theme.spacing(2),
-                  justifyContent: 'center',
+                  justifyContent: "center",
                 }}
               >
                 <HttpsIcon />
               </ListItemIcon>
-              <ListItemText primary={'Edit API Keys'} />
+              <ListItemText primary={"Edit API Keys"} />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
             <ListItemButton onClick={navCredits}>
               <ListItemIcon
                 sx={{
-                  minWidth: 'auto',
+                  minWidth: "auto",
                   marginRight: (theme) => theme.spacing(2),
-                  justifyContent: 'center',
+                  justifyContent: "center",
                 }}
               >
                 <AttributionIcon />
               </ListItemIcon>
-              <ListItemText primary={'Attribution'} />
+              <ListItemText primary={"Attribution"} />
             </ListItemButton>
           </ListItem>
         </List>
@@ -185,10 +185,10 @@ const ChatDrawer = () => {
         <Box
           sx={{
             flexGrow: 1,
-            overflow: 'auto',
+            overflow: "auto",
           }}
         >
-          <List sx={{ overflowX: 'hidden' }}>
+          <List sx={{ overflowX: "hidden" }}>
             {chats
               .slice()
               .reverse()
@@ -203,7 +203,7 @@ const ChatDrawer = () => {
                         : theme.palette.primary.inside,
                   })}
                 >
-                  <Box sx={{ width: '100%' }} marginRight={1.5}>
+                  <Box sx={{ width: "100%" }} marginRight={1.5}>
                     <Grid container>
                       <Grid item xs={9}>
                         <ListItemButton

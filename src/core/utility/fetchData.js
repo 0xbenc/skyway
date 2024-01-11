@@ -1,4 +1,4 @@
-import { useStore } from '../zustand';
+import { useStore } from "../zustand";
 // ----------------------------------------------------------------------
 
 /**
@@ -22,7 +22,7 @@ const fetchChatCompletion = async (messages, model, params) => {
     const response = await window.electron.engine.chat(data, keys[key].key);
     return response;
   } catch (error) {
-    return 'error';
+    return "error";
   }
 };
 
@@ -35,16 +35,16 @@ const fetchChatCompletion = async (messages, model, params) => {
 const fetchChatCompletionConnectionTest = async () => {
   const messages = [
     {
-      role: 'system',
-      content: 'Respond Please',
+      role: "system",
+      content: "Respond Please",
     },
     {
-      role: 'user',
-      content: 'Connection Test',
+      role: "user",
+      content: "Connection Test",
     },
   ];
 
-  const model = 'gpt-3.5-turbo';
+  const model = "gpt-3.5-turbo";
 
   const params = {};
 
@@ -59,9 +59,9 @@ const fetchChatCompletionConnectionTest = async () => {
 
   try {
     await window.electron.engine.chat(data, keys[key].key);
-    return 'success';
+    return "success";
   } catch (error) {
-    return 'error';
+    return "error";
   }
 };
 

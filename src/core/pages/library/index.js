@@ -1,6 +1,6 @@
-import React from 'react';
+import React from "react";
 //
-import { Library } from './library';
+import { Library } from "./library";
 // ----------------------------------------------------------------------
 
 const LibraryPage = () => {

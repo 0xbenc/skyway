@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import bcrypt from 'bcryptjs-react';
+import React, { useState, useEffect } from "react";
+import bcrypt from "bcryptjs-react";
 //
-import { useStore } from '../../zustand';
+import { useStore } from "../../zustand";
 //
-import { Prompts } from '../../utility/defaultSystemPrompts';
-import { seeds } from '../../utility/seeds';
-import { generateRandomNumbers } from '../../utility/number';
-import { eSet } from '../../utility/electronStore';
-import { encryptPrompts, encrypt } from '../../utility/encryption';
-import { BasicBox, OutlinePaper, SeedPaper } from '../../mui/reusable';
-import { fetchChatCompletionConnectionTest } from '../../utility/fetchData';
-import { SeedContent } from './seedContent';
+import { Prompts } from "../../utility/defaultSystemPrompts";
+import { seeds } from "../../utility/seeds";
+import { generateRandomNumbers } from "../../utility/number";
+import { eSet } from "../../utility/electronStore";
+import { encryptPrompts, encrypt } from "../../utility/encryption";
+import { BasicBox, OutlinePaper, SeedPaper } from "../../mui/reusable";
+import { fetchChatCompletionConnectionTest } from "../../utility/fetchData";
+import { SeedContent } from "./seedContent";
 //
 import {
   FormControl,
@@ -20,9 +20,9 @@ import {
   Box,
   Stack,
   Tooltip,
-} from '@mui/material';
+} from "@mui/material";
 //
-import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 // ----------------------------------------------------------------------
 
 const Setup = () => {
@@ -37,13 +37,13 @@ const Setup = () => {
   const [passwordMatch, setPasswordMatch] = useState(false);
 
   // Input
-  const [passwordInput, setPasswordInput] = useState('');
-  const [passwordMatchInput, setPasswordMatchInput] = useState('');
-  const [apiInput, setAPIInput] = useState('');
+  const [passwordInput, setPasswordInput] = useState("");
+  const [passwordMatchInput, setPasswordMatchInput] = useState("");
+  const [apiInput, setAPIInput] = useState("");
 
-  const [seedKey, setSeedKey] = useState('');
-  const [seedArray, setSeedArray] = useState('');
-  const [hash, setHash] = useState('');
+  const [seedKey, setSeedKey] = useState("");
+  const [seedArray, setSeedArray] = useState("");
+  const [hash, setHash] = useState("");
 
   // Helpers
   const handlePasswordInput = (event) => {
@@ -59,46 +59,46 @@ const Setup = () => {
   };
 
   const clickNewPassword = () => {
-    console.log('SETUP: user has created a password');
-    
+    console.log("SETUP: user has created a password");
+
     const salt = bcrypt.genSaltSync(14);
     const newHash = bcrypt.hashSync(passwordInput, salt);
-    
+
     useStore.setState({ password: passwordInput });
-    
+
     setHash(newHash);
     setShowNewPassword(false);
     setShowAPIInput(true);
   };
 
   const clickAPI = async () => {
-    console.log('SETUP: user has entered OpenAI API key');
+    console.log("SETUP: user has entered OpenAI API key");
 
     const randArray = generateRandomNumbers(0, 2047, 8);
 
     const key = String(
       randArray[0] +
-        'x' +
+        "x" +
         randArray[1] +
-        'x' +
+        "x" +
         randArray[2] +
-        'x' +
+        "x" +
         randArray[3] +
-        'x' +
+        "x" +
         randArray[4] +
-        'x' +
+        "x" +
         randArray[5] +
-        'x' +
+        "x" +
         randArray[6] +
-        'x' +
+        "x" +
         randArray[7],
     );
 
-    console.log('SETUP: random numbers', randArray);
-    console.log('SETUP: KEY', key);
+    console.log("SETUP: random numbers", randArray);
+    console.log("SETUP: KEY", key);
 
     console.log(
-      'SETUP: seeds',
+      "SETUP: seeds",
       seeds[randArray[0]],
       seeds[randArray[1]],
       seeds[randArray[2]],
@@ -110,41 +110,41 @@ const Setup = () => {
     );
 
     useStore.setState({
-      open_ai_api_keys: [{ key: apiInput, name: 'default' }],
+      open_ai_api_keys: [{ key: apiInput, name: "default" }],
       open_ai_api_key: 0,
     });
 
     const resultValue = await fetchChatCompletionConnectionTest();
 
-    if (resultValue === 'success') {
+    if (resultValue === "success") {
       setSeedKey(key);
       setSeedArray(randArray);
       setShowAPIInput(false);
       setShowSeed(true);
     } else {
-      setAPIInput('');
+      setAPIInput("");
       useStore
         .getState()
-        .addNotification('Please enter a valid OpenAI API key');
+        .addNotification("Please enter a valid OpenAI API key");
     }
   };
 
   const clickSeedPhrase = () => {
-    console.log('SETUP: user has finished seed');
-    console.log('NAVIGATION: landing');
+    console.log("SETUP: user has finished seed");
+    console.log("NAVIGATION: landing");
 
     const cipherAPI = encrypt(apiInput, passwordInput).toString();
     const encPrompts = encryptPrompts(Prompts, passwordInput);
     const encPass = encrypt(passwordInput, seedKey).toString();
     const currColor = useStore.getState().color_mode;
 
-    eSet('recovery', encPass); 
-    eSet('password_set', true); 
-    eSet('integrity_check', hash); 
-    eSet('system_prompts', encPrompts);
-    eSet('chats', []);
-    eSet('open_ai_api_keys', [{ key: cipherAPI, name: 'default' }]);
-    eSet('color_mode', currColor);
+    eSet("recovery", encPass);
+    eSet("password_set", true);
+    eSet("integrity_check", hash);
+    eSet("system_prompts", encPrompts);
+    eSet("chats", []);
+    eSet("open_ai_api_keys", [{ key: cipherAPI, name: "default" }]);
+    eSet("color_mode", currColor);
 
     useStore.setState({
       password: passwordInput,
@@ -152,15 +152,15 @@ const Setup = () => {
       color_mode: currColor,
       active_system_prompt: Prompts[0],
       last_prompt: 0,
-      page: 'chatbot',
+      page: "chatbot",
     });
   };
 
   //
   useEffect(() => {
     if (
-      passwordInput !== '' &&
-      passwordMatchInput !== '' &&
+      passwordInput !== "" &&
+      passwordMatchInput !== "" &&
       passwordInput === passwordMatchInput
     ) {
       setPasswordMatch(true);
@@ -175,7 +175,7 @@ const Setup = () => {
         <OutlinePaper>
           <Typography variant="h1">Skyway</Typography>
           <Typography variant="body1">
-            v{version} {dev_mode_ ? 'pre-release' : ''}
+            v{version} {dev_mode_ ? "pre-release" : ""}
           </Typography>
         </OutlinePaper>
 
@@ -204,7 +204,7 @@ const Setup = () => {
                     type="password"
                     autoFocus
                     onKeyDown={(ev) => {
-                      if (ev.key === 'Enter' && passwordMatch) {
+                      if (ev.key === "Enter" && passwordMatch) {
                         clickNewPassword();
                         ev.preventDefault();
                       }
@@ -220,14 +220,14 @@ const Setup = () => {
                     required={true}
                     type="password"
                     onKeyDown={(ev) => {
-                      if (ev.key === 'Enter' && passwordMatch) {
+                      if (ev.key === "Enter" && passwordMatch) {
                         clickNewPassword();
                         ev.preventDefault();
                       }
                     }}
                   />
                   <Button
-                    color={'secondary'}
+                    color={"secondary"}
                     variant="outlined"
                     disabled={!passwordMatch}
                     onClick={clickNewPassword}
@@ -268,16 +268,16 @@ const Setup = () => {
                     type="password"
                     autoFocus
                     onKeyDown={(ev) => {
-                      if (ev.key === 'Enter' && apiInput !== '') {
+                      if (ev.key === "Enter" && apiInput !== "") {
                         clickAPI();
                         ev.preventDefault();
                       }
                     }}
                   />
                   <Button
-                    color={'secondary'}
+                    color={"secondary"}
                     variant="outlined"
-                    disabled={apiInput === ''}
+                    disabled={apiInput === ""}
                     onClick={clickAPI}
                   >
                     Save
@@ -293,18 +293,18 @@ const Setup = () => {
             <SeedContent />
 
             <OutlinePaper>
-              <Stack direction="row" spacing={1} alignItems={'center'}>
+              <Stack direction="row" spacing={1} alignItems={"center"}>
                 <Typography variant="h5">Your Seed Phrase:</Typography>
                 <SeedPaper>
                   <Typography>
-                    {seeds[seedArray[0]]} {seeds[seedArray[1]]}{' '}
-                    {seeds[seedArray[2]]} {seeds[seedArray[3]]}{' '}
-                    {seeds[seedArray[4]]} {seeds[seedArray[5]]}{' '}
+                    {seeds[seedArray[0]]} {seeds[seedArray[1]]}{" "}
+                    {seeds[seedArray[2]]} {seeds[seedArray[3]]}{" "}
+                    {seeds[seedArray[4]]} {seeds[seedArray[5]]}{" "}
                     {seeds[seedArray[6]]} {seeds[seedArray[7]]}
                   </Typography>
                 </SeedPaper>
                 <Button
-                  color={'secondary'}
+                  color={"secondary"}
                   variant="outlined"
                   onClick={clickSeedPhrase}
                 >
