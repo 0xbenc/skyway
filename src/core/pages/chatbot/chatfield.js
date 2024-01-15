@@ -28,7 +28,6 @@ const Chatfield = () => {
   const busy_ui = useStore((state) => state.busy_ui);
   const active_system_prompt_ = useStore((state) => state.active_system_prompt);
   const user_message_input = useStore((state) => state.user_message_input);
-  const conversation = useStore((state) => state.conversation);
   const timestamps = useStore((state) => state.timestamps);
   const previous_uuid = useStore((state) => state.previous_uuid);
 
@@ -43,10 +42,10 @@ const Chatfield = () => {
     useStore.setState({ user_message_input: event.target.value });
   };
 
-  const SubmitPromptAsync = async (sendDateISO, chatTitle) => {
+  const SubmitPromptAsync = async (sendDateISO, chatTitle, convo) => {
     let upstream = [];
 
-    const conversation_ = [...conversation];
+    const conversation_ = [...convo];
     const activeSystemPrompt_ = {
       role: "system",
       content: active_system_prompt_.prompt,
@@ -134,9 +133,10 @@ const Chatfield = () => {
     const sendDateISO = String(sendDate.toISOString());
 
     const chat_title = useStore.getState().chat_title;
+    const conversation = useStore.getState().conversation;
 
     useStore.setState({ busy_ui: true });
-    SubmitPromptAsync(sendDateISO, chat_title);
+    SubmitPromptAsync(sendDateISO, chat_title, conversation);
   };
 
   // enables pressing 'Enter' to send message
