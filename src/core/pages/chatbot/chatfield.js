@@ -28,8 +28,6 @@ const Chatfield = () => {
   const busy_ui = useStore((state) => state.busy_ui);
   const active_system_prompt_ = useStore((state) => state.active_system_prompt);
   const user_message_input = useStore((state) => state.user_message_input);
-  const timestamps = useStore((state) => state.timestamps);
-  const previous_uuid = useStore((state) => state.previous_uuid);
 
   const version_ = useStore.getState().version;
 
@@ -42,7 +40,13 @@ const Chatfield = () => {
     useStore.setState({ user_message_input: event.target.value });
   };
 
-  const SubmitPromptAsync = async (sendDateISO, chatTitle, convo) => {
+  const SubmitPromptAsync = async (
+    sendDateISO,
+    chatTitle,
+    convo,
+    times,
+    puuid,
+  ) => {
     let upstream = [];
 
     const conversation_ = [...convo];
@@ -61,7 +65,7 @@ const Chatfield = () => {
       useStore.setState({ chat_title: shortChatTitle });
     }
 
-    const newTimeStamps = [...timestamps];
+    const newTimeStamps = [...times];
     newTimeStamps.push(sendDateISO);
 
     if (!conversation_.length) {
@@ -117,7 +121,7 @@ const Chatfield = () => {
       skywayVersion: version_,
     };
 
-    chatSync(chat, previous_uuid, true);
+    chatSync(chat, puuid, true);
 
     useStore.setState({
       previous_uuid: newKey,
@@ -134,9 +138,11 @@ const Chatfield = () => {
 
     const chat_title = useStore.getState().chat_title;
     const conversation = useStore.getState().conversation;
+    const times = useStore.getState().timestamps;
+    const puuid = useStore.getState().previous_uuid;
 
     useStore.setState({ busy_ui: true });
-    SubmitPromptAsync(sendDateISO, chat_title, conversation);
+    SubmitPromptAsync(sendDateISO, chat_title, conversation, times, puuid);
   };
 
   // enables pressing 'Enter' to send message
