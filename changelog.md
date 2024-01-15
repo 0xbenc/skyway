@@ -2,12 +2,13 @@
 
 ## 1.3.1
 
-- Password encyption uses a bcrypt blowfish + salt setup. 
+- Password encyption uses a bcrypt blowfish + salt setup.
   - Includes a migration for previous versions to use same password
 - UI Adjustments
   - Login
 - Adopted ESLint + Prettier + prop types
 - Attribution Page
+- Main chat page performance and responsiveness improvements
 
 ## 1.3.0
 
