@@ -6,10 +6,7 @@ import { fetchChatCompletion } from "../../utility/fetchData";
 import { unixToISO } from "../../utility/time";
 import { error } from "../../utility/error";
 import { generateKeyV4 } from "../../utility/uuid";
-import {
-  ChatField,
-  Bottom,
-} from "./styles";
+import { ChatField, Bottom } from "./styles";
 import { chatSync } from "./utility";
 //
 import {
@@ -28,11 +25,10 @@ const Chatfield = () => {
 
   const [justOnce, setJustOnce] = useState(false);
 
+  const busy_ui = useStore((state) => state.busy_ui);
   const active_system_prompt_ = useStore((state) => state.active_system_prompt);
   const user_message_input = useStore((state) => state.user_message_input);
   const conversation = useStore((state) => state.conversation);
-  const busy_ui = useStore((state) => state.busy_ui);
-  const chat_title = useStore((state) => state.chat_title);
   const timestamps = useStore((state) => state.timestamps);
   const previous_uuid = useStore((state) => state.previous_uuid);
 
@@ -47,7 +43,7 @@ const Chatfield = () => {
     useStore.setState({ user_message_input: event.target.value });
   };
 
-  const SubmitPromptAsync = async (sendDateISO) => {
+  const SubmitPromptAsync = async (sendDateISO, chatTitle) => {
     let upstream = [];
 
     const conversation_ = [...conversation];
@@ -62,7 +58,7 @@ const Chatfield = () => {
         ? `${String(user_message_input).substring(0, 31)}...`
         : String(user_message_input).substring(0, 31);
 
-    if (chat_title === "none") {
+    if (chatTitle === "none") {
       useStore.setState({ chat_title: shortChatTitle });
     }
 
@@ -115,7 +111,7 @@ const Chatfield = () => {
       conversation: conversation_,
       timestamps: newTimeStamps,
       uuid: newKey,
-      title: chat_title === "none" ? shortChatTitle : chat_title,
+      title: chatTitle === "none" ? shortChatTitle : chatTitle,
       prompt: active_system_prompt_,
       total_tokens: response.usage.total_tokens,
       lastActive: newTimeStamps[newTimeStamps.length - 1],
@@ -137,8 +133,10 @@ const Chatfield = () => {
     const sendDate = new Date();
     const sendDateISO = String(sendDate.toISOString());
 
+    const chat_title = useStore.getState().chat_title;
+
     useStore.setState({ busy_ui: true });
-    SubmitPromptAsync(sendDateISO);
+    SubmitPromptAsync(sendDateISO, chat_title);
   };
 
   // enables pressing 'Enter' to send message

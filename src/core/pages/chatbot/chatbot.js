@@ -7,22 +7,11 @@ import { fetchChatCompletion } from "../../utility/fetchData";
 import { isoToHuman, unixToISO } from "../../utility/time";
 import { error } from "../../utility/error";
 import { generateKeyV4 } from "../../utility/uuid";
-import {
-  LeftBox,
-  RightBox,
-  LeftChatBox,
-  RightChatBox,
-  Middle,
-} from "./styles";
+import { LeftBox, RightBox, LeftChatBox, RightChatBox, Middle } from "./styles";
 import { FormattedLeftResponse, FormattedRightResponse } from "./components";
 import { chatSync } from "./utility";
 //
-import {
-  IconButton,
-  Typography,
-  Stack,
-  Divider,
-} from "@mui/material";
+import { IconButton, Typography, Stack, Divider } from "@mui/material";
 //
 import RefreshIcon from "@mui/icons-material/Refresh";
 import EditIcon from "@mui/icons-material/Edit";
