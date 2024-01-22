@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.3.1
+## 1.4.0
 
 - Password encyption uses a bcrypt blowfish + salt setup.
   - Includes a migration for previous versions to use same password

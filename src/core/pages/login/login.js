@@ -59,7 +59,7 @@ const Login = () => {
       setStoreAccessTime(false);
 
       const _integrity_check = eGet("integrity_check");
-      const _migration_1_3_1_bcrypt = eGet("migration_1_3_1_bcrypt");
+      const _migration_1_3_1_bcrypt = eGet("migration_1_4_0_bcrypt");
 
       setIntegrityCheck(_integrity_check);
       setHasMigrated(_migration_1_3_1_bcrypt);
@@ -80,7 +80,7 @@ const Login = () => {
           var salt = bcrypt.genSaltSync(16);
           var hash = bcrypt.hashSync(passwordInput, salt);
           eSet("integrity_check", hash);
-          eSet("migration_1_3_1_bcrypt", false);
+          eSet("migration_1_4_0_bcrypt", false);
           outcome = true;
         }
       } else {
@@ -96,10 +96,10 @@ const Login = () => {
 
         let dencChats;
 
-        if (chats.length === 0) {
-          dencChats = [];
-        } else {
+        if (chats?.length) {
           dencChats = JSON.parse(decrypt(chats, passwordInput));
+        } else {
+          dencChats = [];
         }
 
         const dencPrompts = decryptPrompts(_system_prompts, passwordInput);

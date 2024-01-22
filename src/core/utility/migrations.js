@@ -82,22 +82,22 @@ const migration_1_3_0 = (store) => {
   store.set("version", "1.3.0");
 };
 
-const migration_1_3_1 = (store) => {
+const migration_1_4_0 = (store) => {
   const system_prompts = store.get("system_prompts");
 
   if (system_prompts !== undefined) {
     let system_prompts_new = [...system_prompts];
 
     for (let i = 0; i < system_prompts.length; i++) {
-      system_prompts_new[i].skywayVersion = "1.3.1";
+      system_prompts_new[i].skywayVersion = "1.4.0";
     }
 
     store.set("system_prompts", system_prompts_new);
-    store.set("migration_1_3_1_bcrypt", true);
+    store.set("migration_1_4_0_bcrypt", true);
   }
 
   store.set("last_prompt", 0);
-  store.set("version", "1.3.1");
+  store.set("version", "1.4.0");
 };
 
-export { migration_1_1_0, migration_1_2_0, migration_1_3_0, migration_1_3_1 };
+export { migration_1_1_0, migration_1_2_0, migration_1_3_0, migration_1_4_0 };

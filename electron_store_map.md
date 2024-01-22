@@ -20,5 +20,5 @@
     index of last prompt used
 ## chats ## 
     encrypted array of chats
-## migration_1_3_1_bcrypt ## 
+## migration_1_4_0_bcrypt ## 
     only true when migrating 1.3.0 to 1.3.1

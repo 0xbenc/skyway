@@ -34,6 +34,8 @@ const Setup = () => {
   const [showNewPassword, setShowNewPassword] = useState(true);
   const [showAPI, setShowAPIInput] = useState(false);
   const [showSeed, setShowSeed] = useState(false);
+  const [revealSeed, setRevealSeet] = useState(false);
+  const [hasRevealedSeed, setHasRevealedSeed] = useState(false);
   const [passwordMatch, setPasswordMatch] = useState(false);
 
   // Input
@@ -125,7 +127,7 @@ const Setup = () => {
       setAPIInput("");
       useStore
         .getState()
-        .addNotification("Please enter a valid OpenAI API key");
+        .addNotification("Please enter a valid OpenAI API key.");
     }
   };
 
@@ -154,6 +156,16 @@ const Setup = () => {
       last_prompt: 0,
       page: "chatbot",
     });
+  };
+
+  const clickRevealSeedPhrase = () => {
+    console.log("SETUP: user toggled seed visibility");
+    setHasRevealedSeed(true);
+    if (revealSeed) {
+      setRevealSeet(false);
+    } else {
+      setRevealSeet(true);
+    }
   };
 
   //
@@ -186,7 +198,7 @@ const Setup = () => {
                 <Typography variant="h5">
                   Welcome! Create a password to begin.
                 </Typography>
-                <Tooltip title="The password you create is used to encrypt your local chat data. It is never sent to the internet, or stored in plaintext.">
+                <Tooltip title="The password you create is used to encrypt your local chat data. It is never sent to the internet or stored in plaintext.">
                   <HelpOutlineIcon size="small" />
                 </Tooltip>
               </Stack>
@@ -293,23 +305,40 @@ const Setup = () => {
             <SeedContent />
 
             <OutlinePaper>
-              <Stack direction="row" spacing={1} alignItems={"center"}>
+              <Stack direction="column" spacing={1} alignItems={"left"}>
                 <Typography variant="h5">Your Seed Phrase:</Typography>
-                <SeedPaper>
-                  <Typography>
-                    {seeds[seedArray[0]]} {seeds[seedArray[1]]}{" "}
-                    {seeds[seedArray[2]]} {seeds[seedArray[3]]}{" "}
-                    {seeds[seedArray[4]]} {seeds[seedArray[5]]}{" "}
-                    {seeds[seedArray[6]]} {seeds[seedArray[7]]}
-                  </Typography>
-                </SeedPaper>
-                <Button
-                  color={"secondary"}
-                  variant="outlined"
-                  onClick={clickSeedPhrase}
-                >
-                  Continue
-                </Button>
+                <Stack direction="row" spacing={1} alignItems={"left"}>
+                  <SeedPaper>
+                    {revealSeed && (
+                      <Typography sx={{ userSelect: "none" }} variant="h4">
+                        {seeds[seedArray[0]]} {seeds[seedArray[1]]}{" "}
+                        {seeds[seedArray[2]]} {seeds[seedArray[3]]}{" "}
+                        {seeds[seedArray[4]]} {seeds[seedArray[5]]}{" "}
+                        {seeds[seedArray[6]]} {seeds[seedArray[7]]}
+                      </Typography>
+                    )}
+                    {!revealSeed && (
+                      <Typography sx={{ userSelect: "none" }} variant="h4">
+                        **** **** **** ****
+                      </Typography>
+                    )}
+                  </SeedPaper>
+                  <Button
+                    color={"secondary"}
+                    variant="outlined"
+                    onClick={clickRevealSeedPhrase}
+                  >
+                    {revealSeed ? "Hide Seed" : "Show Seed"}
+                  </Button>
+                  <Button
+                    color={"secondary"}
+                    variant="outlined"
+                    onClick={clickSeedPhrase}
+                    disabled={!hasRevealedSeed}
+                  >
+                    Continue
+                  </Button>
+                </Stack>
               </Stack>
             </OutlinePaper>
           </>
