@@ -13,8 +13,10 @@ node_modules/
 # Electron-Forge
 out/
 
+# NPM dependencies
 package-lock.json
 
+# Mac system files
 .DS_Store
 
 # VSCode

@@ -1,5 +1,11 @@
 # STYLE GUIDE
 
+## Formatting and Linting ##
+
+This project uses ESLint and Prettier.
+Modifications should not be made to the ESLint settup. 
+Prettier should not be manually configured.
+
 ---
 
 ## File Names

@@ -4,9 +4,7 @@ import { Login } from "./login";
 // ----------------------------------------------------------------------
 
 const LoginPage = () => {
-  return (
-    <Login />
-  );
+  return <Login />;
 };
 
 export { LoginPage };

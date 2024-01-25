@@ -90,7 +90,7 @@ can install .deb files from the Downloads folder.
 Skyway is not a website or a native mobile app. To chat and receive messages,
 an internet connection must be present.
 
-The ARM64 architecture is officially supported for Mac
+The ARM64 architecture is officially supported for Windows, Mac
 and Linux (M1, M2, Raspberry Pi 4, Jetson Nano, etc).
 
 While Skyway does not have active Windows ARM (64bit) support, technical users
@@ -150,12 +150,10 @@ Download the file appropriate for your platform.
 
 - requires node 18.x on x86 Windows, Mac (Intel), and Linux (Debian)
 - requires node 18.x on ARM Mac (M1, M2)
+- requires node 18.x on ARM Windows
 - requires node 16.x on ARM64 Linux (Debian)
 - ARM32 Linux not supported
   - It is recommended you find a more lightweight project, with a non-web GUI
-- ARM64 Windows not supported
-  - If you have an ARM64 Windows device and you are interested in development,
-  please reach out to a maintainer!
 
 ### NPM
 
@@ -198,7 +196,7 @@ Inside `make` will be another folder based on the platform for which Skyway was 
 Navigate inside that folder, and navigate again inside the next folder.
 You should be two levels down from `make`.
 
-#### Windows
+#### Windows (x64 + ARM64)
 
 - Click the .exe file to begin the install process.
 If Skyway was already installed, it will be updated.

@@ -10,7 +10,8 @@ import { encryptPrompts } from "./utility/encryption";
 const HandleIPC = () => {
   useEffect(() => {
     const newChatListener = () => {
-      const { system_prompts, page, password, last_prompt } = useStore.getState();
+      const { system_prompts, page, password, last_prompt } =
+        useStore.getState();
 
       if (system_prompts.length) {
         if (page === "chatbot") {
@@ -30,7 +31,7 @@ const HandleIPC = () => {
           useStore.setState({
             system_prompts: systems,
             active_system_prompt: system_prompts[last_prompt],
-            page: "chatbot"
+            page: "chatbot",
           });
         }
       }

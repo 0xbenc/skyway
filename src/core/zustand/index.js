@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+import { create } from "zustand";
 // ----------------------------------------------------------------------
 
 export const useStore = create((set, get) => {
@@ -6,9 +6,9 @@ export const useStore = create((set, get) => {
     // START SHARED //
 
     /* pages:
-      precheck, setup, login, system_prompts, 
-      system_prompt, new_system_prompt, chatbot, 
-      recovery, change_api_key
+      precheck, setup, login,
+      recovery, chatbot, change api key
+      library, prompt, credits 
     */
     page: "precheck",
 
@@ -33,13 +33,13 @@ export const useStore = create((set, get) => {
     // powers notistack
     notification_alarm: false,
     notification_message: "",
-    addNotification: (messageText) => set({ notification_message: messageText, notification_alarm: true }),
+    addNotification: (messageText) =>
+      set({ notification_message: messageText, notification_alarm: true }),
 
     // true if not a release build
-    dev_mode: true,
+    dev_mode: false,
 
     // END SHARED //
-
 
     // START PROMPT LIBRARY //
 
@@ -51,19 +51,18 @@ export const useStore = create((set, get) => {
 
     // END PROMPT LIBRARY //
 
-
     // START CHANGE API //
 
-    // decrypted OpenAI API Key list 
+    // decrypted OpenAI API Key list
     open_ai_api_keys: [],
 
     // END CHANGE API //
 
-
     // START CHATBOT //
 
     chat_drawer_open: false, //
-    chat_drawer_toggle: () => set({chat_drawer_open: !get().chat_drawer_open}),
+    chat_drawer_toggle: () =>
+      set({ chat_drawer_open: !get().chat_drawer_open }),
 
     rename_dialog_open: false,
 

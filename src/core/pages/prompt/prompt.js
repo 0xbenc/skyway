@@ -16,7 +16,7 @@ import {
   Grid,
   Typography,
   MenuItem,
-  Stack
+  Stack,
 } from "@mui/material";
 // ----------------------------------------------------------------------
 
@@ -89,7 +89,7 @@ const Prompt = () => {
       }
     } else {
       setLimit(0);
-    };
+    }
   };
 
   const handleCloseModel = () => {
@@ -111,13 +111,13 @@ const Prompt = () => {
   };
 
   const cancel = () => {
-    console.log("NAVIGATION: system_prompts")
-    useStore.setState({ page: "library", system_prompt_to_edit: -1 })
+    console.log("NAVIGATION: system_prompts");
+    useStore.setState({ page: "library", system_prompt_to_edit: -1 });
   };
 
   const addPrompt = () => {
     if (newPrompt) {
-      console.log("ITS A NEW PROMPT", limit)
+      console.log("ITS A NEW PROMPT", limit);
       const usedDate = new Date();
       const usedDateISO = String(usedDate.toISOString());
       const version_ = useStore.getState().version;
@@ -135,7 +135,7 @@ const Prompt = () => {
         createdDate: usedDateISO,
         importedDate: usedDateISO,
         usedDate: usedDateISO,
-        skywayVersion: version_
+        skywayVersion: version_,
       });
 
       const password_ = useStore.getState().password;
@@ -147,7 +147,7 @@ const Prompt = () => {
 
       useStore.setState({
         system_prompts: system_prompts_,
-        page: "library"
+        page: "library",
       });
     } else {
       const importedDate = new Date();
@@ -164,7 +164,7 @@ const Prompt = () => {
       system_prompts_[system_prompt_to_edit].importedDate = importedDateISO;
       system_prompts_[system_prompt_to_edit].createdDate = importedDateISO;
       system_prompts_[system_prompt_to_edit].usedDate = importedDateISO;
-      system_prompts_[system_prompt_to_edit].skywayVersion = version_
+      system_prompts_[system_prompt_to_edit].skywayVersion = version_;
 
       const password_ = useStore.getState().password;
 
@@ -174,9 +174,9 @@ const Prompt = () => {
 
       useStore.setState({
         system_prompts: system_prompts_,
-        page: "library"
+        page: "library",
       });
-    };
+    }
   };
 
   useEffect(() => {
@@ -189,10 +189,10 @@ const Prompt = () => {
       engine !== "" &&
       engine !== "NONE"
     ) {
-      setReady(true)
+      setReady(true);
     } else {
-      setReady(false)
-    };
+      setReady(false);
+    }
   }, [titleInput, promptInput, userInput, model]);
 
   useEffect(() => {
@@ -207,7 +207,7 @@ const Prompt = () => {
       setEngine(system_prompts_[system_prompt_to_edit].engine);
     } else {
       setNewPrompt(true);
-    };
+    }
   }, [system_prompt_to_edit, system_prompts_]);
 
   return (
@@ -269,9 +269,7 @@ const Prompt = () => {
 
         <OutlinePaper>
           <Stack direction="column" spacing={1}>
-            <Typography variant="h4">
-              Prompt:
-            </Typography>
+            <Typography variant="h4">Prompt:</Typography>
 
             <FormControl fullWidth>
               <TextField
@@ -292,9 +290,7 @@ const Prompt = () => {
 
         <OutlinePaper>
           <Stack direction="column" spacing={1}>
-            <Typography variant="h4">
-              Input Prefill:
-            </Typography>
+            <Typography variant="h4">Input Prefill:</Typography>
 
             <FormControl fullWidth>
               <TextField
@@ -327,15 +323,13 @@ const Prompt = () => {
           >
             <Grid item sm={6}>
               <Stack direction="row" spacing={1}>
-                <Typography variant="h6">
-                  Model: {model}
-                </Typography>
+                <Typography variant="h6">Model: {model}</Typography>
 
                 <Button
                   id="basic-button"
-                  aria-controls={modelOpen ? 'basic-menu' : undefined}
+                  aria-controls={modelOpen ? "basic-menu" : undefined}
                   aria-haspopup="true"
-                  aria-expanded={modelOpen ? 'true' : undefined}
+                  aria-expanded={modelOpen ? "true" : undefined}
                   onClick={handleModel}
                   variant="outlined"
                   color="secondary"
@@ -348,28 +342,36 @@ const Prompt = () => {
                   open={modelOpen}
                   onClose={handleCloseModel}
                   MenuListProps={{
-                    'aria-labelledby': 'basic-button',
+                    "aria-labelledby": "basic-button",
                   }}
                 >
-                  <MenuItem onClick={() => handleChooseModel("gpt-3.5-turbo")}>{"GPT 3.5 Turbo (4k)"}</MenuItem>
-                  <MenuItem onClick={() => handleChooseModel("gpt-4")}>{"GPT 4 (8k)"}</MenuItem>
-                  <MenuItem onClick={() => handleChooseModel("gpt-4-32k")}>{"GPT 4 (32k)"}</MenuItem>
-                  <MenuItem onClick={() => handleChooseModel("gpt-4-1106-preview")}>{"GPT 4 (128k)"}</MenuItem>
+                  <MenuItem onClick={() => handleChooseModel("gpt-3.5-turbo")}>
+                    {"GPT 3.5 Turbo (4k)"}
+                  </MenuItem>
+                  <MenuItem onClick={() => handleChooseModel("gpt-4")}>
+                    {"GPT 4 (8k)"}
+                  </MenuItem>
+                  <MenuItem onClick={() => handleChooseModel("gpt-4-32k")}>
+                    {"GPT 4 (32k)"}
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => handleChooseModel("gpt-4-1106-preview")}
+                  >
+                    {"GPT 4 (128k)"}
+                  </MenuItem>
                 </Menu>
               </Stack>
             </Grid>
 
             <Grid item sm={6}>
               <Stack direction="row" spacing={1}>
-                <Typography variant="h6">
-                  Engine: {engine}
-                </Typography>
+                <Typography variant="h6">Engine: {engine}</Typography>
 
                 <Button
                   id="basic-button"
-                  aria-controls={engineOpen ? 'basic-menu' : undefined}
+                  aria-controls={engineOpen ? "basic-menu" : undefined}
                   aria-haspopup="true"
-                  aria-expanded={engineOpen ? 'true' : undefined}
+                  aria-expanded={engineOpen ? "true" : undefined}
                   onClick={handleEngine}
                   variant="outlined"
                   color="secondary"
@@ -382,11 +384,18 @@ const Prompt = () => {
                   open={engineOpen}
                   onClose={handleCloseEngine}
                   MenuListProps={{
-                    'aria-labelledby': 'basic-button',
+                    "aria-labelledby": "basic-button",
                   }}
                 >
-                  <MenuItem value={"token limited"} onClick={handleChooseEngine}>token limited</MenuItem>
-                  <MenuItem value={"amnesia"} onClick={handleChooseEngine}>amnesia</MenuItem>
+                  <MenuItem
+                    value={"token limited"}
+                    onClick={handleChooseEngine}
+                  >
+                    token limited
+                  </MenuItem>
+                  <MenuItem value={"amnesia"} onClick={handleChooseEngine}>
+                    amnesia
+                  </MenuItem>
                 </Menu>
               </Stack>
             </Grid>
@@ -404,17 +413,13 @@ const Prompt = () => {
               Save Prompt
             </Button>
 
-            <Button
-              variant="outlined"
-              onClick={cancel}
-              color="secondary"
-            >
+            <Button variant="outlined" onClick={cancel} color="secondary">
               Cancel
             </Button>
           </Stack>
         </OutlinePaper>
       </Stack>
-    </BasicBox >
+    </BasicBox>
   );
 };
 

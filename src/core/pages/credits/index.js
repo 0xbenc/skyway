@@ -1,10 +1,10 @@
 import React from "react";
 //
-import { Setup } from "./setup";
+import { Credits } from "./credits";
 // ----------------------------------------------------------------------
 
-const SetupPage = () => {
-  return <Setup />;
+const CreditsPage = () => {
+  return <Credits />;
 };
 
-export { SetupPage };
+export { CreditsPage };
