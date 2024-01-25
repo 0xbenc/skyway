@@ -1,12 +1,11 @@
-const webpack = require('webpack');
-const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
-const rules = require('./webpack.rules');
-const Dotenv = require('dotenv-webpack');
-
+const webpack = require("webpack");
+const ReactRefreshWebpackPlugin = require("@pmmmwh/react-refresh-webpack-plugin");
+const rules = require("./webpack.rules");
+const Dotenv = require("dotenv-webpack");
 
 rules.push({
   test: /\.css$/,
-  use: [{ loader: 'style-loader' }, { loader: 'css-loader' }],
+  use: [{ loader: "style-loader" }, { loader: "css-loader" }],
 });
 
 module.exports = {
@@ -14,12 +13,12 @@ module.exports = {
     rules,
   },
   resolve: {
-    extensions: ['.js', '.ts', '.jsx', '.tsx', '.css']
+    extensions: [".js", ".ts", ".jsx", ".tsx", ".css"],
   },
-  devtool: 'source-map',
+  devtool: "source-map",
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new ReactRefreshWebpackPlugin(),
-    new Dotenv()
-  ]
+    new Dotenv(),
+  ],
 };

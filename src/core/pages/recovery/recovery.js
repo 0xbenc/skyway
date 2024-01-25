@@ -1,12 +1,19 @@
 import React, { useState } from "react";
+import bcrypt from "bcryptjs-react";
 //
 import { seeds } from "../../utility/seeds";
 import { navigate } from "../../utility/navigatePage";
 import { decrypt } from "../../utility/encryption";
-import { BasicBox, OutlinePaper } from "../../mui/reusable";
+import { BasicBox, OutlinePaper, SeedPaper } from "../../mui/reusable";
 import { eGet } from "../../utility/electronStore";
 //
-import { Typography, FormControl, TextField, Button, Stack } from "@mui/material";
+import {
+  Typography,
+  FormControl,
+  TextField,
+  Button,
+  Stack,
+} from "@mui/material";
 // ----------------------------------------------------------------------
 
 const Recovery = () => {
@@ -25,27 +32,27 @@ const Recovery = () => {
 
     for (let i = 0; i < splitKey.length; i++) {
       nums.push(seeds.indexOf(splitKey[i]));
-    };
+    }
 
     for (let e = 0; e < nums.length; e++) {
       key += nums[e];
       if (e !== nums.length - 1) {
         key += "x";
-      };
-    };
+      }
+    }
 
-    const _recovery = eGet("recovery")
-    const _integrity_check = eGet("integrity_check")
+    const _recovery = eGet("recovery");
+    const _integrity_check = eGet("integrity_check");
+    const recovery = decrypt(_recovery, key);
 
-    const recovery = decrypt(_recovery, key)
-    const integrity_check = decrypt(_integrity_check, recovery)
+    const outcome = bcrypt.compareSync(recovery, _integrity_check);
 
-    if (integrity_check === "skynet") {
-      setPasswordOutput(recovery)
-      setBad(false)
+    if (outcome) {
+      setPasswordOutput(recovery);
+      setBad(false);
     } else {
-      setBad(true)
-      setPasswordOutput("")
+      setBad(true);
+      setPasswordOutput("");
     }
   };
 
@@ -53,14 +60,15 @@ const Recovery = () => {
     <BasicBox>
       <Stack direction="column" spacing={1}>
         <OutlinePaper>
-          <Typography variant="h2">
-            Password Recovery
-          </Typography>
+          <Typography variant="h2">Password Recovery</Typography>
         </OutlinePaper>
 
         <OutlinePaper>
           <Stack direction="column" spacing={1}>
-            <Typography>Enter every word of your seed phrase, all lowercase, separated by spaces, no space at the end.</Typography>
+            <Typography>
+              Enter every word of your seed phrase, all lowercase, separated by
+              spaces, no space at the end.
+            </Typography>
             <FormControl>
               <Stack direction="row" spacing={1}>
                 <TextField
@@ -87,19 +95,29 @@ const Recovery = () => {
             </FormControl>
           </Stack>
         </OutlinePaper>
-        {(bad || passwordOutput !== "") && <OutlinePaper>
-          {passwordOutput !== "" && <Typography variant="body">
-            Password: {passwordOutput}
-          </Typography>}
-          {bad && <Typography variant="body">
-            Incorrect Seed Phrase
-          </Typography>}
-        </OutlinePaper>}
+        {(bad || passwordOutput !== "") && (
+          <OutlinePaper>
+            {passwordOutput !== "" && (
+              <Stack direction="row" spacing={1} alignItems={"center"}>
+                <Typography variant="body">Your Password is:</Typography>
+                <SeedPaper>
+                  <Typography>{passwordOutput}</Typography>
+                </SeedPaper>
+              </Stack>
+            )}
+
+            {bad && (
+              <Typography variant="body">Incorrect Seed Phrase</Typography>
+            )}
+          </OutlinePaper>
+        )}
         <OutlinePaper>
           <Button
             color={"secondary"}
             variant="outlined"
-            onClick={() => {navigate("login")}}
+            onClick={() => {
+              navigate("login");
+            }}
             fullWidth={false}
           >
             Return to Login

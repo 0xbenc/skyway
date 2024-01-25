@@ -1,16 +1,12 @@
 import React from "react";
+import PropTypes from "prop-types";
 //
 import { navigate } from "../utility/navigatePage";
 import { OutlinePaper } from "../mui/reusable";
 //
-import {
-  Typography,
-  Stack,
-  Box,
-  IconButton
-} from "@mui/material";
+import { Typography, Stack, Box, IconButton } from "@mui/material";
 //
-import ArrowBackIcon from "@mui/icons-material/ArrowBack"
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 // ----------------------------------------------------------------------
 
 const Title = ({ value }) => {
@@ -20,18 +16,22 @@ const Title = ({ value }) => {
         <Box display="flex" alignItems="center">
           <IconButton
             aria-label="close"
-            onClick={() => { navigate("chatbot") }}
+            onClick={() => {
+              navigate("chatbot");
+            }}
             size="large"
           >
-            <ArrowBackIcon fontSize="inheret"/>
+            <ArrowBackIcon fontSize="inheret" />
           </IconButton>
         </Box>
-        <Typography variant="h2">
-          {value}
-        </Typography>
+        <Typography variant="h2">{value}</Typography>
       </Stack>
     </OutlinePaper>
   );
+};
+
+Title.propTypes = {
+  value: PropTypes.string.isRequired,
 };
 
 export { Title };
