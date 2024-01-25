@@ -20,8 +20,6 @@ const Credits = () => {
                 <ListItemText
                   primary={item.name}
                   secondary={`${
-                    item.versionInfo ? item.versionInfo : "Unknown Version"
-                  } | ${
                     item.licenseConcluded
                       ? item.licenseConcluded
                       : item.licenseDeclared
