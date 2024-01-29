@@ -54,7 +54,7 @@
     "@emotion/styled": "11.11.0",
     "@mui/icons-material": "5.15.6",
     "@mui/material": "5.15.4",
-    "axios": "1.6.5",
+    "axios": "1.6.7",
     "bcryptjs-react": "2.4.6",
     "crypto-js": "4.2.0",
     "electron-squirrel-startup": "1.0.0",
