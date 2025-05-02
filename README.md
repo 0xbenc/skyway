@@ -226,4 +226,4 @@ If you wish to write issues or develop features for Skyway, see [here](./CONTRIB
 
 ## Contributors
 
-- [0xbenc](https://github.com/0xbenc) - maintainer
+- [0xbenc](https://github.com/0xbenc) - maintainer (haha)
